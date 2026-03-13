@@ -14,6 +14,30 @@ VERSION=$(python3 -c "import json; d=json.load(open('$SOURCE_DIR/data/words.json
 sed -i '' "s|<meta name=\"words-version\" content=\"[^\"]*\">|<meta name=\"words-version\" content=\"$VERSION\">|" "$SOURCE_DIR/index.html"
 echo "  words-version: $VERSION"
 
+# 音声ファイルの欠けチェック（デプロイ前に必須）
+echo "  音声ファイルチェック中..."
+MISSING=$(venv/bin/python -c "
+import json
+from pathlib import Path
+base = Path('$SOURCE_DIR')
+words = json.loads((base / 'data/words.json').read_text())['words']
+missing = [
+    f'{t}/{w[\"id\"]}.mp3'
+    for w in words
+    for t in ['words', 'ja', 'p4_split']
+    if not (base / 'data/audio' / t / f'{w[\"id\"]}.mp3').exists()
+]
+print('\n'.join(missing))
+" 2>/dev/null)
+
+if [ -n "$MISSING" ]; then
+  echo "❌ 音声ファイルが不足しています。デプロイを中止します。"
+  echo "$MISSING" | sed 's/^/     /'
+  echo "  venv/bin/python moe-vocab/scripts/generate_audio.py を実行してください。"
+  exit 1
+fi
+echo "  音声ファイル: OK ✅"
+
 # 変更ファイルをデプロイ用リポジトリにコピー
 cp -r "$SOURCE_DIR/." "$DEPLOY_DIR/"
 
