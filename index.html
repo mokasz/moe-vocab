@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="words-version" content="1773380274">
+  <title>Moe's Vocab — ターゲット1900</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #0f0f13; --surface: #1a1a24; --surface2: #22222f;
+      --border: #2e2e40; --text: #e8e8f0; --text-sub: #8888aa;
+      --accent: #6c8ef7; --green: #4caf82; --red: #e05c5c; --yellow: #d4a020;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Login Screen ── */
+    #loginScreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .login-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .login-subtitle {
+      font-size: 1rem;
+      color: var(--text-sub);
+    }
+
+    .login-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+
+    #loginBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    #loginBtn:hover { opacity: 0.85; }
+
+    /* Google icon SVG inlined as text */
+    .google-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── App Shell ── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #userChip {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #logoutBtn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-sub);
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    #logoutBtn:hover {
+      border-color: var(--text-sub);
+      color: var(--text);
+    }
+
+    /* ── Tab Bar ── */
+    .tab-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+
+    .tab.on {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab:hover:not(.on) {
+      color: var(--text);
+    }
+
+    /* ── Views ── */
+    .view {
+      display: none;
+      flex: 1;
+      padding: 24px 20px;
+    }
+
+    .view.on {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .view-placeholder {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+    }
+
+    /* ===== Card ===== */
+    .counter-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .card-counter { font-size:0.9rem; color:var(--text-sub); }
+    .autoplay-label { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; color:var(--text-sub); user-select:none; }
+    .toggle-switch { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle-switch input { opacity:0; width:0; height:0; position:absolute; }
+    .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:22px; transition:background 0.2s; cursor:pointer; }
+    .toggle-slider::before { content:''; position:absolute; width:16px; height:16px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:transform 0.2s; }
+    .toggle-switch input:checked + .toggle-slider { background:var(--accent); }
+    .toggle-switch input:checked + .toggle-slider::before { transform:translateX(18px); }
+
+    .card {
+      background:var(--surface); border:1px solid var(--border); border-radius:16px;
+      padding:32px 24px; text-align:center; cursor:pointer; user-select:none;
+      min-height:280px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:14px; transition:background 0.15s;
+    }
+    .card:hover { background:var(--surface2); }
+
+    .card-meta { font-size:0.9rem; color:var(--text-sub); }
+    .card-word { font-size:2.6rem; font-weight:700; color:var(--text); }
+    .card-pos  { font-size:1rem; color:var(--text-sub); font-style:italic; }
+    .card-japanese { font-size:1.6rem; font-weight:600; color:var(--text); }
+    .card-sentence { font-size:1rem; color:var(--text-sub); line-height:1.6; }
+    .word-highlight { color:var(--accent); font-weight:700; }
+
+    .sound-btn {
+      background:none; border:1px solid var(--border); border-radius:10px;
+      padding:12px 28px; color:var(--text-sub); cursor:pointer; font-size:1rem;
+      min-height:44px; transition:border-color 0.15s;
+    }
+    .sound-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+    .flip-hint { font-size:0.9rem; color:var(--text-sub); margin-top:8px; }
+
+    /* ===== Judge buttons ===== */
+    .judge-btns {
+      display:flex; gap:12px; margin-top:16px;
+    }
+    .judge-btns button {
+      flex:1; padding:14px; border-radius:12px; border:none;
+      font-size:1rem; font-weight:600; cursor:pointer; transition:opacity 0.15s;
+    }
+    .btn-known   { background:var(--green); color:#fff; }
+    .btn-unknown { background:var(--red);   color:#fff; }
+    .judge-btns button:hover { opacity:0.85; }
+
+    /* ===== Today's word list ===== */
+    .today-section { margin-bottom:24px; }
+    .today-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .today-title { font-size:1rem; font-weight:700; }
+    .mouikkai-all { background:var(--accent); color:#fff; border:none; border-radius:8px;
+      padding:8px 16px; font-size:0.9rem; cursor:pointer; }
+    .today-item { display:flex; align-items:center; gap:10px; padding:8px 0;
+      border-bottom:1px solid var(--border); }
+    .today-id  { font-size:0.8rem; color:var(--text-sub); width:40px; flex-shrink:0; }
+    .today-word { flex:1; font-size:1rem; font-weight:600; }
+    .status-badge { font-size:0.8rem; padding:2px 8px; border-radius:12px; flex-shrink:0; }
+    .status-green  { background:#1a3a2a; color:#4caf82; }
+    .status-red    { background:#3a1a1a; color:#e05252; }
+    .status-new    { background:var(--surface2); color:var(--text-sub); }
+    .mouikkai-btn { background:none; border:1px solid var(--border); border-radius:6px;
+      padding:6px 18px; font-size:0.85rem; color:var(--text-sub); cursor:pointer; flex-shrink:0;
+      min-width:88px; text-align:center; }
+    .mouikkai-btn.queued { border-color:var(--accent); color:var(--accent); background:#1a2a3a; }
+    .mouikkai-btn:disabled { opacity:0.35; cursor:not-allowed; }
+
+
+    /* ===== Done screen ===== */
+    .done-screen {
+      text-align:center; padding:40px 16px;
+    }
+    .done-screen h2 { font-size:1.6rem; margin-bottom:8px; }
+    .done-screen p  { color:var(--text-sub); margin-bottom:24px; }
+    .done-screen button {
+      background:var(--accent); color:#fff; border:none; border-radius:10px;
+      padding:12px 24px; font-size:0.95rem; font-weight:600; cursor:pointer;
+    }
+
+    /* ===== Passage ===== */
+    .passage-wrap { padding:8px 0; }
+    .passage-theme { font-size:0.78rem; color:var(--accent); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+    .passage-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .passage-title { font-size:1.1rem; font-weight:700; }
+    .passage-play-btn { background:var(--accent); color:#fff; border:none; border-radius:8px;
+      padding:8px 16px; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; gap:6px; }
+    .passage-play-btn.playing { background:#555; }
+    .passage-text { font-size:0.95rem; line-height:1.8; color:var(--text); }
+    .passage-text mark { background:rgba(108,142,247,0.25); color:var(--accent); border-radius:3px; padding:1px 2px; }
+    .passage-empty { color:var(--text-sub); font-size:0.9rem; text-align:center; padding:40px 0; }
+
+    /* ===== Progress ===== */
+    .progress-wrap { padding:8px 0; }
+    .part-block { margin-bottom:24px; }
+    .part-header { display:flex; justify-content:space-between; align-items:center; font-weight:700; margin-bottom:8px; }
+    .part-name { font-size:1rem; }
+    .part-pct  { font-size:0.85rem; color:var(--text-sub); }
+    .part-bar  { height:8px; background:var(--surface2); border-radius:4px; overflow:hidden; margin-bottom:12px; }
+    .part-fill { height:100%; background:var(--green); border-radius:4px; transition:width 0.4s; }
+
+    .section-row {
+      display:flex; align-items:center; gap:10px; padding:8px 4px;
+      cursor:pointer; border-radius:8px; transition:background 0.12s;
+    }
+    .section-row:hover { background:var(--surface2); }
+    .sec-label { font-size:0.82rem; color:var(--text-sub); width:80px; flex-shrink:0; }
+    .sec-bar   { flex:1; height:6px; background:var(--surface2); border-radius:3px; overflow:hidden; }
+    .sec-fill  { height:100%; background:var(--accent); border-radius:3px; }
+    .sec-pct   { font-size:0.78rem; color:var(--text-sub); width:36px; text-align:right; flex-shrink:0; }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100;
+      display:flex; align-items:flex-end;
+    }
+    .modal-sheet {
+      background:var(--surface); border-radius:16px 16px 0 0; width:100%; max-height:70vh;
+      overflow-y:auto; padding:16px;
+    }
+    .modal-header {
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
+    }
+    .modal-title { font-weight:700; font-size:1rem; }
+    .modal-close { background:none; border:none; color:var(--text-sub); font-size:1.3rem; cursor:pointer; padding:4px 8px; }
+    .word-row {
+      display:flex; align-items:center; gap:10px; padding:8px 0;
+      border-bottom:1px solid var(--border);
+    }
+    .word-row:last-child { border-bottom:none; }
+    .status-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .word-en  { font-weight:600; min-width:130px; }
+    .word-ja  { font-size:0.85rem; color:var(--text-sub); }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-title">Moe's Vocab</div>
+    <div class="login-subtitle">ターゲット1900</div>
+    <div class="login-divider"></div>
+    <button id="loginBtn">
+      <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="rgba(255,255,255,0.85)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="rgba(255,255,255,0.7)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+        <path fill="rgba(255,255,255,0.6)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Googleでログイン
+    </button>
+  </div>
+</div>
+
+<!-- App Shell -->
+<div id="app">
+  <header>
+    <span class="header-title">Moe's Vocab</span>
+    <div class="header-right">
+      <span id="userChip"></span>
+      <button id="logoutBtn">ログアウト</button>
+    </div>
+  </header>
+
+  <div class="tab-bar" role="tablist">
+    <button class="tab on" data-tab="card" role="tab" onclick="switchTab('card')">カード学習</button>
+    <button class="tab" data-tab="passage" role="tab" onclick="switchTab('passage')">今日の文書</button>
+    <button class="tab" data-tab="progress" role="tab" onclick="switchTab('progress')">進捗</button>
+  </div>
+
+  <div id="cardView" class="view on">
+    <span class="view-placeholder">カード読み込み中...</span>
+  </div>
+  <div id="passageView" class="view">
+    <span class="view-placeholder">今日の文書を読み込み中...</span>
+  </div>
+  <div id="progressView" class="view">
+    <span class="view-placeholder">進捗を読み込み中...</span>
+  </div>
+</div>
+
+<script>
+  // ── Config ──────────────────────────────────────────────────────────────
+  const SUPA_URL = 'https://uzpmpjkkwapaohleejtt.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6cG1wamtrd2FwYW9obGVlanR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NzkzMjksImV4cCI6MjA4ODU1NTMyOX0.vnmV6eC05k4BRMR3SgrJBrn5x0gb0_4wI9_L39pGfl0';
+  const BOOK_KEY = 'moe-target1900';
+  const LS_KEY = 'moe_vocab_v1';
+  const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+  // ── State ────────────────────────────────────────────────────────────────
+  let currentUser = null;
+  let allWords = [];
+  let wordsData = null;
+  let cardQueue = [];
+  let cardIndex = 0;
+  let sessionStats = { known: 0, unknown: 0 };
+  let pendingReview = []; // 進捗タブから「もう一回」でキューされた単語
+  const SS_KEY   = 'moe_session_idx';   // sessionStorage: カード位置（途中再開用）
+  const SS_START = 'moe_session_start'; // sessionStorage: セッション開始マーカー
+  let isReviewSession = false;          // 「もう一回」サブセッション中は SS_KEY を更新しない
+
+  // ── Auth ─────────────────────────────────────────────────────────────────
+  async function bootAuth() {
+    document.getElementById('loginBtn').onclick = () => sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: location.href }
+    });
+    document.getElementById('logoutBtn').onclick = () => sb.auth.signOut();
+
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        if (!currentUser) {
+          currentUser = session.user;
+          const chip = document.getElementById('userChip');
+          chip.textContent = currentUser.email || '';
+          showApp();
+          try { await initApp(); } catch(e) { console.error('[initApp] ERROR:', e); }
+        }
+      } else {
+        if (currentUser) {
+          currentUser = null;
+          document.getElementById('userChip').textContent = '';
+          showLogin();
+        } else if (event === 'INITIAL_SESSION') {
+          showLogin();
+        }
+      }
+    });
+  }
+
+  function showLogin() { document.getElementById('loginScreen').style.display = 'flex'; }
+  function showApp()   { document.getElementById('loginScreen').style.display = 'none'; }
+
+  // ── App Init ─────────────────────────────────────────────────────────────
+  let audioVer = '0'; // audio cache-busting version
+
+  async function initApp() {
+    const v = document.querySelector('meta[name="words-version"]')?.content || '0';
+    const resp = await fetch(`data/words.json?v=${v}`);
+    wordsData = await resp.json();
+    allWords = wordsData.words;
+    audioVer = String(wordsData.meta?.version || v);
+
+    loadProgress();
+    renderAll();
+  }
+
+  // ── Progress (localStorage + Supabase) ──────────────────────────────────
+  function loadProgress() {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+    allWords.forEach(w => {
+      const p = saved[w.id];
+      if (p) {
+        w.status = p.status;
+        w.ease = p.ease;
+        w.interval = p.interval;
+        w.repetitions = p.repetitions;
+        w.lastSeen = p.lastSeen;
+      }
+    });
+  }
+
+  function saveProgress(word) {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+    saved[word.id] = {
+      status: word.status,
+      ease: word.ease,
+      interval: word.interval,
+      repetitions: word.repetitions,
+      lastSeen: word.lastSeen,
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(saved));
+    // Supabase upsert (fire-and-forget)
+    if (currentUser) {
+      sb.from('progress_sync').upsert({
+        user_id: currentUser.id,
+        book_key: BOOK_KEY,
+        word_key: String(word.id),
+        status: word.status,
+        ease_factor: word.ease,
+        interval_days: word.interval,
+        repetitions: word.repetitions,
+        last_studied: word.lastSeen,
+      }, { onConflict: 'user_id,book_key,word_key' }).then(() => {});
+    }
+  }
+
+  // ── SM-2 ─────────────────────────────────────────────────────────────────
+  function sm2Update(word, quality) {
+    let { ease, interval, repetitions } = word;
+    if (quality < 2) { interval = 1; repetitions = 0; }
+    else {
+      ease = Math.max(1.3, ease + 0.1 - (4 - quality) * 0.08);
+      repetitions += 1;
+      if (repetitions === 1) interval = 1;
+      else if (repetitions === 2) interval = 6;
+      else interval = Math.round(interval * ease);
+    }
+    word.ease = ease; word.interval = interval; word.repetitions = repetitions;
+    word.lastSeen = new Date().toISOString();
+    return word;
+  }
+
+  // ── Tab Navigation ───────────────────────────────────────────────────────
+  function switchTab(name) {
+    stopAudio();
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === name + 'View'));
+    if (name === 'progress') renderProgress();
+    if (name === 'card' && pendingReview.length > 0) {
+      if (cardIndex >= cardQueue.length) {
+        // セッション完了後 → pendingReview で置き換え・リセット
+        cardQueue = [...pendingReview];
+        cardIndex = 0;
+        sessionStats = { known: 0, unknown: 0 };
+      } else {
+        // セッション途中 → キューの末尾に追加するだけ。位置・統計は維持
+        const existingIds = new Set(cardQueue.map(w => w.id));
+        pendingReview.forEach(w => { if (!existingIds.has(w.id)) cardQueue.push(w); });
+      }
+      pendingReview = [];
+      isReviewSession = true;
+      showCardFront();
+    }
+  }
+
+  // ── Render (stubs) ───────────────────────────────────────────────────────
+  function renderAll() {
+    renderCards();
+    renderPassage();
+    renderProgress();
+  }
+
+  function renderCards() {
+    isReviewSession = false;
+    cardQueue = [...allWords];
+    const saved    = parseInt(sessionStorage.getItem(SS_KEY)   || '0', 10);
+    const hasStart = sessionStorage.getItem(SS_START) !== null;
+    if (saved > 0 && saved <= cardQueue.length && hasStart) {
+      cardIndex = saved; // 有効なセッション → 途中再開
+    } else {
+      // セッション状態なし or stale → 単語データから直接判定
+      const allDone = cardQueue.every(w => w.status && w.status !== 'new');
+      cardIndex = allDone ? cardQueue.length : 0;
+      sessionStorage.setItem(SS_START, Date.now());
+      sessionStorage.setItem(SS_KEY, cardIndex);
+    }
+    sessionStats = { known: 0, unknown: 0 };
+    showCardFront();
+  }
+
+  function showCardFront() {
+    stopAudio();
+    const v = document.getElementById('cardView');
+    while (v.firstChild) v.removeChild(v.firstChild);
+
+    if (cardIndex >= cardQueue.length) {
+      showDoneScreen();
+      return;
+    }
+
+    const w = cardQueue[cardIndex];
+    const total = cardQueue.length;
+
+    renderCounter(v, cardIndex, total);
+
+    // card (click to flip)
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const meta = document.createElement('div');
+    meta.className = 'card-meta';
+    meta.textContent = '#' + w.id + '  ·  Section ' + w.section;
+    card.appendChild(meta);
+
+    const wordEl = document.createElement('div');
+    wordEl.className = 'card-word';
+    wordEl.textContent = w.word;
+    card.appendChild(wordEl);
+
+    const posEl = document.createElement('div');
+    posEl.className = 'card-pos';
+    posEl.textContent = w.pos;
+    card.appendChild(posEl);
+
+    const soundBtn = document.createElement('button');
+    soundBtn.className = 'sound-btn';
+    soundBtn.textContent = '🔊 Pronunciation';
+    soundBtn.onclick = (e) => { e.stopPropagation(); playWord(w); };
+    card.appendChild(soundBtn);
+
+    const hint = document.createElement('div');
+    hint.className = 'flip-hint';
+    hint.textContent = 'Tap to flip';
+    card.appendChild(hint);
+
+    card.onclick = () => showCardBack();
+    v.appendChild(card);
+    if (autoPlay) setTimeout(() => playWord(w), 300);
+  }
+
+  function showCardBack() {
+    const v = document.getElementById('cardView');
+    while (v.firstChild) v.removeChild(v.firstChild);
+
+    const w = cardQueue[cardIndex];
+    const total = cardQueue.length;
+
+    renderCounter(v, cardIndex, total);
+
+    // card (no click handler on back)
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.cursor = 'default';
+
+    const metaBack = document.createElement('div');
+    metaBack.className = 'card-meta';
+    metaBack.textContent = '#' + w.id + '  ·  Section ' + w.section;
+    card.appendChild(metaBack);
+
+    const wordEl = document.createElement('div');
+    wordEl.className = 'card-word';
+    wordEl.textContent = w.word;
+    card.appendChild(wordEl);
+
+    const jpEl = document.createElement('div');
+    jpEl.className = 'card-japanese';
+    jpEl.textContent = w.japanese;
+    card.appendChild(jpEl);
+
+    if (w.sentence) {
+      const sentEl = document.createElement('div');
+      sentEl.className = 'card-sentence';
+      highlightInEl(sentEl, w.sentence, w.word);
+      card.appendChild(sentEl);
+
+      const sentJaEl = document.createElement('div');
+      sentJaEl.className = 'card-sentence';
+      highlightInEl(sentJaEl, w.sentence_ja, jaKeyword(w.japanese));
+      card.appendChild(sentJaEl);
+    }
+
+    const soundBtn = document.createElement('button');
+    soundBtn.className = 'sound-btn';
+    soundBtn.textContent = '🔊 Listen';
+    soundBtn.onclick = () => playBackSequence(w);
+    card.appendChild(soundBtn);
+
+    v.appendChild(card);
+    if (autoPlay) setTimeout(() => playBackSequence(w), 300);
+
+    // judge buttons (outside card)
+    const judgeBtns = document.createElement('div');
+    judgeBtns.className = 'judge-btns';
+
+    const knownBtn = document.createElement('button');
+    knownBtn.className = 'btn-known';
+    knownBtn.textContent = '✅ 知ってた';
+    knownBtn.onclick = () => judge(w, 4);
+
+    const unknownBtn = document.createElement('button');
+    unknownBtn.className = 'btn-unknown';
+    unknownBtn.textContent = '❌ 知らなかった';
+    unknownBtn.onclick = () => judge(w, 0);
+
+    judgeBtns.appendChild(knownBtn);
+    judgeBtns.appendChild(unknownBtn);
+    v.appendChild(judgeBtns);
+  }
+
+  function judge(word, quality) {
+    word.status = quality >= 4 ? 'green' : 'red';
+    sm2Update(word, quality);
+    saveProgress(word);
+    if (quality >= 4) sessionStats.known++;
+    else sessionStats.unknown++;
+    cardIndex++;
+    if (!isReviewSession) sessionStorage.setItem(SS_KEY, cardIndex);
+    showCardFront();
+  }
+
+  function showDoneScreen() {
+    if (!isReviewSession) sessionStorage.setItem(SS_KEY, cardQueue.length);
+    const v = document.getElementById('cardView');
+    while (v.firstChild) v.removeChild(v.firstChild);
+
+    const screen = document.createElement('div');
+    screen.id = 'doneScreen';
+    screen.className = 'done-screen';
+
+    const h2 = document.createElement('h2');
+    const redCount = allWords.filter(w => w.status === 'red').length;
+    h2.textContent = redCount === 0 ? '🎉 全問グリーン！' : '✅ セッション完了';
+    screen.appendChild(h2);
+
+    const p = document.createElement('p');
+    const knownCount  = allWords.filter(w => w.status === 'green').length;
+    const unknownCount = allWords.filter(w => w.status === 'red').length;
+    p.textContent = '知ってた: ' + knownCount + '語 / 知らなかった: ' + unknownCount + '語';
+    screen.appendChild(p);
+
+    if (redCount > 0) {
+      const retryMsg = document.createElement('p');
+      retryMsg.textContent = '🔁 知らなかった単語を復習します…';
+      retryMsg.style.color = 'var(--text-sub)';
+      retryMsg.style.fontSize = '0.9rem';
+      screen.appendChild(retryMsg);
+      setTimeout(() => {
+        isReviewSession = true; // リトライも SS_KEY を汚さない
+        cardQueue = allWords.filter(w => w.status === 'red');
+        cardIndex = 0;
+        sessionStats = { known: 0, unknown: 0 };
+        showCardFront();
+      }, 1500);
+    }
+
+    v.appendChild(screen);
+  }
+
+  // ── Auto-play toggle ─────────────────────────────────────────────────────
+  let autoPlay = localStorage.getItem('moe_autoplay') !== 'false';
+
+  function renderCounter(container, index, total) {
+    const row = document.createElement('div');
+    row.className = 'counter-row';
+
+    const ctr = document.createElement('div');
+    ctr.id = 'cardCounter';
+    ctr.className = 'card-counter';
+    ctr.textContent = (index + 1) + ' / ' + total;
+
+    const label = document.createElement('label');
+    label.className = 'autoplay-label';
+
+    const span = document.createTextNode('🔊 Auto');
+    const sw = document.createElement('span');
+    sw.className = 'toggle-switch';
+    const inp = document.createElement('input');
+    inp.type = 'checkbox';
+    inp.checked = autoPlay;
+    inp.onchange = () => {
+      autoPlay = inp.checked;
+      localStorage.setItem('moe_autoplay', autoPlay);
+    };
+    const slider = document.createElement('span');
+    slider.className = 'toggle-slider';
+    sw.appendChild(inp);
+    sw.appendChild(slider);
+    label.appendChild(span);
+    label.appendChild(sw);
+
+    row.appendChild(ctr);
+    row.appendChild(label);
+    container.appendChild(row);
+  }
+
+  // ── Audio control ────────────────────────────────────────────────────────
+  let _activeAudio = null;
+  let _seqAborted = false;
+
+  function stopAudio() {
+    _seqAborted = true;
+    if (_activeAudio) { _activeAudio.pause(); _activeAudio.currentTime = 0; _activeAudio = null; }
+  }
+
+  // テキスト内のキーワードをハイライトしてelに追加（innerHTML不使用）
+  function highlightInEl(el, text, keyword) {
+    if (!keyword) { el.textContent = text; return; }
+    const pat = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const parts = text.split(new RegExp(`(${pat}\\w*)`, 'gi'));
+    parts.forEach((part, i) => {
+      if (i % 2 === 1) {
+        const mark = document.createElement('mark');
+        mark.className = 'word-highlight';
+        mark.style.background = 'none';
+        mark.textContent = part;
+        el.appendChild(mark);
+      } else {
+        el.appendChild(document.createTextNode(part));
+      }
+    });
+  }
+
+  // japaneseフィールドからハイライト用キーワードを抽出
+  function jaKeyword(japanese) {
+    const seg = japanese.split(/[；（【,，]/)[0];
+    const clean = seg.replace(/^[をにがはのへでもとから]+/, '');
+    return clean.replace(/(?:する|できる|させる|される|れる|した|す|る|な)$/, '')
+                .replace(/[をにがはのへでもと].+$/, '').trim();
+  }
+
+  function playWord(w) {
+    stopAudio();
+    _seqAborted = false;
+    const a = new Audio(`data/audio/words/${w.id}.mp3?v=${audioVer}`);
+    _activeAudio = a;
+    a.play().catch(() => {});
+  }
+
+  async function playBackSequence(w) {
+    stopAudio();
+    _seqAborted = false;
+    const files = [
+      `data/audio/words/${w.id}.mp3?v=${audioVer}`,
+      `data/audio/ja/${w.id}.mp3?v=${audioVer}`,
+      `data/audio/p4_split/${w.id}.mp3?v=${audioVer}`,
+    ];
+    for (const f of files) {
+      if (_seqAborted) return;
+      await new Promise((resolve) => {
+        const a = new Audio(f);
+        _activeAudio = a;
+        a.onended = resolve;
+        a.onerror = resolve;
+        a.play().catch(resolve);
+      });
+    }
+  }
+
+  function renderPassage() {
+    const v = document.getElementById('passageView');
+    while (v.firstChild) v.removeChild(v.firstChild);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'passage-wrap';
+
+    if (!wordsData || !wordsData.passage || !wordsData.passage.text) {
+      const empty = document.createElement('p');
+      empty.className = 'passage-empty';
+      empty.textContent = 'generate_words.py を実行してください';
+      wrap.appendChild(empty);
+      v.appendChild(wrap);
+      return;
+    }
+
+    const p = wordsData.passage;
+
+    const themeEl = document.createElement('div');
+    themeEl.className = 'passage-theme';
+    themeEl.textContent = p.theme || '';
+    wrap.appendChild(themeEl);
+
+    const hdr = document.createElement('div');
+    hdr.className = 'passage-header';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'passage-title';
+    titleEl.textContent = "Today's Reading";
+    hdr.appendChild(titleEl);
+
+    const playBtn = document.createElement('button');
+    playBtn.className = 'passage-play-btn';
+    playBtn.textContent = '▶ Listen';
+    let passageAudio = null;
+    playBtn.onclick = () => {
+      if (passageAudio && !passageAudio.paused) {
+        passageAudio.pause();
+        passageAudio.currentTime = 0;
+        passageAudio = null;
+        playBtn.textContent = '▶ Listen';
+        playBtn.classList.remove('playing');
+      } else {
+        stopAudio();
+        passageAudio = new Audio(`data/audio/passage.mp3?v=${audioVer}`);
+        _activeAudio = passageAudio;
+        playBtn.textContent = '⏹ Stop';
+        playBtn.classList.add('playing');
+        passageAudio.onended = () => {
+          playBtn.textContent = '▶ Listen';
+          playBtn.classList.remove('playing');
+          passageAudio = null;
+        };
+        passageAudio.onerror = () => {
+          playBtn.textContent = '▶ Listen';
+          playBtn.classList.remove('playing');
+          passageAudio = null;
+        };
+        passageAudio.play().catch(() => {});
+      }
+    };
+    hdr.appendChild(playBtn);
+    wrap.appendChild(hdr);
+
+    // Build highlighted text safely — NO innerHTML
+    const textEl = document.createElement('p');
+    textEl.className = 'passage-text';
+
+    const highlighted = (p.highlighted_words || []).filter(w => w.length > 0);
+    // Strip any ** markdown that Gemini may have included
+    const rawText = (p.text || '').replace(/\*\*(.+?)\*\*/g, '$1');
+    if (highlighted.length === 0) {
+      textEl.textContent = rawText;
+    } else {
+      const escaped = highlighted.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      const pattern = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+      let last = 0;
+      const text = rawText;
+      let m;
+      while ((m = pattern.exec(text)) !== null) {
+        if (m.index > last) {
+          textEl.appendChild(document.createTextNode(text.slice(last, m.index)));
+        }
+        const mark = document.createElement('mark');
+        mark.textContent = m[0];
+        textEl.appendChild(mark);
+        last = m.index + m[0].length;
+      }
+      if (last < text.length) {
+        textEl.appendChild(document.createTextNode(text.slice(last)));
+      }
+    }
+
+    wrap.appendChild(textEl);
+
+    if (p.text_ja) {
+      const divider = document.createElement('hr');
+      divider.style.cssText = 'border:none;border-top:1px solid var(--border);margin:20px 0';
+      wrap.appendChild(divider);
+
+      const jaEl = document.createElement('p');
+      jaEl.className = 'passage-text';
+      jaEl.style.color = 'var(--text-sub)';
+      jaEl.textContent = p.text_ja;
+      wrap.appendChild(jaEl);
+    }
+
+    v.appendChild(wrap);
+  }
+
+  function renderProgress() {
+    const v = document.getElementById('progressView');
+    while (v.firstChild) v.removeChild(v.firstChild);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'progress-wrap';
+
+    // ── 今日の単語リスト ──────────────────────────────────────
+    const todaySection = document.createElement('div');
+    todaySection.className = 'today-section';
+
+    const todayHdr = document.createElement('div');
+    todayHdr.className = 'today-header';
+
+    const todayTitle = document.createElement('div');
+    todayTitle.className = 'today-title';
+    todayTitle.textContent = '今日の単語 (' + allWords.length + '語)';
+
+    const allBtn = document.createElement('button');
+    allBtn.id = 'mouikkaiAll';
+    allBtn.className = 'mouikkai-all';
+    allBtn.textContent = 'もう一回（全部）';
+    allBtn.onclick = () => {
+      pendingReview = [...allWords];
+      switchTab('card');
+    };
+
+    todayHdr.appendChild(todayTitle);
+    todayHdr.appendChild(allBtn);
+    todaySection.appendChild(todayHdr);
+
+    const todayList = document.createElement('div');
+    todayList.id = 'todayList';
+    allWords.forEach(w => {
+      const item = document.createElement('div');
+      item.className = 'today-item';
+      item.dataset.wordId = w.id;
+
+      const idEl = document.createElement('div');
+      idEl.className = 'today-id';
+      idEl.textContent = '#' + w.id;
+
+      const wordEl = document.createElement('div');
+      wordEl.className = 'today-word';
+      wordEl.textContent = w.word;
+
+      const badge = document.createElement('span');
+      badge.className = 'status-badge status-' + (w.status || 'new');
+      badge.textContent = w.status === 'green' ? '✅' : w.status === 'red' ? '❌' : '🆕';
+
+      const btn = document.createElement('button');
+      if ((w.status || 'new') !== 'new') {
+        btn.className = 'mouikkai-btn';
+        btn.dataset.wordId = w.id;
+        if (w.status === 'red') {
+          btn.textContent = 'もう一回';
+          btn.disabled = true;
+        } else {
+          const isQueued = pendingReview.some(p => p.id === w.id);
+          if (isQueued) btn.classList.add('queued');
+          btn.textContent = isQueued ? '✓ キュー済' : 'もう一回';
+          btn.onclick = () => {
+            if (btn.classList.contains('queued')) {
+              pendingReview = pendingReview.filter(p => p.id !== w.id);
+              btn.classList.remove('queued');
+              btn.textContent = 'もう一回';
+            } else {
+              pendingReview.push(w);
+              btn.classList.add('queued');
+              btn.textContent = '✓ キュー済';
+            }
+          };
+        }
+      }
+
+      item.appendChild(idEl);
+      item.appendChild(wordEl);
+      item.appendChild(badge);
+      item.appendChild(btn);
+      todayList.appendChild(item);
+    });
+    todaySection.appendChild(todayList);
+    wrap.appendChild(todaySection);
+
+    // Compute stats per section
+    const sectionStats = {};
+    for (let s = 1; s <= 19; s++) sectionStats[s] = { total: 0, known: 0 };
+    allWords.forEach(w => {
+      sectionStats[w.section].total++;
+      if (w.status === 'green') sectionStats[w.section].known++;
+    });
+
+    // Compute stats per part
+    const partStats = { 1: { total:0, known:0 }, 2: { total:0, known:0 }, 3: { total:0, known:0 } };
+    allWords.forEach(w => {
+      partStats[w.part].total++;
+      if (w.status === 'green') partStats[w.part].known++;
+    });
+
+    const partNames = { 1: 'Part 1（基本800語）', 2: 'Part 2（重要700語）', 3: 'Part 3（難単語400語）' };
+    const partSections = { 1: [1,2,3,4,5,6,7,8], 2: [9,10,11,12,13,14,15], 3: [16,17,18,19] };
+
+    [3, 2, 1].forEach(part => {
+      const pStat = partStats[part];
+      const pct = pStat.total > 0 ? Math.round(pStat.known / pStat.total * 100) : 0;
+
+      const block = document.createElement('div');
+      block.className = 'part-block';
+
+      const hdr = document.createElement('div');
+      hdr.className = 'part-header';
+      const pName = document.createElement('span');
+      pName.className = 'part-name';
+      pName.textContent = partNames[part];
+      const pPct = document.createElement('span');
+      pPct.className = 'part-pct';
+      pPct.textContent = pct + '%';
+      hdr.appendChild(pName);
+      hdr.appendChild(pPct);
+      block.appendChild(hdr);
+
+      const barWrap = document.createElement('div');
+      barWrap.className = 'part-bar';
+      const barFill = document.createElement('div');
+      barFill.className = 'part-fill';
+      barFill.style.width = pct + '%';
+      barWrap.appendChild(barFill);
+      block.appendChild(barWrap);
+
+      // Sections (reverse order within part: highest first)
+      [...partSections[part]].reverse().forEach(sec => {
+        const sStat = sectionStats[sec];
+        if (sStat.total === 0) return;
+        const sPct = Math.round(sStat.known / sStat.total * 100);
+
+        const row = document.createElement('div');
+        row.className = 'section-row';
+        row.onclick = () => openSectionModal(sec);
+
+        const label = document.createElement('div');
+        label.className = 'sec-label';
+        label.textContent = 'Section ' + sec;
+
+        const sBar = document.createElement('div');
+        sBar.className = 'sec-bar';
+        const sFill = document.createElement('div');
+        sFill.className = 'sec-fill';
+        sFill.style.width = sPct + '%';
+        sBar.appendChild(sFill);
+
+        const pctEl = document.createElement('div');
+        pctEl.className = 'sec-pct';
+        pctEl.textContent = sPct + '%';
+
+        row.appendChild(label);
+        row.appendChild(sBar);
+        row.appendChild(pctEl);
+        block.appendChild(row);
+      });
+
+      wrap.appendChild(block);
+    });
+
+    v.appendChild(wrap);
+  }
+
+  function openSectionModal(section) {
+    const words = allWords.filter(w => w.section === section);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+    const sheet = document.createElement('div');
+    sheet.className = 'modal-sheet';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'modal-header';
+    const title = document.createElement('div');
+    title.className = 'modal-title';
+    title.textContent = 'Section ' + section + ' (' + words.length + '語)';
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'modal-close';
+    closeBtn.textContent = '✕';
+    closeBtn.onclick = () => overlay.remove();
+    hdr.appendChild(title);
+    hdr.appendChild(closeBtn);
+    sheet.appendChild(hdr);
+
+    const dotColors = { green: '#4caf82', red: '#e05c5c', yellow: '#d4a020', new: '#2e2e40' };
+
+    words.forEach(w => {
+      const row = document.createElement('div');
+      row.className = 'word-row';
+
+      const dot = document.createElement('div');
+      dot.className = 'status-dot';
+      dot.style.background = dotColors[w.status] || dotColors.new;
+
+      const en = document.createElement('div');
+      en.className = 'word-en';
+      en.textContent = w.word;
+
+      const ja = document.createElement('div');
+      ja.className = 'word-ja';
+      ja.textContent = w.japanese;
+
+      row.appendChild(dot);
+      row.appendChild(en);
+      row.appendChild(ja);
+      sheet.appendChild(row);
+    });
+
+    overlay.appendChild(sheet);
+    document.body.appendChild(overlay);
+  }
+
+  // ── Boot ─────────────────────────────────────────────────────────────────
+  bootAuth();
+</script>
+</body>
+</html>
