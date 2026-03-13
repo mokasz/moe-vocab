@@ -477,6 +477,14 @@
         repetitions: word.repetitions,
         last_studied: word.lastSeen,
       }, { onConflict: 'user_id,book_key,word_key' }).then(() => {});
+      // FSRS移行用レビューログ（green=4 / red=1）
+      const fsrsRating = word.status === 'green' ? 4 : 1;
+      sb.from('review_log').insert({
+        user_id: currentUser.id, book_key: BOOK_KEY,
+        word_key: String(word.id), rating: fsrsRating
+      }).then(({ error }) => {
+        if (error) console.warn('review_log error:', error);
+      });
     }
   }
 
