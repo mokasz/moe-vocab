@@ -14,7 +14,7 @@ def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     ease = max(1.3, ease + 0.1 - (4 - quality) * 0.08)
     repetitions += 1
     if repetitions == 1:
-        interval = 1
+        interval = 3
     elif repetitions == 2:
         interval = 6
     else:

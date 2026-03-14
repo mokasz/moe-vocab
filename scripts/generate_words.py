@@ -22,6 +22,7 @@ from pathlib import Path
 BOOK_KEY = "moe-target1900"
 MOE_USER_EMAIL = "moe.zhu@icloud.com"
 DAILY_LIMIT = 30
+DUE_MAX = 15       # red=0 時の due（復習）上限枚数
 MASTERED_INTERVAL = 30
 
 CSV_PATH = Path(__file__).parent.parent / "data" / "target1900_master_enriched.csv"
@@ -54,7 +55,7 @@ def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     ease = max(1.3, ease + 0.1 - (4 - quality) * 0.08)
     repetitions += 1
     if repetitions == 1:
-        interval = 1
+        interval = 3
     elif repetitions == 2:
         interval = 6
     else:
@@ -119,11 +120,10 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
 # ── SM-2 単語選定 ─────────────────────────────────────────
 def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict]:
     """
-    Priority order:
-    1. red (status == "red")
-    2. due (status in yellow/green AND interval days have elapsed since lastSeen)
-    3. new (status == "new", sorted by section DESCENDING then id ascending)
-    Returns up to daily_limit words.
+    単語選択ロジック（SPEC: docs/moe-vocab/SPEC.md「単語選択ロジック」参照）
+
+    red ≥ 1 のとき: red → due → new（合計 daily_limit 上限）
+    red = 0 のとき: due 最大 DUE_MAX 語 → new 残り枠
     """
     today = date.today().isoformat()
 
@@ -150,18 +150,26 @@ def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict
         elif status == "new":
             new.append(w)
 
-    # new は section 降順 → id 昇順
-    new.sort(key=lambda w: (-w.get("section", 0), w.get("id", 0)))
+    # new は part 降順 → section 昇順 → id 昇順（Part3-sec16→17→18→19→Part2-sec9…）
+    new.sort(key=lambda w: (-w.get("part", 0), w.get("section", 0), w.get("id", 0)))
 
     selected = []
-    remaining = daily_limit
 
-    for bucket in (red, due, new):
-        take = bucket[:remaining]
-        selected.extend(take)
-        remaining -= len(take)
-        if remaining <= 0:
-            break
+    if red:
+        # red ≥ 1: 現行仕様（red → due → new、合計 daily_limit 上限）
+        remaining = daily_limit
+        for bucket in (red, due, new):
+            take = bucket[:remaining]
+            selected.extend(take)
+            remaining -= len(take)
+            if remaining <= 0:
+                break
+    else:
+        # red = 0: due は最大 DUE_MAX 語、残り枠を new で補充
+        due_take = due[:DUE_MAX]
+        selected.extend(due_take)
+        remaining = daily_limit - len(due_take)
+        selected.extend(new[:remaining])
 
     return selected
 

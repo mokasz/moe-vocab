@@ -32,20 +32,38 @@ SPLIT_DIR = DATA_DIR / "audio" / "p4_split"
 WORDS_DIR = DATA_DIR / "audio" / "words"
 JA_DIR    = DATA_DIR / "audio" / "ja"
 
-GEMINI_MODEL = "gemini-2.5-flash-preview-tts"
 VOICE_NAME = "Aoede"
 PCM_RATE = 24000
 RATE_LIMIT_SLEEP = 6.5
 MAX_RETRIES = 3
 PASSAGE_FILE = DATA_DIR / "audio" / "passage.mp3"
 
+# フォールバック順: key1+Flash → key1+Pro → key2+Flash → key2+Pro
+TTS_MODELS = [
+    "gemini-2.5-flash-preview-tts",
+    "gemini-2.5-pro-preview-tts",
+]
 
-def init_client():
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
+
+def init_slots():
+    """(client, model) ペアのフォールバックリストを生成。
+    QUOTA超過時にこのリストを順番に試す。
+    key1+Flash → key1+Pro → key2+Flash → key2+Pro の順。"""
+    keys = []
+    for var in ["GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3"]:
+        key = os.environ.get(var)
+        if key:
+            keys.append(key)
+    if not keys:
         print("ERROR: GEMINI_API_KEY が設定されていません")
         sys.exit(1)
-    return genai.Client(api_key=api_key)
+    slots = [
+        (genai.Client(api_key=k), model)
+        for k in keys
+        for model in TTS_MODELS
+    ]
+    print(f"  フォールバックスロット: {len(slots)}個 ({len(keys)}キー × {len(TTS_MODELS)}モデル)")
+    return slots
 
 
 def pcm_to_mp3(pcm_bytes: bytes, output_path: Path) -> bool:
@@ -60,15 +78,19 @@ def pcm_to_mp3(pcm_bytes: bytes, output_path: Path) -> bool:
     return result.returncode == 0
 
 
-def generate_audio(client, text: str, output_path: Path, force: bool = False) -> bool:
+def generate_audio(slots: list, text: str, output_path: Path, force: bool = False) -> bool:
     if output_path.exists() and not force:
         print(f"  SKIP: {output_path.name}")
         return True
 
-    for attempt in range(MAX_RETRIES):
+    slot_idx = 0  # 現在使用中の (client, model) スロット
+
+    while slot_idx < len(slots):
+        client, model = slots[slot_idx]
+        slot_label = f"key{slot_idx // len(TTS_MODELS) + 1}/{model.split('-')[2]}"
         try:
             response = client.models.generate_content(
-                model=GEMINI_MODEL,
+                model=model,
                 contents=text,
                 config=types.GenerateContentConfig(
                     response_modalities=["AUDIO"],
@@ -83,7 +105,7 @@ def generate_audio(client, text: str, output_path: Path, force: bool = False) ->
             )
             content = response.candidates[0].content
             if content is None:
-                print(f"  RETRY ({attempt+1}/{MAX_RETRIES}): content=None")
+                print(f"  RETRY: content=None ({slot_label})")
                 time.sleep(RATE_LIMIT_SLEEP)
                 continue
 
@@ -93,14 +115,14 @@ def generate_audio(client, text: str, output_path: Path, force: bool = False) ->
                     pcm += part.inline_data.data
 
             if not pcm:
-                print(f"  RETRY ({attempt+1}/{MAX_RETRIES}): no PCM data")
+                print(f"  RETRY: no PCM data ({slot_label})")
                 time.sleep(RATE_LIMIT_SLEEP)
                 continue
 
             output_path.parent.mkdir(parents=True, exist_ok=True)
             if pcm_to_mp3(pcm, output_path):
                 size_kb = output_path.stat().st_size // 1024
-                print(f"  OK: {output_path.name} ({size_kb}KB)")
+                print(f"  OK: {output_path.name} ({size_kb}KB) [{slot_label}]")
                 time.sleep(RATE_LIMIT_SLEEP)
                 return True
             else:
@@ -108,10 +130,22 @@ def generate_audio(client, text: str, output_path: Path, force: bool = False) ->
                 return False
 
         except Exception as e:
-            print(f"  ERROR ({attempt+1}/{MAX_RETRIES}): {e}")
-            time.sleep(RATE_LIMIT_SLEEP * 2)
+            err = str(e)
+            if "429" in err or "RESOURCE_EXHAUSTED" in err:
+                next_idx = slot_idx + 1
+                if next_idx < len(slots):
+                    next_client, next_model = slots[next_idx]
+                    next_label = f"key{next_idx // len(TTS_MODELS) + 1}/{next_model.split('-')[2]}"
+                    print(f"  QUOTA超過 [{slot_label}] → [{next_label}] に切り替え")
+                    slot_idx = next_idx
+                else:
+                    print(f"  QUOTA超過 [{slot_label}] → 全スロット消耗")
+                    break
+            else:
+                print(f"  ERROR ({slot_label}): {e}")
+                time.sleep(RATE_LIMIT_SLEEP * 2)
 
-    print(f"  FAILED: {output_path.name} (リトライ上限)")
+    print(f"  FAILED: {output_path.name} (全スロット消耗)")
     return False
 
 
@@ -134,7 +168,7 @@ def load_section_from_csv(section: int):
     return words
 
 
-def run_type(client, words, audio_type, force):
+def run_type(slots, words, audio_type, force):
     ok = skip = fail = 0
     for w in words:
         if audio_type == "words":
@@ -152,21 +186,21 @@ def run_type(client, words, audio_type, force):
             skip += 1
             continue
 
-        if generate_audio(client, text, out, force=force):
+        if generate_audio(slots, text, out, force=force):
             ok += 1
         else:
             fail += 1
     return ok, skip, fail
 
 
-def generate_passage_audio(client, force: bool = False):
+def generate_passage_audio(slots, force: bool = False):
     data = json.loads(WORDS_FILE.read_text())
     text = data.get("passage", {}).get("text", "").strip()
     if not text:
         print("  SKIP: passage.text が空です")
         return
     print(f"  文書 ({len(text)}文字)")
-    generate_audio(client, text, PASSAGE_FILE, force=force)
+    generate_audio(slots, text, PASSAGE_FILE, force=force)
 
 
 def main():
@@ -179,11 +213,11 @@ def main():
     args = parser.parse_args()
 
     print("=== generate_audio.py ===")
-    client = init_client()
+    slots = init_slots()
 
     if args.type == "passage":
         print("\n--- passage ---")
-        generate_passage_audio(client, force=args.force)
+        generate_passage_audio(slots, force=args.force)
         print("\n=== Done ===")
         return
 
@@ -207,14 +241,14 @@ def main():
 
     for t in types:
         print(f"\n--- {t} ---")
-        ok, skip, fail = run_type(client, words, t, args.force)
+        ok, skip, fail = run_type(slots, words, t, args.force)
         total_ok += ok
         total_skip += skip
         total_fail += fail
 
     if args.type == "all":
         print("\n--- passage ---")
-        generate_passage_audio(client, force=args.force)
+        generate_passage_audio(slots, force=args.force)
 
     print(f"\n=== Done: OK={total_ok}, SKIP={total_skip}, FAIL={total_fail} ===")
 
