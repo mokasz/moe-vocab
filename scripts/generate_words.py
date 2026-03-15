@@ -93,7 +93,7 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
     """Load Supabase progress_sync records and merge onto words."""
     rows = (
         sb.table("progress_sync")
-        .select("word_key,status,ease_factor,interval_days,repetitions,last_studied,correct,incorrect")
+        .select("word_key,status,ease_factor,interval_days,repetitions,last_studied,next_review,correct,incorrect")
         .eq("book_key", BOOK_KEY)
         .execute()
         .data
@@ -111,9 +111,10 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
             w["interval"] = v if v is not None else 1
             v = p.get("repetitions")
             w["repetitions"] = v if v is not None else 0
-            w["lastSeen"] = p.get("last_studied")
-            w["correct"]  = p.get("correct")  or 0
-            w["incorrect"] = p.get("incorrect") or 0
+            w["lastSeen"]   = p.get("last_studied")
+            w["nextReview"] = p.get("next_review")
+            w["correct"]    = p.get("correct")   or 0
+            w["incorrect"]  = p.get("incorrect")  or 0
 
     return words
 
@@ -121,42 +122,41 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
 # ── SM-2 更新 + progress_sync 書き戻し ─────────────────────
 def update_sm2_and_save(sb, words: list[dict]) -> None:
     """
-    回答済み単語（lastSeen が null でない）の SM-2 を再計算し、
-    progress_sync の ease_factor / interval_days / repetitions を更新する。
+    回答済み単語の SM-2 を再計算し、progress_sync を更新する。
+    next_review > last_studied の単語はスキップ（重複適用防止）。
     """
-    updates = []
-    for w in words:
-        if not w.get("lastSeen"):
-            continue  # 未回答はスキップ
-        status = w.get("status", "new")
-        if status not in ("green", "red"):
-            continue
-        quality = 4 if status == "green" else 0
-        ease, interval, repetitions = sm2_update(
-            w["ease"], w["interval"], w["repetitions"], quality
-        )
-        updates.append({
-            "book_key":     BOOK_KEY,
-            "word_key":     str(w["id"]),
-            "ease_factor":  ease,
-            "interval_days": interval,
-            "repetitions":  repetitions,
-        })
+    today = date.today().isoformat()
 
-    if not updates:
+    # 対象絞り込み（kaya-vocab と同じパターン）
+    targets = [
+        w for w in words
+        if w.get("lastSeen")                        # 未回答はスキップ
+        and w.get("lastSeen", "")[:10] < today      # 今日の回答は翌朝に処理
+        and w.get("status") in ("green", "red")     # new はスキップ
+        and (                                        # SM-2 未反映のみ
+            w.get("nextReview") is None
+            or w.get("nextReview") <= w.get("lastSeen", "")[:10]
+        )
+    ]
+
+    if not targets:
         print("  no SM-2 updates needed")
         return
 
-    # user_id は progress_sync の既存レコードに既に存在するため upsert ではなく
-    # word_key + book_key で絞って update する
-    for u in updates:
+    for w in targets:
+        quality = 4 if w["status"] == "green" else 0
+        ease, interval, repetitions = sm2_update(
+            w["ease"], w["interval"], w["repetitions"], quality
+        )
+        next_review = (date.today() + timedelta(days=interval)).isoformat()
         sb.table("progress_sync").update({
-            "ease_factor":   u["ease_factor"],
-            "interval_days": u["interval_days"],
-            "repetitions":   u["repetitions"],
-        }).eq("book_key", u["book_key"]).eq("word_key", u["word_key"]).execute()
+            "ease_factor":   ease,
+            "interval_days": interval,
+            "repetitions":   repetitions,
+            "next_review":   next_review,
+        }).eq("book_key", BOOK_KEY).eq("word_key", str(w["id"])).execute()
 
-    print(f"  updated SM-2 for {len(updates)} words")
+    print(f"  updated SM-2 for {len(targets)} words")
 
 
 # ── SM-2 単語選定 ─────────────────────────────────────────

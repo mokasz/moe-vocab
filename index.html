@@ -380,6 +380,8 @@
   const SUPA_URL = 'https://uzpmpjkkwapaohleejtt.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6cG1wamtrd2FwYW9obGVlanR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NzkzMjksImV4cCI6MjA4ODU1NTMyOX0.vnmV6eC05k4BRMR3SgrJBrn5x0gb0_4wI9_L39pGfl0';
   const BOOK_KEY = 'moe-target1900';
+  const PENDING_KEY = BOOK_KEY + '_sync_pending';
+  let isSyncing = false;
   const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
   // ── State ────────────────────────────────────────────────────────────────
@@ -438,6 +440,8 @@
 
     renderAll();           // 全語 new で即座に表示
     loadFromSupabase();    // バックグラウンドで進捗を取得・再描画（await しない）
+    // 30秒ごとにリトライ（オフライン復帰後の未送信分を送信）
+    setInterval(flushPending, 30000);
   }
 
   // ── Progress (Supabase のみ) ─────────────────────────────────────────────
@@ -468,9 +472,39 @@
       });
   }
 
+  async function flushPending() {
+    if (!currentUser || isSyncing) return;
+    const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+    const entries = Object.values(pending);
+    if (entries.length === 0) return;
+    isSyncing = true;
+    localStorage.removeItem(PENDING_KEY);
+    try {
+      for (const payload of entries) {
+        const { error } = await sb.from('progress_sync').upsert(
+          payload, { onConflict: 'user_id,book_key,word_key' }
+        );
+        if (error) throw error;
+      }
+    } catch (e) {
+      const current = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+      for (const payload of entries) {
+        if (!(payload.word_key in current)) current[payload.word_key] = payload;
+      }
+      localStorage.setItem(PENDING_KEY, JSON.stringify(current));
+      console.warn('[flushPending] sync error, will retry:', e);
+    } finally {
+      isSyncing = false;
+      const remaining = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+      if (Object.keys(remaining).length > 0) flushPending();
+    }
+  }
+
   function saveProgress(word) {
     if (!currentUser) return;
-    sb.from('progress_sync').upsert({
+    // 1. localStorage に書き込む（常に最新で上書き）
+    const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+    pending[String(word.id)] = {
       user_id:      currentUser.id,
       book_key:     BOOK_KEY,
       word_key:     String(word.id),
@@ -478,8 +512,10 @@
       last_studied: word.lastSeen,
       correct:      word.correct   ?? 0,
       incorrect:    word.incorrect ?? 0,
-    }, { onConflict: 'user_id,book_key,word_key' })
-      .then(({ error }) => { if (error) console.warn('[saveProgress] upsert error:', error); });
+    };
+    localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+    // 2. flushPending() 経由で Supabase に送信
+    flushPending();
   }
 
 
