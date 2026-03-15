@@ -50,7 +50,7 @@ def init_slots():
     QUOTA超過時にこのリストを順番に試す。
     key1+Flash → key1+Pro → key2+Flash → key2+Pro の順。"""
     keys = []
-    for var in ["GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3"]:
+    for var in ["GEMINI_API_KEY", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3", "GEMINI_API_KEY_4"]:
         key = os.environ.get(var)
         if key:
             keys.append(key)
@@ -80,7 +80,7 @@ def pcm_to_mp3(pcm_bytes: bytes, output_path: Path) -> bool:
 
 def generate_audio(slots: list, text: str, output_path: Path, force: bool = False) -> bool:
     if output_path.exists() and not force:
-        print(f"  SKIP: {output_path.name}")
+        print(f"  SKIP: {output_path.name}", flush=True)
         return True
 
     slot_idx = 0  # 現在使用中の (client, model) スロット
@@ -103,10 +103,17 @@ def generate_audio(slots: list, text: str, output_path: Path, force: bool = Fals
                     ),
                 ),
             )
-            content = response.candidates[0].content
+            cand = response.candidates[0]
+            content = cand.content
             if content is None:
-                print(f"  RETRY: content=None ({slot_label})")
-                time.sleep(RATE_LIMIT_SLEEP)
+                reason = str(getattr(cand, "finish_reason", None))
+                permanent = any(r in reason for r in ("SAFETY", "PROHIBITED", "RECITATION"))
+                if permanent:
+                    print(f"  FAILED: {output_path.name} (blocked: {reason})", flush=True)
+                    return False
+                # 一時的エラー: 次スロットへ
+                print(f"  SKIP_SLOT: content=None finish_reason={reason} [{slot_label}]")
+                slot_idx += 1
                 continue
 
             pcm = b""
@@ -115,14 +122,15 @@ def generate_audio(slots: list, text: str, output_path: Path, force: bool = Fals
                     pcm += part.inline_data.data
 
             if not pcm:
-                print(f"  RETRY: no PCM data ({slot_label})")
-                time.sleep(RATE_LIMIT_SLEEP)
+                # PCMなしも一時的エラーとして次スロットへ
+                print(f"  SKIP_SLOT: no PCM data [{slot_label}]")
+                slot_idx += 1
                 continue
 
             output_path.parent.mkdir(parents=True, exist_ok=True)
             if pcm_to_mp3(pcm, output_path):
                 size_kb = output_path.stat().st_size // 1024
-                print(f"  OK: {output_path.name} ({size_kb}KB) [{slot_label}]")
+                print(f"  OK: {output_path.name} ({size_kb}KB) [{slot_label}]", flush=True)
                 time.sleep(RATE_LIMIT_SLEEP)
                 return True
             else:
@@ -170,7 +178,8 @@ def load_section_from_csv(section: int):
 
 def run_type(slots, words, audio_type, force):
     ok = skip = fail = 0
-    for w in words:
+    total = len(words)
+    for i, w in enumerate(words, 1):
         if audio_type == "words":
             out = WORDS_DIR / f"{w['id']}.mp3"
             text = f"Say the word: {w['word']}"
@@ -180,6 +189,8 @@ def run_type(slots, words, audio_type, force):
         else:  # sentences
             out = SPLIT_DIR / f"{w['id']}.mp3"
             text = w["sentence"]
+
+        print(f"[{i}/{total}] {w['word']} (id={w['id']})", flush=True)
 
         if not text.strip():
             print(f"  SKIP (テキストなし): {out.name}")
@@ -191,6 +202,34 @@ def run_type(slots, words, audio_type, force):
         else:
             fail += 1
     return ok, skip, fail
+
+
+def run_type_batch(client, words, audio_type, force):
+    """Batch API を使って一括生成（非同期・50%オフ）。passage には非対応。"""
+    # 生成が必要な語だけ抽出
+    targets = []
+    for w in words:
+        if audio_type == "words":
+            out = WORDS_DIR / f"{w['id']}.mp3"
+            text = f"Say the word: {w['word']}"
+        elif audio_type == "ja":
+            out = JA_DIR / f"{w['id']}.mp3"
+            text = w["japanese"]
+        else:
+            out = SPLIT_DIR / f"{w['id']}.mp3"
+            text = w["sentence"]
+        if out.exists() and not force:
+            continue
+        if text.strip():
+            targets.append({"id": w["id"], "word": w["word"], "text": text, "out": out})
+
+    skip = len(words) - len(targets)
+    if not targets:
+        print(f"  全語SKIP（既存ファイルあり）: {skip}語", flush=True)
+        return 0, skip, 0
+
+    print(f"  SKIP={skip}語 / バッチ送信={len(targets)}語", flush=True)
+
 
 
 def generate_passage_audio(slots, force: bool = False):

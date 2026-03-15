@@ -380,7 +380,6 @@
   const SUPA_URL = 'https://uzpmpjkkwapaohleejtt.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6cG1wamtrd2FwYW9obGVlanR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NzkzMjksImV4cCI6MjA4ODU1NTMyOX0.vnmV6eC05k4BRMR3SgrJBrn5x0gb0_4wI9_L39pGfl0';
   const BOOK_KEY = 'moe-target1900';
-  const LS_KEY = 'moe_vocab_v1';
   const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
   // ── State ────────────────────────────────────────────────────────────────
@@ -437,56 +436,56 @@
     allWords = wordsData.words;
     audioVer = String(wordsData.meta?.version || v);
 
-    loadProgress();
-    renderAll();
+    renderAll();           // 全語 new で即座に表示
+    loadFromSupabase();    // バックグラウンドで進捗を取得・再描画（await しない）
   }
 
-  // ── Progress (localStorage + Supabase) ──────────────────────────────────
-  function loadProgress() {
-    const saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-    allWords.forEach(w => {
-      const p = saved[w.id];
-      if (p) {
-        w.status = p.status;
-        w.ease = p.ease;
-        w.interval = p.interval;
-        w.repetitions = p.repetitions;
-        w.lastSeen = p.lastSeen;
-      }
-    });
+  // ── Progress (Supabase のみ) ─────────────────────────────────────────────
+  function loadFromSupabase() {
+    if (!currentUser) return;
+    sb.from('progress_sync')
+      .select('word_key, status, ease_factor, interval_days, repetitions, last_studied')
+      .eq('user_id', currentUser.id)
+      .eq('book_key', BOOK_KEY)
+      .then(({ data, error }) => {
+        if (error) { console.warn('[loadFromSupabase] error:', error); return; }
+        if (!data || data.length === 0) return;
+        const map = {};
+        data.forEach(r => { map[r.word_key] = r; });
+        allWords.forEach(w => {
+          const r = map[String(w.id)];
+          if (r) {
+            w.status      = r.status;
+            w.ease        = r.ease_factor;
+            w.interval    = r.interval_days;
+            w.repetitions = r.repetitions;
+            w.lastSeen    = r.last_studied;
+          }
+        });
+        renderAll();
+      });
   }
 
   function saveProgress(word) {
-    const saved = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-    saved[word.id] = {
-      status: word.status,
-      ease: word.ease,
-      interval: word.interval,
-      repetitions: word.repetitions,
-      lastSeen: word.lastSeen,
-    };
-    localStorage.setItem(LS_KEY, JSON.stringify(saved));
+    if (!currentUser) return;
     // Supabase upsert (fire-and-forget)
-    if (currentUser) {
-      sb.from('progress_sync').upsert({
-        user_id: currentUser.id,
-        book_key: BOOK_KEY,
-        word_key: String(word.id),
-        status: word.status,
-        ease_factor: word.ease,
-        interval_days: word.interval,
-        repetitions: word.repetitions,
-        last_studied: word.lastSeen,
-      }, { onConflict: 'user_id,book_key,word_key' }).then(() => {});
-      // FSRS移行用レビューログ（green=4 / red=1）
-      const fsrsRating = word.status === 'green' ? 4 : 1;
-      sb.from('review_log').insert({
-        user_id: currentUser.id, book_key: BOOK_KEY,
-        word_key: String(word.id), rating: fsrsRating
-      }).then(({ error }) => {
-        if (error) console.warn('review_log error:', error);
-      });
-    }
+    sb.from('progress_sync').upsert({
+      user_id:       currentUser.id,
+      book_key:      BOOK_KEY,
+      word_key:      String(word.id),
+      status:        word.status,
+      ease_factor:   word.ease,
+      interval_days: word.interval,
+      repetitions:   word.repetitions,
+      last_studied:  word.lastSeen,
+    }, { onConflict: 'user_id,book_key,word_key' })
+      .then(({ error }) => { if (error) console.warn('[saveProgress] upsert error:', error); });
+    // FSRS移行用レビューログ（green=4 / red=1）
+    const fsrsRating = word.status === 'green' ? 4 : 1;
+    sb.from('review_log').insert({
+      user_id: currentUser.id, book_key: BOOK_KEY,
+      word_key: String(word.id), rating: fsrsRating
+    }).then(({ error }) => { if (error) console.warn('[saveProgress] review_log error:', error); });
   }
 
   // ── SM-2 ─────────────────────────────────────────────────────────────────

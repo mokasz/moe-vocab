@@ -23,7 +23,6 @@ BOOK_KEY = "moe-target1900"
 MOE_USER_EMAIL = "moe.zhu@icloud.com"
 DAILY_LIMIT = 30
 DUE_MAX = 15       # red=0 時の due（復習）上限枚数
-MASTERED_INTERVAL = 30
 
 CSV_PATH = Path(__file__).parent.parent / "data" / "target1900_master_enriched.csv"
 OUTPUT_PATH = Path(__file__).parent.parent / "data" / "words.json"
@@ -135,7 +134,7 @@ def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict
         status = w.get("status", "new")
         if status == "red":
             red.append(w)
-        elif status in ("yellow", "green"):
+        elif status == "green":
             last_seen = w.get("lastSeen")
             interval = w.get("interval", 1)
             if last_seen:

@@ -1,6 +1,4 @@
-# kaya-vocab/scripts/sm2.py
-
-MASTERED_INTERVAL = 21  # この日数以上で習得済み
+# moe-vocab/scripts/sm2.py
 
 def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     """
@@ -24,9 +22,4 @@ def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
 
 def quality_from_status(status: str) -> int:
     """progress_sync の status を SM-2 quality 値に変換"""
-    return {'green': 4, 'yellow': 2, 'red': 0}.get(status, 0)
-
-
-def is_mastered(interval: int) -> bool:
-    """interval が閾値以上なら習得済み"""
-    return interval >= MASTERED_INTERVAL
+    return {'green': 4, 'red': 0}.get(status, 0)
