@@ -93,7 +93,7 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
     """Load Supabase progress_sync records and merge onto words."""
     rows = (
         sb.table("progress_sync")
-        .select("word_key,status,ease_factor,interval_days,repetitions,last_studied")
+        .select("word_key,status,ease_factor,interval_days,repetitions,last_studied,correct,incorrect")
         .eq("book_key", BOOK_KEY)
         .execute()
         .data
@@ -112,8 +112,51 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
             v = p.get("repetitions")
             w["repetitions"] = v if v is not None else 0
             w["lastSeen"] = p.get("last_studied")
+            w["correct"]  = p.get("correct")  or 0
+            w["incorrect"] = p.get("incorrect") or 0
 
     return words
+
+
+# ── SM-2 更新 + progress_sync 書き戻し ─────────────────────
+def update_sm2_and_save(sb, words: list[dict]) -> None:
+    """
+    回答済み単語（lastSeen が null でない）の SM-2 を再計算し、
+    progress_sync の ease_factor / interval_days / repetitions を更新する。
+    """
+    updates = []
+    for w in words:
+        if not w.get("lastSeen"):
+            continue  # 未回答はスキップ
+        status = w.get("status", "new")
+        if status not in ("green", "red"):
+            continue
+        quality = 4 if status == "green" else 0
+        ease, interval, repetitions = sm2_update(
+            w["ease"], w["interval"], w["repetitions"], quality
+        )
+        updates.append({
+            "book_key":     BOOK_KEY,
+            "word_key":     str(w["id"]),
+            "ease_factor":  ease,
+            "interval_days": interval,
+            "repetitions":  repetitions,
+        })
+
+    if not updates:
+        print("  no SM-2 updates needed")
+        return
+
+    # user_id は progress_sync の既存レコードに既に存在するため upsert ではなく
+    # word_key + book_key で絞って update する
+    for u in updates:
+        sb.table("progress_sync").update({
+            "ease_factor":   u["ease_factor"],
+            "interval_days": u["interval_days"],
+            "repetitions":   u["repetitions"],
+        }).eq("book_key", u["book_key"]).eq("word_key", u["word_key"]).execute()
+
+    print(f"  updated SM-2 for {len(updates)} words")
 
 
 # ── SM-2 単語選定 ─────────────────────────────────────────
@@ -284,11 +327,14 @@ def main():
     words = load_progress(sb, words)
     print("  merged Supabase progress")
 
-    # 3. SM-2 単語選定
+    # 3. SM-2 再計算 + progress_sync 書き戻し
+    update_sm2_and_save(sb, words)
+
+    # 4. 単語選定
     selected = select_words(words, daily_limit=DAILY_LIMIT)
     print(f"  selected {len(selected)} words for today")
 
-    # 4. 医学系パッセージ生成
+    # 5. 医学系パッセージ生成
     client = get_gemini()
     passage = generate_passage(client, selected)
     if passage:
@@ -296,7 +342,7 @@ def main():
     else:
         print("  WARNING: passage generation failed, using empty passage")
 
-    # 5. words.json 出力
+    # 6. words.json 出力
     output = {
         "meta": {
             "total": len(selected),
