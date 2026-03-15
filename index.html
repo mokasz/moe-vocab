@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="words-version" content="1773453163">
+  <meta name="words-version" content="1773590870">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -387,6 +387,7 @@
   // ── State ────────────────────────────────────────────────────────────────
   let currentUser = null;
   let allWords = [];
+  let allProgress = {}; // word_key → {status, ...} 全1900語分の進捗キャッシュ
   let wordsData = null;
   let cardQueue = [];
   let cardIndex = 0;
@@ -456,6 +457,7 @@
         if (!data || data.length === 0) return;
         const map = {};
         data.forEach(r => { map[r.word_key] = r; });
+        allProgress = map; // 全進捗キャッシュを更新
         allWords.forEach(w => {
           const r = map[String(w.id)];
           if (r) {
@@ -554,8 +556,10 @@
     cardQueue = [...allWords];
     const saved    = parseInt(sessionStorage.getItem(SS_KEY)   || '0', 10);
     const hasStart = sessionStorage.getItem(SS_START) !== null;
-    if (saved > 0 && saved <= cardQueue.length && hasStart) {
-      cardIndex = saved; // 有効なセッション → 途中再開
+    const startTs = parseInt(sessionStorage.getItem(SS_START) || '0', 10);
+    const isToday = startTs > 0 && new Date(startTs).toDateString() === new Date().toDateString();
+    if (saved > 0 && saved <= cardQueue.length && hasStart && isToday) {
+      cardIndex = saved; // 有効なセッション（今日）→ 途中再開
     } else {
       // セッション状態なし or stale → 単語データから直接判定
       const allDone = cardQueue.every(w => w.status && w.status !== 'new');
@@ -881,7 +885,8 @@
         playBtn.classList.remove('playing');
       } else {
         stopAudio();
-        passageAudio = new Audio(`data/audio/passage.mp3?v=${audioVer}`);
+        const passageFile = wordsData.passage?.audio || 'passage.mp3';
+        passageAudio = new Audio(`data/audio/${passageFile}?v=${audioVer}`);
         _activeAudio = passageAudio;
         playBtn.textContent = '⏹ Stop';
         playBtn.classList.add('playing');
@@ -1046,19 +1051,41 @@
     todaySection.appendChild(todayList);
     wrap.appendChild(todaySection);
 
-    // Compute stats per section
-    const sectionStats = {};
-    for (let s = 1; s <= 19; s++) sectionStats[s] = { total: 0, known: 0 };
+    // 全1900語の固定総語数（CSV由来・変化しない）
+    const SECTION_TOTAL = 100; // 全セクション共通（ID 1-100 = sec1, 101-200 = sec2, ...）
+    const PART_TOTAL = { 1: 800, 2: 700, 3: 400 };
+    // Section 1-8 → Part 1, Section 9-15 → Part 2, Section 16-19 → Part 3
+    const secToPart = s => s <= 8 ? 1 : s <= 15 ? 2 : 3;
+
+    // allProgress（全1900語）から green 数を集計
+    const sectionKnown = {};
+    for (let s = 1; s <= 19; s++) sectionKnown[s] = 0;
+    const partKnown = { 1: 0, 2: 0, 3: 0 };
+    Object.entries(allProgress).forEach(([wk, r]) => {
+      if (r.status === 'green') {
+        const sec = Math.ceil(parseInt(wk) / SECTION_TOTAL);
+        if (sec >= 1 && sec <= 19) {
+          sectionKnown[sec]++;
+          partKnown[secToPart(sec)]++;
+        }
+      }
+    });
+    // 今日の単語は allWords の最新ステータスで allProgress を上書き補正
     allWords.forEach(w => {
-      sectionStats[w.section].total++;
-      if (w.status === 'green') sectionStats[w.section].known++;
+      const prev = allProgress[String(w.id)];
+      const prevGreen = prev && prev.status === 'green';
+      const nowGreen  = w.status === 'green';
+      if (nowGreen && !prevGreen) { sectionKnown[w.section]++; partKnown[w.part]++; }
+      if (!nowGreen && prevGreen) { sectionKnown[w.section]--; partKnown[w.part]--; }
     });
 
-    // Compute stats per part
-    const partStats = { 1: { total:0, known:0 }, 2: { total:0, known:0 }, 3: { total:0, known:0 } };
-    allWords.forEach(w => {
-      partStats[w.part].total++;
-      if (w.status === 'green') partStats[w.part].known++;
+    const sectionStats = {};
+    for (let s = 1; s <= 19; s++) {
+      sectionStats[s] = { total: SECTION_TOTAL, known: sectionKnown[s] };
+    }
+    const partStats = {};
+    [1, 2, 3].forEach(p => {
+      partStats[p] = { total: PART_TOTAL[p], known: partKnown[p] };
     });
 
     const partNames = { 1: 'Part 1（基本800語）', 2: 'Part 2（重要700語）', 3: 'Part 3（難単語400語）' };

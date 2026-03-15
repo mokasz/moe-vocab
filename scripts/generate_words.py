@@ -20,7 +20,8 @@ from pathlib import Path
 
 # ── 設定 ────────────────────────────────────────────────
 BOOK_KEY = "moe-target1900"
-MOE_USER_EMAIL = "moe.zhu@icloud.com"
+MOE_USER_EMAIL = "moeloveslemon1921@gmail.com"
+MOE_USER_ID = "a29d41be-9ee3-4890-9c03-cff3f7339c21"
 DAILY_LIMIT = 30
 DUE_MAX = 15       # red=0 時の due（復習）上限枚数
 
@@ -95,6 +96,7 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
         sb.table("progress_sync")
         .select("word_key,status,ease_factor,interval_days,repetitions,last_studied,next_review,correct,incorrect")
         .eq("book_key", BOOK_KEY)
+        .eq("user_id", MOE_USER_ID)
         .execute()
         .data
     )
@@ -154,7 +156,7 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
             "interval_days": interval,
             "repetitions":   repetitions,
             "next_review":   next_review,
-        }).eq("book_key", BOOK_KEY).eq("word_key", str(w["id"])).execute()
+        }).eq("book_key", BOOK_KEY).eq("user_id", MOE_USER_ID).eq("word_key", str(w["id"])).execute()
 
     print(f"  updated SM-2 for {len(targets)} words")
 
@@ -338,6 +340,7 @@ def main():
     client = get_gemini()
     passage = generate_passage(client, selected)
     if passage:
+        passage["audio"] = f"passage_{date.today().isoformat()}.mp3"
         print(f"  generated passage (theme: {passage.get('theme', '?')})")
     else:
         print("  WARNING: passage generation failed, using empty passage")
