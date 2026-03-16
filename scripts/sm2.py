@@ -20,6 +20,16 @@ def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     return ease, interval, repetitions
 
 
-def quality_from_status(status: str) -> int:
-    """progress_sync の status を SM-2 quality 値に変換"""
-    return {'green': 4, 'red': 0}.get(status, 0)
+def quality_from_review_log(ratings: list[int]) -> int:
+    """
+    当日の review_log の rating リストから SM-2 quality を決定する。
+    rating: green=4, red=1（moe-vocab は yellow なし）
+    - red が1件でもある → 0
+    - 全部 green → 4
+    - 記録なし → 0（フォールバック）
+    """
+    if not ratings:
+        return 0
+    if 1 in ratings:
+        return 0
+    return 4

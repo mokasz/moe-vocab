@@ -15,6 +15,7 @@ import random
 import re
 import sys
 import time
+from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -63,6 +64,18 @@ def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     return ease, interval, repetitions
 
 
+def quality_from_review_log(ratings: list[int]) -> int:
+    """
+    当日の review_log の rating リストから SM-2 quality を決定する。
+    rating: green=4, red=1（moe-vocab は yellow なし）
+    """
+    if not ratings:
+        return 0
+    if 1 in ratings:
+        return 0
+    return 4
+
+
 # ── CSV 読み込み ───────────────────────────────────────────
 def load_master_csv() -> list[dict]:
     """Load target1900_master_enriched.csv and return list of word dicts with SM-2 defaults."""
@@ -94,7 +107,7 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
     """Load Supabase progress_sync records and merge onto words."""
     rows = (
         sb.table("progress_sync")
-        .select("word_key,status,ease_factor,interval_days,repetitions,last_studied,next_review,correct,incorrect")
+        .select("word_key,status,ease_factor,interval_days,repetitions,last_studied,next_review")
         .eq("book_key", BOOK_KEY)
         .eq("user_id", MOE_USER_ID)
         .execute()
@@ -115,8 +128,6 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
             w["repetitions"] = v if v is not None else 0
             w["lastSeen"]   = p.get("last_studied")
             w["nextReview"] = p.get("next_review")
-            w["correct"]    = p.get("correct")   or 0
-            w["incorrect"]  = p.get("incorrect")  or 0
 
     return words
 
@@ -145,12 +156,29 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
         print("  no SM-2 updates needed")
         return
 
+    # review_log を一括取得（対象単語の last_studied 日付分）
+    word_keys = [str(w["id"]) for w in targets]
+    log_rows = (
+        sb.table("review_log")
+        .select("word_key, rating, reviewed_at")
+        .eq("user_id", MOE_USER_ID)
+        .eq("book_key", BOOK_KEY)
+        .in_("word_key", word_keys)
+        .execute()
+        .data
+    )
+    log_map: dict[str, dict[str, list[int]]] = defaultdict(lambda: defaultdict(list))
+    for log in log_rows:
+        d = log["reviewed_at"][:10]
+        log_map[log["word_key"]][d].append(log["rating"])
+
     for w in targets:
-        quality = 4 if w["status"] == "green" else 0
+        ratings = log_map[str(w["id"])].get(w["lastSeen"][:10], [])
+        quality = quality_from_review_log(ratings)
         ease, interval, repetitions = sm2_update(
             w["ease"], w["interval"], w["repetitions"], quality
         )
-        next_review = (date.today() + timedelta(days=interval)).isoformat()
+        next_review = (date.fromisoformat(w["lastSeen"][:10]) + timedelta(days=interval)).isoformat()
         sb.table("progress_sync").update({
             "ease_factor":   ease,
             "interval_days": interval,

@@ -296,9 +296,8 @@
 
     .section-row {
       display:flex; align-items:center; gap:10px; padding:8px 4px;
-      cursor:pointer; border-radius:8px; transition:background 0.12s;
+      border-radius:8px;
     }
-    .section-row:hover { background:var(--surface2); }
     .sec-label { font-size:0.82rem; color:var(--text-sub); width:80px; flex-shrink:0; }
     .sec-bar   { flex:1; height:6px; background:var(--surface2); border-radius:3px; overflow:hidden; }
     .sec-fill  { height:100%; background:var(--accent); border-radius:3px; }
@@ -449,7 +448,7 @@
   function loadFromSupabase() {
     if (!currentUser) return;
     sb.from('progress_sync')
-      .select('word_key, status, ease_factor, interval_days, repetitions, last_studied, correct, incorrect')
+      .select('word_key, status, ease_factor, interval_days, repetitions, last_studied')
       .eq('user_id', currentUser.id)
       .eq('book_key', BOOK_KEY)
       .then(({ data, error }) => {
@@ -466,8 +465,6 @@
             w.interval    = r.interval_days;
             w.repetitions = r.repetitions;
             w.lastSeen    = r.last_studied;
-            w.correct     = r.correct   ?? 0;
-            w.incorrect   = r.incorrect ?? 0;
           }
         });
         renderAll();
@@ -512,12 +509,16 @@
       word_key:     String(word.id),
       status:       word.status,
       last_studied: word.lastSeen,
-      correct:      word.correct   ?? 0,
-      incorrect:    word.incorrect ?? 0,
     };
     localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
     // 2. flushPending() 経由で Supabase に送信
     flushPending();
+    // 3. review_log に記録（SM-2 quality の入力源）
+    const rating = word.status === 'green' ? 4 : 1;
+    sb.from('review_log').insert({
+      user_id: currentUser.id, book_key: BOOK_KEY,
+      word_key: String(word.id), rating,
+    }).then(({ error }) => { if (error) console.warn('[review_log] error:', error); });
   }
 
 
@@ -693,8 +694,6 @@
   function judge(word, quality) {
     word.status   = quality >= 4 ? 'green' : 'red';
     word.lastSeen = new Date().toISOString();
-    if (quality >= 4) word.correct   = (word.correct   ?? 0) + 1;
-    else              word.incorrect = (word.incorrect ?? 0) + 1;
     saveProgress(word);
     if (quality >= 4) sessionStats.known++;
     else sessionStats.unknown++;
@@ -1008,7 +1007,7 @@
       const badge = document.createElement('span');
       badge.className = 'status-badge status-' + (w.status || 'new');
       badge.textContent = w.status === 'green' ? '✅' : w.status === 'red' ? '❌' : '🆕';
-      if (inRemaining) badge.style.opacity = '0.35';
+      if (inRemaining || w.status === 'new') badge.style.opacity = '0.35';
 
       item.appendChild(idEl);
       item.appendChild(wordEl);
@@ -1126,7 +1125,6 @@
 
         const row = document.createElement('div');
         row.className = 'section-row';
-        row.onclick = () => openSectionModal(sec);
 
         const label = document.createElement('div');
         label.className = 'sec-label';
@@ -1155,56 +1153,6 @@
     v.appendChild(wrap);
   }
 
-  function openSectionModal(section) {
-    const words = allWords.filter(w => w.section === section);
-
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-
-    const sheet = document.createElement('div');
-    sheet.className = 'modal-sheet';
-
-    const hdr = document.createElement('div');
-    hdr.className = 'modal-header';
-    const title = document.createElement('div');
-    title.className = 'modal-title';
-    title.textContent = 'Section ' + section + ' (' + words.length + '語)';
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'modal-close';
-    closeBtn.textContent = '✕';
-    closeBtn.onclick = () => overlay.remove();
-    hdr.appendChild(title);
-    hdr.appendChild(closeBtn);
-    sheet.appendChild(hdr);
-
-    const dotColors = { green: '#4caf82', red: '#e05c5c', yellow: '#d4a020', new: '#2e2e40' };
-
-    words.forEach(w => {
-      const row = document.createElement('div');
-      row.className = 'word-row';
-
-      const dot = document.createElement('div');
-      dot.className = 'status-dot';
-      dot.style.background = dotColors[w.status] || dotColors.new;
-
-      const en = document.createElement('div');
-      en.className = 'word-en';
-      en.textContent = w.word;
-
-      const ja = document.createElement('div');
-      ja.className = 'word-ja';
-      ja.textContent = w.japanese;
-
-      row.appendChild(dot);
-      row.appendChild(en);
-      row.appendChild(ja);
-      sheet.appendChild(row);
-    });
-
-    overlay.appendChild(sheet);
-    document.body.appendChild(overlay);
-  }
 
   // ── Boot ─────────────────────────────────────────────────────────────────
   bootAuth();
