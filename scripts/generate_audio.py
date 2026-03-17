@@ -41,6 +41,12 @@ AUDIO_DIR = DATA_DIR / "audio"
 EN_VOICE = "en-US-Studio-O"
 JA_VOICE = "ja-JP-Chirp3-HD-Aoede"
 
+# 日本語読みオーバーライド（TTSが漢字を誤読する場合にひらがなで指定）
+# key: word_id (str), value: 読み（ひらがな）
+JA_READING_OVERRIDES = {
+    "1561": "はいぐうしゃ",  # 配偶者 → TTSが「ぺいようしゃ」と誤読
+}
+
 # Gemini TTS 設定
 GEMINI_VOICE = "Aoede"
 PCM_RATE = 24000
@@ -242,7 +248,7 @@ def run_type(gcloud, slots, words, audio_type, force):
 
         elif audio_type == "ja":
             out = JA_DIR / f"{w['id']}.mp3"
-            text = w["japanese"]
+            text = JA_READING_OVERRIDES.get(str(w["id"]), w["japanese"])
             if not text.strip():
                 print(f"  SKIP (テキストなし): {out.name}")
                 skip += 1

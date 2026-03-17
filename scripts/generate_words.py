@@ -185,6 +185,8 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
             "repetitions":   repetitions,
             "next_review":   next_review,
         }).eq("book_key", BOOK_KEY).eq("user_id", MOE_USER_ID).eq("word_key", str(w["id"])).execute()
+        w["interval"]   = interval
+        w["nextReview"] = next_review
 
     print(f"  updated SM-2 for {len(targets)} words")
 
