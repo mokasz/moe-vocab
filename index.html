@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="words-version" content="1773760621">
+  <meta name="words-version" content="1773846088">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -378,8 +378,9 @@
   // ── Config ──────────────────────────────────────────────────────────────
   const SUPA_URL = 'https://uzpmpjkkwapaohleejtt.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6cG1wamtrd2FwYW9obGVlanR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NzkzMjksImV4cCI6MjA4ODU1NTMyOX0.vnmV6eC05k4BRMR3SgrJBrn5x0gb0_4wI9_L39pGfl0';
-  const BOOK_KEY = 'moe-target1900';
+  const BOOK_KEY    = 'moe-target1900';
   const PENDING_KEY = BOOK_KEY + '_sync_pending';
+  const VERSION_KEY = 'moe_words_version'; // 単語セット切り替え検出用
   let isSyncing = false;
   const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
@@ -438,6 +439,14 @@
     allWords = wordsData.words;
     audioVer = String(wordsData.meta?.version || v);
 
+    // 単語セット切り替え検出: バージョンが変わっていれば前回のセッション位置を無効化
+    const currentVersion = String(wordsData.meta?.version || '');
+    if (localStorage.getItem(VERSION_KEY) !== currentVersion) {
+      sessionStorage.removeItem(SS_KEY);
+      sessionStorage.removeItem(SS_START);
+      localStorage.setItem(VERSION_KEY, currentVersion);
+    }
+
     renderAll();           // 全語 new で即座に表示
     loadFromSupabase();    // バックグラウンドで進捗を取得・再描画（await しない）
     // 30秒ごとにリトライ（オフライン復帰後の未送信分を送信）
@@ -457,10 +466,12 @@
         const map = {};
         data.forEach(r => { map[r.word_key] = r; });
         allProgress = map; // 全進捗キャッシュを更新
+        const todayJST = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
         allWords.forEach(w => {
           const r = map[String(w.id)];
           if (r) {
-            w.status      = r.status;
+            const isOldRecord = !r.last_studied || r.last_studied < todayJST;
+            w.status      = isOldRecord ? 'new' : r.status;
             w.ease        = r.ease_factor;
             w.interval    = r.interval_days;
             w.repetitions = r.repetitions;
@@ -693,7 +704,7 @@
 
   function judge(word, quality) {
     word.status   = quality >= 4 ? 'green' : 'red';
-    word.lastSeen = new Date().toISOString();
+    word.lastSeen = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
     saveProgress(word);
     if (quality >= 4) sessionStats.known++;
     else sessionStats.unknown++;

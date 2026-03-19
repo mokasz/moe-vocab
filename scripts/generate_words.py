@@ -48,7 +48,8 @@ MEDICAL_THEMES = [
 def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     """
     SM-2 アルゴリズム（インライン実装）。
-    quality: 4=正解ヒントなし, 2=正解ヒントあり, 0=不正解
+    quality: 4=正解（知ってた）, 0=不正解（知らなかった）
+    moe-vocab はヒント機能なし。quality は 0 / 4 の2値のみ使用する。
     returns: (ease, interval, repetitions)
     """
     if quality < 2:  # 不正解 → リセット
@@ -68,9 +69,10 @@ def quality_from_review_log(ratings: list[int]) -> int:
     """
     当日の review_log の rating リストから SM-2 quality を決定する。
     rating: green=4, red=1（moe-vocab は yellow なし）
+
+    前提: ratings は空でないこと（呼び出し元で確認する）。
+    review_log に記録がない単語は SM-2 計算対象外とし、この関数を呼ばない。
     """
-    if not ratings:
-        return 0
     if 1 in ratings:
         return 0
     return 4
@@ -137,15 +139,19 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
     """
     回答済み単語の SM-2 を再計算し、progress_sync を更新する。
     next_review > last_studied の単語はスキップ（重複適用防止）。
+
+    quality は review_log から導出し、w["quality"] に書き戻す。
+    select_words() はこの値を使って red バケットを決定する
+    （progress_sync.status はブラウザが保存するため信頼性が低い）。
     """
     today = date.today().isoformat()
 
     # 対象絞り込み（kaya-vocab と同じパターン）
+    # status は参照しない: new（lastSeen=null）のみ除外すれば十分
     targets = [
         w for w in words
         if w.get("lastSeen")                        # 未回答はスキップ
         and w.get("lastSeen", "")[:10] < today      # 今日の回答は翌朝に処理
-        and w.get("status") in ("green", "red")     # new はスキップ
         and (                                        # SM-2 未反映のみ
             w.get("nextReview") is None
             or w.get("nextReview") <= w.get("lastSeen", "")[:10]
@@ -174,6 +180,10 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
 
     for w in targets:
         ratings = log_map[str(w["id"])].get(w["lastSeen"][:10], [])
+        if not ratings:
+            # review_log 記録なし → SM-2 計算対象外（スキップ）
+            # 学習した事実がない or データ欠損の場合は計算しない
+            continue
         quality = quality_from_review_log(ratings)
         ease, interval, repetitions = sm2_update(
             w["ease"], w["interval"], w["repetitions"], quality
@@ -187,6 +197,7 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
         }).eq("book_key", BOOK_KEY).eq("user_id", MOE_USER_ID).eq("word_key", str(w["id"])).execute()
         w["interval"]   = interval
         w["nextReview"] = next_review
+        w["quality"]    = quality   # select_words() で red バケット判定に使用
 
     print(f"  updated SM-2 for {len(targets)} words")
 
@@ -198,6 +209,10 @@ def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict
 
     red ≥ 1 のとき: red → due → new（合計 daily_limit 上限）
     red = 0 のとき: due 最大 DUE_MAX 語 → new 残り枠
+
+    red の判定: progress_sync.status ではなく w["quality"] == 0 を使う。
+    quality は update_sm2_and_save() が review_log から導出して書き戻す。
+    ブラウザが保存する status は UI 表示用であり、選定ロジックでは参照しない。
     """
     today = date.today().isoformat()
 
@@ -206,22 +221,19 @@ def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict
     new = []
 
     for w in words:
-        status = w.get("status", "new")
-        if status == "red":
+        # review_log 由来の quality=0 → red（前回不正解）
+        if w.get("quality") == 0:
             red.append(w)
-        elif status == "green":
-            last_seen = w.get("lastSeen")
+        elif w.get("lastSeen"):
+            # 回答済み（green/red 問わず）: lastSeen + interval で due 判定
             interval = w.get("interval", 1)
-            if last_seen:
-                next_due = (
-                    date.fromisoformat(last_seen[:10]) + timedelta(days=interval)
-                ).isoformat()
-                if next_due <= today:
-                    due.append(w)
-            else:
-                # lastSeen なし → 即時due扱い
+            next_due = (
+                date.fromisoformat(w["lastSeen"][:10]) + timedelta(days=interval)
+            ).isoformat()
+            if next_due <= today:
                 due.append(w)
-        elif status == "new":
+        else:
+            # lastSeen なし → 未出題（new）
             new.append(w)
 
     # new は part 降順 → section 昇順 → id 昇順（Part3-sec16→17→18→19→Part2-sec9…）
@@ -376,6 +388,11 @@ def main():
         print("  WARNING: passage generation failed, using empty passage")
 
     # 6. words.json 出力
+    # status を 'new' にリセット（アプリは "全語 new で即座に表示" が前提。
+    # Supabase から取得した進捗値をそのまま書くと起動時に全問完了扱いになるため）
+    for w in selected:
+        w["status"] = "new"
+
     output = {
         "meta": {
             "total": len(selected),

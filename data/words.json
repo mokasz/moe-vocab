@@ -2,74 +2,10 @@
   "meta": {
     "total": 30,
     "source": "target1900",
-    "created": "2026-03-18",
-    "version": 1773760621
+    "created": "2026-03-19",
+    "version": 1773846088
   },
   "words": [
-    {
-      "id": 1561,
-      "word": "spouse",
-      "pos": "noun",
-      "part": 3,
-      "section": 16,
-      "japanese": "配偶者",
-      "sentence": "The man is very glad that he has a supportive spouse.",
-      "sentence_ja": "その男性は自分に支えとなる配偶者がいることをとてもうれしく思っている。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
-    {
-      "id": 1576,
-      "word": "obsession",
-      "pos": "noun",
-      "part": 3,
-      "section": 16,
-      "japanese": "(考えなどに)取りつかれること；妄想；強迫観念",
-      "sentence": "She seemed to have an obsession with losing weight.",
-      "sentence_ja": "彼女は痩せることに取りつかれているように見えた。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
-    {
-      "id": 1577,
-      "word": "hygiene",
-      "pos": "noun",
-      "part": 3,
-      "section": 16,
-      "japanese": "衛生(状態)；健康法",
-      "sentence": "The hospital's standard of hygiene is high.",
-      "sentence_ja": "その病院の衛生基準は高い。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
-    {
-      "id": 1578,
-      "word": "paradigm",
-      "pos": "noun",
-      "part": 3,
-      "section": 16,
-      "japanese": "理論的枠組み、パラダイム；模範",
-      "sentence": "The professor introduced a new paradigm into linguistic studies.",
-      "sentence_ja": "その教授は言語学研究に新たな理論的枠組みを取り入れた。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
     {
       "id": 1579,
       "word": "legitimate",
@@ -79,28 +15,13 @@
       "japanese": "合法的な；妥当な",
       "sentence": "He has three offshore companies for legitimate tax avoidance purposes.",
       "sentence_ja": "彼は合法的な租税回避の目的で海外の会社を3つ持っている。",
-      "status": "green",
+      "status": "new",
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
-    {
-      "id": 1580,
-      "word": "authentic",
-      "pos": "adjective",
-      "part": 3,
-      "section": 16,
-      "japanese": "本物の；信頼できる",
-      "sentence": "She was moved by the authentic works by Picasso at the museum.",
-      "sentence_ja": "彼女はその美術館でピカソの本物の作品に感動した。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1581,
@@ -111,12 +32,13 @@
       "japanese": "経験的な；経験主義の",
       "sentence": "The teacher explained how to collect empirical evidence.",
       "sentence_ja": "その教師は経験的証拠の集め方を説明した。",
-      "status": "green",
+      "status": "new",
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1582,
@@ -127,28 +49,13 @@
       "japanese": "膨大な",
       "sentence": "There are immense varieties of chilies in Mexico.",
       "sentence_ja": "メキシコには膨大な種類のトウガラシがある。",
-      "status": "green",
+      "status": "new",
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
-    {
-      "id": 1584,
-      "word": "weird",
-      "pos": "adjective",
-      "part": 3,
-      "section": 16,
-      "japanese": "異様な；奇妙な",
-      "sentence": "I have been having very weird dreams these days.",
-      "sentence_ja": "私は最近よくとても奇妙な夢を見る。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1586,
@@ -159,28 +66,13 @@
       "japanese": "不安な；落ち着かない；ぎこちない",
       "sentence": "Young people tend to feel uneasy about the future.",
       "sentence_ja": "若者は将来に関して不安や気持ちになる傾向がある。",
-      "status": "green",
+      "status": "new",
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
-    },
-    {
-      "id": 1590,
-      "word": "hollow",
-      "pos": "adjective",
-      "part": 3,
-      "section": 16,
-      "japanese": "空洞の；空虚な；うわべだけの",
-      "sentence": "As she had not eaten anything, her stomach felt hollow.",
-      "sentence_ja": "彼女は何も食べていなかったので、胃が空っぽの感じがした。",
-      "status": "green",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": "2026-03-17",
-      "nextReview": "2026-03-18"
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1591,
@@ -195,7 +87,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1592,
@@ -210,22 +104,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
-    },
-    {
-      "id": 1593,
-      "word": "pessimistic",
-      "pos": "adjective",
-      "part": 3,
-      "section": 16,
-      "japanese": "悲観的な",
-      "sentence": "You should not be pessimistic about your future.",
-      "sentence_ja": "君は将来について悲観的になってはいけない。",
-      "status": "new",
-      "ease": 2.5,
-      "interval": 1,
-      "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1594,
@@ -240,7 +121,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1595,
@@ -255,7 +138,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1596,
@@ -270,7 +155,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1597,
@@ -285,7 +172,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1598,
@@ -300,7 +189,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1599,
@@ -315,7 +206,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1600,
@@ -330,7 +223,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1601,
@@ -345,7 +240,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1602,
@@ -360,7 +257,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1603,
@@ -375,7 +274,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1604,
@@ -390,7 +291,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1605,
@@ -405,7 +308,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1606,
@@ -420,7 +325,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1607,
@@ -435,7 +342,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1608,
@@ -450,7 +359,9 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
     },
     {
       "id": 1609,
@@ -465,30 +376,160 @@
       "ease": 2.5,
       "interval": 1,
       "repetitions": 0,
-      "lastSeen": null
+      "lastSeen": "2026-03-18",
+      "nextReview": "2026-03-19",
+      "quality": 0
+    },
+    {
+      "id": 1516,
+      "word": "steer",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "（を）操縦する；を（～へ）向ける（to）",
+      "sentence": "As an experienced navigator, he steered the boat into the harbor.",
+      "sentence_ja": "熟練した航海士として、彼は船を港に操縦して入った。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1517,
+      "word": "drown",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "溺死する；を水没しにする",
+      "sentence": "The rowboat turned over and she nearly drowned in the lake.",
+      "sentence_ja": "ボートがひっくり返り、彼女は湖で溺れそうになった。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1518,
+      "word": "dip",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "を浸す；（手など）を（～に）突っ込む",
+      "sentence": "She dips biscuits in tea before eating them.",
+      "sentence_ja": "彼女は食べる前にビスケットを紅茶に浸す。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1519,
+      "word": "soak",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "を浸す；をずぶぬれにする",
+      "sentence": "She made pickles by soaking cucumbers in vinegar.",
+      "sentence_ja": "彼女はキュウリを酢に漬けてぬか漬けを作った。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1520,
+      "word": "stir",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "をかき回す；を振り動かす",
+      "sentence": "She stirred her tea with a spoon.",
+      "sentence_ja": "彼女はスプーンで紅茶をかき混ぜた。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1521,
+      "word": "transplant",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "を移植する；を移住させる",
+      "sentence": "The surgeon successfully transplanted a heart into the child.",
+      "sentence_ja": "外科医はその子供に心臓を移植することに成功した。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1522,
+      "word": "reassure",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "を安心させる",
+      "sentence": "My mother reassured me that everything should go well.",
+      "sentence_ja": "母は私に全てうまくいくと安心させてくれた。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
+    },
+    {
+      "id": 1523,
+      "word": "resume",
+      "pos": "verb",
+      "part": 3,
+      "section": 16,
+      "japanese": "（を）再開する；を取り戻す",
+      "sentence": "She resumed her career after two years of maternity leave.",
+      "sentence_ja": "彼女は2年間の産休の後、仕事を再開した。",
+      "status": "new",
+      "ease": 2.7,
+      "interval": 6,
+      "repetitions": 2,
+      "lastSeen": "2026-03-13",
+      "nextReview": "2026-03-22"
     }
   ],
   "passage": {
-    "text": "The evolving understanding of mental health represents a profound paradigm shift in contemporary medicine. Historically, psychological distress was often dismissed as a character flaw or a crude manifestation of moral weakness, leading to pessimistic prognoses and vain attempts at self-correction. Such an approach often left patients feeling uneasy and hollow, their suffering unrecognized as a legitimate medical concern. Today, an immense body of empirical research supports the complex physiological and psychosocial basis of mental illness. Clinicians must move beyond simply identifying what appears \"weird\" or superficially problematic. Understanding the patient's authentic internal experience, including the impact of their environment—from personal hygiene practices to the support (or lack thereof) from a spouse—is crucial. Conditions like debilitating obsession highlight the necessity of this holistic view. Dismissing such conditions as mere mental sore spots would be a grave error. This integrated approach, grounded in scientific rigor, is essential for effective diagnosis and compassionate care, ensuring mental well-being is treated with the same gravity as physical ailments.",
-    "text_ja": "精神的健康への理解の進化は、現代医学における深遠な**パラダイム**シフトを象徴しています。歴史的に、心理的苦痛はしばしば性格上の欠陥、あるいは倫理的弱さの**粗野な**現れとして片付けられ、**悲観的な**予後と**無益な**自己修正の試みに繋がっていました。このようなアプローチは、しばしば患者を**不安で**、そして**空虚な**気持ちにさせ、彼らの苦しみが**正当な**医学的懸念として認識されませんでした。今日では、**膨大な**数の**経験的**研究が、精神疾患の複雑な生理学的および心理社会学的基盤を裏付けています。臨床医は、「**奇妙に**」見えるものや表面的な問題だけを特定するだけでは不十分です。個人の**衛生**習慣から**配偶者**からの支援（あるいはその欠如）に至るまで、患者の環境の影響を含む、患者の**真正な**内的体験を理解することが極めて重要です。衰弱させる**強迫観念**のような状態は、この全体論的視点の必要性を浮き彫りにしています。そのような状態を単なる精神的な**痛いところ**として退けることは、重大な過ちとなるでしょう。科学的厳密さに基づいたこの統合的アプローチは、効果的な診断と人間味あるケアのために不可欠であり、精神的ウェルビーイングが身体的疾患と同じ重大さで扱われることを保証します。",
-    "theme": "mental health and psychology",
+    "text": "The integration of artificial intelligence (AI) and advanced medical technology marks a paradigm shift in healthcare. The potential benefits are immense, from enhancing diagnostic accuracy to optimizing treatment protocols. AI algorithms can process sheer volumes of empirical data, identifying subtle patterns that human perception might miss, providing a more legitimate basis for clinical decisions. However, this rapid evolution also elicits an uneasy tension. Concerns abound regarding data privacy and the ethical implications of autonomous systems. Early, sometimes crude, AI models were prone to biases embedded in their training data, making efforts to ensure fairness and equity paramount. Relying solely on these systems without explicit human oversight would be a vain endeavor, risking misdiagnosis or exacerbating existing health disparities. Furthermore, the digital divide means not all populations, particularly those less affluent, are equally equipped to benefit, creating a new sore point in global health equity. Patients become susceptible to system errors or data breaches. Future advancements, such as AI's role in personalized nutrition, analyzing an individual's response to specific edible compounds for disease prevention, demand rigorous research. Clinicians must collaborate with AI, leveraging its analytical power while retaining human empathy and ethical judgment. Both clinicians and policymakers must exert continuous effort to navigate these complexities, ensuring technology serves humanity responsibly.",
+    "text_ja": "人工知能（AI）と高度な医療技術の統合は、医療分野におけるパラダイムシフトを意味する。診断精度の向上から治療プロトコルの最適化に至るまで、その潜在的な恩恵は**計り知れない**。AIアルゴリズムは、**膨大な**数の**経験的**データを処理し、人間の知覚では見落とされがちな微細なパターンを特定することで、臨床意思決定により**正当な**根拠を提供する。しかし、この急速な進化は、ある種の**不安**も引き起こす。データプライバシーや自律システムの倫理的影響に関する懸念は尽きない。初期には、時に**粗雑な**AIモデルは、その学習データに埋め込まれたバイアスに**陥りやすかった**ため、公平性と平等を確保するための努力が最も重要である。**明示的**な人間の監視なしにこれらのシステムのみに依存することは、**無駄な**試みであり、誤診や既存の健康格差の悪化を招くリスクがある。さらに、デジタルデバイドは、特に**富裕でない**人々を含むすべての人口が等しく恩恵を受けられるわけではないことを意味し、グローバルヘルス衡平における新たな**懸念事項**を生み出している。患者はシステムエラーやデータ漏洩の被害を**受けやすい**。個別の**食用の**化合物に対する個人の反応を分析し、疾患予防に役立てるAIの個別栄養における役割のような将来の進歩には、厳格な研究が求められる。臨床医はAIと**協働し**、その分析力を活用しつつ、人間の共感と倫理的判断を保持する必要がある。臨床医と政策立案者の双方が、これらの複雑性を乗り越え、テクノロジーが責任を持って人類に奉仕するよう、継続的な努力を**払う**必要がある。",
+    "theme": "medical technology and AI in healthcare",
     "highlighted_words": [
-      "spouse",
-      "obsession",
-      "hygiene",
-      "paradigm",
-      "legitimate",
-      "authentic",
-      "empirical",
       "immense",
-      "weird",
+      "sheer",
+      "empirical",
+      "legitimate",
       "uneasy",
-      "hollow",
       "crude",
+      "prone",
+      "explicit",
+      "vain",
+      "affluent",
       "sore",
-      "pessimistic",
-      "vain"
+      "susceptible",
+      "edible",
+      "collaborate",
+      "exert"
     ],
-    "audio": "passage_2026-03-18.mp3"
+    "audio": "passage_2026-03-19.mp3"
   }
 }
