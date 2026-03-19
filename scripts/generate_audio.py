@@ -5,8 +5,8 @@ generate_audio.py — moe-vocab 音声生成
 エンジン分担:
   words/    → Google Cloud TTS (en-US-Studio-O)
   ja/       → Google Cloud TTS (ja-JP-Chirp3-HD-Aoede)
-  p4_split/ → Gemini TTS（永続ブロック時は Google Cloud TTS にフォールバック）
-  passage   → Gemini TTS（永続ブロック時は Google Cloud TTS にフォールバック）
+  p4_split/ → Google Cloud TTS (en-US-Studio-O)
+  passage   → Google Cloud TTS (en-US-Studio-O)
 
 使い方:
   venv/bin/python moe-vocab/scripts/generate_audio.py           # words.json の30語
@@ -232,7 +232,7 @@ def load_section_from_csv(section: int):
 
 # ── 生成ループ ────────────────────────────────────────────
 
-def run_type(gcloud, slots, words, audio_type, force):
+def run_type(gcloud, words, audio_type, force):
     ok = skip = fail = 0
     total = len(words)
 
@@ -265,23 +265,15 @@ def run_type(gcloud, slots, words, audio_type, force):
                 print(f"  SKIP (テキストなし): {out.name}")
                 skip += 1
                 continue
-            result = gemini_tts(slots, text, out, force)
-            if result is True:
+            if gcloud_tts(gcloud, text, "en-US", EN_VOICE, out, force):
                 ok += 1
-            elif result is None:
-                # 永続ブロック → Google Cloud TTS にフォールバック
-                print(f"  FALLBACK → gcloud: {out.name}", flush=True)
-                if gcloud_tts(gcloud, text, "en-US", EN_VOICE, out, force=True):
-                    ok += 1
-                else:
-                    fail += 1
             else:
                 fail += 1
 
     return ok, skip, fail
 
 
-def run_passage(gcloud, slots, force: bool = False):
+def run_passage(gcloud, force: bool = False):
     data = json.loads(WORDS_FILE.read_text())
     passage = data.get("passage", {})
     text = passage.get("text", "").strip()
@@ -292,11 +284,7 @@ def run_passage(gcloud, slots, force: bool = False):
     audio_filename = passage.get("audio", "passage.mp3")
     out = AUDIO_DIR / audio_filename
     print(f"  文書 ({len(text)}文字) → {audio_filename}")
-
-    result = gemini_tts(slots, text, out, force)
-    if result is None:
-        print(f"  FALLBACK → gcloud: {audio_filename}", flush=True)
-        gcloud_tts(gcloud, text, "en-US", EN_VOICE, out, force=True)
+    gcloud_tts(gcloud, text, "en-US", EN_VOICE, out, force)
 
 
 # ── メイン ────────────────────────────────────────────────
@@ -314,11 +302,10 @@ def main():
 
     print("=== generate_audio.py ===")
     gcloud = init_gcloud_tts()
-    slots = init_gemini_slots()
 
     if args.type == "passage":
         print("\n--- passage ---")
-        run_passage(gcloud, slots, force=args.force)
+        run_passage(gcloud, force=args.force)
         print("\n=== Done ===")
         return
 
@@ -342,14 +329,14 @@ def main():
 
     for t in run_types:
         print(f"\n--- {t} ---")
-        ok, skip, fail = run_type(gcloud, slots, words, t, args.force)
+        ok, skip, fail = run_type(gcloud, words, t, args.force)
         total_ok += ok
         total_skip += skip
         total_fail += fail
 
     if args.type == "all":
         print("\n--- passage ---")
-        run_passage(gcloud, slots, force=args.force)
+        run_passage(gcloud, force=args.force)
 
     print(f"\n=== Done: OK={total_ok}, SKIP={total_skip}, FAIL={total_fail} ===")
 
