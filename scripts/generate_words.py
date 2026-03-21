@@ -135,7 +135,7 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
 
 
 # ── SM-2 更新 + progress_sync 書き戻し ─────────────────────
-def update_sm2_and_save(sb, words: list[dict]) -> None:
+def update_sm2_and_save(sb, words: list[dict], target_date: str) -> None:
     """
     回答済み単語の SM-2 を再計算し、progress_sync を更新する。
     next_review > last_studied の単語はスキップ（重複適用防止）。
@@ -144,7 +144,7 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
     select_words() はこの値を使って red バケットを決定する
     （progress_sync.status はブラウザが保存するため信頼性が低い）。
     """
-    today = date.today().isoformat()
+    today = target_date
 
     # 対象絞り込み（kaya-vocab と同じパターン）
     # status は参照しない: new（lastSeen=null）のみ除外すれば十分
@@ -203,7 +203,7 @@ def update_sm2_and_save(sb, words: list[dict]) -> None:
 
 
 # ── SM-2 単語選定 ─────────────────────────────────────────
-def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict]:
+def select_words(words: list[dict], target_date: str, daily_limit: int = DAILY_LIMIT) -> list[dict]:
     """
     単語選択ロジック（SPEC: docs/moe-vocab/SPEC.md「単語選択ロジック」参照）
 
@@ -214,7 +214,7 @@ def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict
     quality は update_sm2_and_save() が review_log から導出して書き戻す。
     ブラウザが保存する status は UI 表示用であり、選定ロジックでは参照しない。
     """
-    today = date.today().isoformat()
+    today = target_date
 
     red = []
     due = []
@@ -334,7 +334,15 @@ def main():
         default=None,
         help="このセクション番号の単語のみを対象にする（例: --section 16）",
     )
+    parser.add_argument(
+        "--date",
+        dest="target_date",
+        default=None,
+        help="生成対象日 YYYY-MM-DD（省略時は今日）",
+    )
     args = parser.parse_args()
+
+    target_date = args.target_date if args.target_date else date.today().isoformat()
 
     print("=== generate_words.py ===")
 
@@ -349,12 +357,12 @@ def main():
 
     if args.dry_run:
         # Supabase / Gemini スキップ
-        selected = select_words(words, daily_limit=DAILY_LIMIT)
+        selected = select_words(words, target_date, daily_limit=DAILY_LIMIT)
         output = {
             "meta": {
                 "total": len(selected),
                 "source": "target1900",
-                "created": date.today().isoformat(),
+                "created": target_date,
                 "version": int(time.time()),
             },
             "words": selected,
@@ -372,17 +380,17 @@ def main():
     print("  merged Supabase progress")
 
     # 3. SM-2 再計算 + progress_sync 書き戻し
-    update_sm2_and_save(sb, words)
+    update_sm2_and_save(sb, words, target_date)
 
     # 4. 単語選定
-    selected = select_words(words, daily_limit=DAILY_LIMIT)
+    selected = select_words(words, target_date, daily_limit=DAILY_LIMIT)
     print(f"  selected {len(selected)} words for today")
 
     # 5. 医学系パッセージ生成
     client = get_gemini()
     passage = generate_passage(client, selected)
     if passage:
-        passage["audio"] = f"passage_{date.today().isoformat()}.mp3"
+        passage["audio"] = f"passage_{target_date}.mp3"
         print(f"  generated passage (theme: {passage.get('theme', '?')})")
     else:
         print("  WARNING: passage generation failed, using empty passage")
@@ -397,7 +405,7 @@ def main():
         "meta": {
             "total": len(selected),
             "source": "target1900",
-            "created": date.today().isoformat(),
+            "created": target_date,
             "version": int(time.time()),
         },
         "words": selected,
