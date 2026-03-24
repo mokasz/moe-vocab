@@ -16,7 +16,7 @@ echo "  words-version: $VERSION"
 
 # 音声ファイルの欠けチェック（デプロイ前に必須）
 echo "  音声ファイルチェック中..."
-MISSING=$(venv/bin/python -c "
+MISSING=$(.venv/bin/python -c "
 import json
 from pathlib import Path
 base = Path('$SOURCE_DIR')

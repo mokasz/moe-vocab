@@ -23,8 +23,9 @@ from pathlib import Path
 BOOK_KEY = "moe-target1900"
 MOE_USER_EMAIL = "moeloveslemon1921@gmail.com"
 MOE_USER_ID = "a29d41be-9ee3-4890-9c03-cff3f7339c21"
-DAILY_LIMIT = 30
-DUE_MAX = 15       # red=0 時の due（復習）上限枚数
+DAILY_LIMIT = 50
+MIN_NEW = 10
+DUE_MAX = 40       # 復習枠の上限 (DAILY_LIMIT - MIN_NEW)
 
 CSV_PATH = Path(__file__).parent.parent / "data" / "target1900_master_enriched.csv"
 OUTPUT_PATH = Path(__file__).parent.parent / "data" / "words.json"
@@ -205,14 +206,10 @@ def update_sm2_and_save(sb, words: list[dict], target_date: str) -> None:
 # ── SM-2 単語選定 ─────────────────────────────────────────
 def select_words(words: list[dict], target_date: str, daily_limit: int = DAILY_LIMIT) -> list[dict]:
     """
-    単語選択ロジック（SPEC: docs/moe-vocab/SPEC.md「単語選択ロジック」参照）
-
-    red ≥ 1 のとき: red → due → new（合計 daily_limit 上限）
-    red = 0 のとき: due 最大 DUE_MAX 語 → new 残り枠
-
-    red の判定: progress_sync.status ではなく w["quality"] == 0 を使う。
-    quality は update_sm2_and_save() が review_log から導出して書き戻す。
-    ブラウザが保存する status は UI 表示用であり、選定ロジックでは参照しない。
+    単語選択ロジック (2026-03-24 更新)
+    - 復習枠 (red + due) は最大 DUE_MAX (40語) まで。
+    - 新規枠 (new) は最低 MIN_NEW (10語) 以上。
+    - 合計 DAILY_LIMIT (50語) になるように new で調整する。
     """
     today = target_date
 
@@ -221,11 +218,9 @@ def select_words(words: list[dict], target_date: str, daily_limit: int = DAILY_L
     new = []
 
     for w in words:
-        # review_log 由来の quality=0 → red（前回不正解）
         if w.get("quality") == 0:
             red.append(w)
         elif w.get("lastSeen"):
-            # 回答済み（green/red 問わず）: lastSeen + interval で due 判定
             interval = w.get("interval", 1)
             next_due = (
                 date.fromisoformat(w["lastSeen"][:10]) + timedelta(days=interval)
@@ -233,31 +228,23 @@ def select_words(words: list[dict], target_date: str, daily_limit: int = DAILY_L
             if next_due <= today:
                 due.append(w)
         else:
-            # lastSeen なし → 未出題（new）
             new.append(w)
 
-    # new は part 降順 → section 昇順 → id 昇順（Part3-sec16→17→18→19→Part2-sec9…）
+    # new は Part降順 -> Section昇順 -> ID昇順
     new.sort(key=lambda w: (-w.get("part", 0), w.get("section", 0), w.get("id", 0)))
 
-    selected = []
+    # 1. 復習枠 (最大 40語)
+    # red -> due の順で枠を埋める
+    review_pool = red + due
+    selected_reviews = review_pool[:DUE_MAX]
 
-    if red:
-        # red ≥ 1: 現行仕様（red → due → new、合計 daily_limit 上限）
-        remaining = daily_limit
-        for bucket in (red, due, new):
-            take = bucket[:remaining]
-            selected.extend(take)
-            remaining -= len(take)
-            if remaining <= 0:
-                break
-    else:
-        # red = 0: due は最大 DUE_MAX 語、残り枠を new で補充
-        due_take = due[:DUE_MAX]
-        selected.extend(due_take)
-        remaining = daily_limit - len(due_take)
-        selected.extend(new[:remaining])
+    # 2. 新規枠
+    # 合計 50語 になるように new から補充
+    # (最低 10語 は必ず確保される: 50 - 40 = 10)
+    remaining_slots = daily_limit - len(selected_reviews)
+    selected_new = new[:remaining_slots]
 
-    return selected
+    return selected_reviews + selected_new
 
 
 # ── パッセージ生成 ────────────────────────────────────────
@@ -368,10 +355,8 @@ def main():
             "words": selected,
             "passage": {},
         }
-        text = json.dumps(output, ensure_ascii=False, indent=2)
-        print(f"  [dry-run] selected {len(selected)} words")
-        print(f"  [dry-run] first word IDs: {[w['id'] for w in selected[:5]]}")
-        print(text[:500])
+        OUTPUT_PATH.write_text(json.dumps(output, ensure_ascii=False, indent=2))
+        print(f"  [dry-run] selected {len(selected)} words and wrote to {OUTPUT_PATH}")
         return
 
     # 2. Supabase 進捗マージ
