@@ -552,12 +552,6 @@
     localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
     // 2. flushPending() 経由で Supabase に送信
     flushPending();
-    // 3. review_log に記録
-    const rating = word.status === 'green' ? 4 : 1;
-    sb.from('review_log').insert({
-      user_id: currentUser.id, book_key: BOOK_KEY,
-      word_key: String(word.id), rating,
-    }).then(({ error }) => { if (error) console.warn('[review_log] error:', error); });
   }
 
 
@@ -741,12 +735,16 @@
       sm2Update(word, quality);
     } else {
       // 解き直し（同じセッション内）
-      // 前回 ✅ で今回 ❌ に悪化した場合のみ、ペナルティとしてリセット
       if (word.status === 'green' && quality < 4) {
+        // 良 → 悪 に転じた場合のみ SM-2 をリセット（最悪評価の保護）
         word.status = 'red';
         sm2Update(word, 0);
+      } else if (word.status === 'red' && quality >= 4) {
+        // 悪 → 良 に転じた場合：
+        // セッションを完了させるためにステータスは green に戻すが、
+        // SM-2 の再計算（良化）は行わない（Measure B: 最悪評価の保持）
+        word.status = 'green';
       }
-      // それ以外（評価維持、または ❌→✅）は計算をスキップし、前回の評価を保持
     }
 
     // 次回復習日時の算出（絶対時刻 ISO8601）
@@ -756,6 +754,13 @@
 
     saveProgress(word);
     
+    // review_log には「実際に押したボタン」の結果を記録する
+    const actualRating = quality >= 4 ? 4 : 1;
+    sb.from('review_log').insert({
+      user_id: currentUser.id, book_key: BOOK_KEY,
+      word_key: String(word.id), rating: actualRating
+    }).then(({ error }) => { if (error) console.warn('[review_log] error:', error); });
+
     if (quality >= 4) sessionStats.known++;
     else sessionStats.unknown++;
     cardIndex++;
