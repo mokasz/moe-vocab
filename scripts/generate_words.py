@@ -12,7 +12,7 @@ import random
 import re
 import sys
 import time
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 
 # ── 設定 ────────────────────────────────────────────────
@@ -207,6 +207,47 @@ def get_gemini():
     return genai.Client(api_key=api_key)
 
 
+# ── 遅延アラート ──────────────────────────────────────────
+def check_overdue_alerts(words: list[dict]):
+    """JST基準で、本来の復習日から2日（48時間）以上遅れている単語を検出し、アラートを表示する。"""
+    # 現在のJST時刻を取得
+    now_jst = datetime.now(timezone(timedelta(hours=9)))
+    # 今日のJST 0:00 を計算
+    today_midnight_jst = now_jst.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    # アラートの閾値: 今日の0時から起算して2日（48時間）前
+    # つまり、「一昨日以前の0時」が期限のものが対象
+    threshold_jst = today_midnight_jst - timedelta(days=2)
+    
+    overdue_words = []
+    for w in words:
+        nr_str = w.get("nextReview")
+        if nr_str:
+            try:
+                # nextReview を UTC から JST に変換
+                nr_utc = datetime.fromisoformat(nr_str.replace('Z', '+00:00'))
+                nr_jst = nr_utc.astimezone(timezone(timedelta(hours=9)))
+                
+                # JST基準で閾値以前なら遅延と判定
+                if nr_jst <= threshold_jst:
+                    overdue_words.append(w)
+            except:
+                continue
+    
+    if overdue_words:
+        print(f"\n\033[91m⚠️  ALERT: 2日(48時間)以上復習が遅れている単語が {len(overdue_words)} 語あります！\033[0m")
+        # 最も古い5語を表示
+        overdue_words.sort(key=lambda x: x.get("nextReview"))
+        for w in overdue_words[:5]:
+            # 分かりやすいように JST で表示
+            nr_utc = datetime.fromisoformat(w['nextReview'].replace('Z', '+00:00'))
+            nr_jst = nr_utc.astimezone(timezone(timedelta(hours=9)))
+            print(f"  - [{w['id']}] {w['word']} (Due: {nr_jst.strftime('%Y-%m-%d %H:%M JST')})")
+        if len(overdue_words) > 5:
+            print(f"  ...他 {len(overdue_words)-5} 語")
+        print("\033[91m復習枠の拡大や新規単語の抑制を検討してください。\033[0m\n")
+
+
 # ── メイン ────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(description="moe-vocab SM-2 単語生成スクリプト")
@@ -254,7 +295,10 @@ def main():
     words = load_progress(sb, words)
     print("  merged Supabase progress")
 
-    # 3. 単語選定 (SM-2計算はブラウザで行うため、ここでは選定のみ)
+    # 3. 遅延チェック（アラート）
+    check_overdue_alerts(words)
+
+    # 4. 単語選定 (SM-2計算はブラウザで行うため、ここでは選定のみ)
     selected = select_words(words, daily_limit=DAILY_LIMIT)
     print(f"  selected {len(selected)} words for today")
 
