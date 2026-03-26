@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="words-version" content="1774371599">
+  <meta name="words-version" content="1774491942">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -457,7 +457,7 @@
   function loadFromSupabase() {
     if (!currentUser) return;
     sb.from('progress_sync')
-      .select('word_key, status, ease_factor, interval_days, repetitions, last_studied')
+      .select('word_key, status, ease_factor, interval_days, repetitions, last_studied, next_review, last_session_version')
       .eq('user_id', currentUser.id)
       .eq('book_key', BOOK_KEY)
       .then(({ data, error }) => {
@@ -466,16 +466,22 @@
         const map = {};
         data.forEach(r => { map[r.word_key] = r; });
         allProgress = map; // 全進捗キャッシュを更新
-        const todayJST = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+        
+        const currentVersion = wordsData?.meta?.version;
         allWords.forEach(w => {
           const r = map[String(w.id)];
           if (r) {
-            const isOldRecord = !r.last_studied || r.last_studied < todayJST;
-            w.status      = isOldRecord ? 'new' : r.status;
-            w.ease        = r.ease_factor;
-            w.interval    = r.interval_days;
-            w.repetitions = r.repetitions;
-            w.lastSeen    = r.last_studied;
+            // 現在のセッションで回答済みの場合は、そのステータスを復元する。
+            // それ以外（古いセッションの記録）の場合は、'new'（未回答）として扱う。
+            const isSameSession = currentVersion && r.last_session_version === currentVersion;
+            w.status               = isSameSession ? (r.status || 'new') : 'new';
+            
+            w.ease                 = r.ease_factor;
+            w.interval             = r.interval_days;
+            w.repetitions          = r.repetitions;
+            w.lastSeen             = r.last_studied;
+            w.nextReview           = r.next_review;
+            w.last_session_version = r.last_session_version;
           }
         });
         renderAll();
@@ -510,21 +516,43 @@
     }
   }
 
+  function sm2Update(word, quality) {
+    if (quality < 2) {
+      word.interval = 1;
+      word.repetitions = 0;
+      return;
+    }
+    word.ease = Math.max(1.3, word.ease + 0.1 - (4 - quality) * 0.08);
+    word.repetitions += 1;
+    if (word.repetitions === 1) {
+      word.interval = 3;
+    } else if (word.repetitions === 2) {
+      word.interval = 6;
+    } else {
+      word.interval = Math.round(word.interval * word.ease);
+    }
+  }
+
   function saveProgress(word) {
     if (!currentUser) return;
     // 1. localStorage に書き込む（常に最新で上書き）
     const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
     pending[String(word.id)] = {
-      user_id:      currentUser.id,
-      book_key:     BOOK_KEY,
-      word_key:     String(word.id),
-      status:       word.status,
-      last_studied: word.lastSeen,
+      user_id:              currentUser.id,
+      book_key:             BOOK_KEY,
+      word_key:             String(word.id),
+      status:               word.status,
+      ease_factor:          word.ease,
+      interval_days:        word.interval,
+      repetitions:          word.repetitions,
+      last_studied:         word.lastSeen,
+      next_review:          word.nextReview,
+      last_session_version: word.last_session_version,
     };
     localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
     // 2. flushPending() 経由で Supabase に送信
     flushPending();
-    // 3. review_log に記録（SM-2 quality の入力源）
+    // 3. review_log に記録
     const rating = word.status === 'green' ? 4 : 1;
     sb.from('review_log').insert({
       user_id: currentUser.id, book_key: BOOK_KEY,
@@ -703,9 +731,31 @@
   }
 
   function judge(word, quality) {
-    word.status   = quality >= 4 ? 'green' : 'red';
-    word.lastSeen = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const currentSessionVersion = wordsData.meta?.version || Math.floor(Date.now() / 1000);
+    const isSameSession = word.last_session_version === currentSessionVersion;
+
+    if (!isSameSession) {
+      // 初回学習
+      word.last_session_version = currentSessionVersion;
+      word.status = quality >= 4 ? 'green' : 'red';
+      sm2Update(word, quality);
+    } else {
+      // 解き直し（同じセッション内）
+      // 前回 ✅ で今回 ❌ に悪化した場合のみ、ペナルティとしてリセット
+      if (word.status === 'green' && quality < 4) {
+        word.status = 'red';
+        sm2Update(word, 0);
+      }
+      // それ以外（評価維持、または ❌→✅）は計算をスキップし、前回の評価を保持
+    }
+
+    // 次回復習日時の算出（絶対時刻 ISO8601）
+    // next_review = (meta.version * 1000) + (interval_days * 24 * 60 * 60 * 1000)
+    word.nextReview = new Date((currentSessionVersion * 1000) + (word.interval * 24 * 60 * 60 * 1000)).toISOString();
+    word.lastSeen = new Date().toISOString(); // 打鍵時刻（表示用/参考用）
+
     saveProgress(word);
+    
     if (quality >= 4) sessionStats.known++;
     else sessionStats.unknown++;
     cardIndex++;

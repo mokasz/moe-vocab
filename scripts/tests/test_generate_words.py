@@ -1,28 +1,35 @@
 import sys
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from generate_words import select_words, load_progress, MEDICAL_THEMES, DUE_MAX, DAILY_LIMIT
-from sm2 import sm2_update
 
-def make_word(word_id, status="new", interval=1, last_seen=None):
+def make_word(word_id, status="new", next_review=None):
     return {
         "id": word_id, "word": f"w{word_id}", "pos": "noun",
         "part": 3 if word_id > 1500 else 2 if word_id > 800 else 1,
         "section": (word_id - 1) // 100 + 1,
         "japanese": f"意味{word_id}", "sentence": "Ex.", "sentence_ja": "例。",
-        "status": status, "ease": 2.5, "interval": interval,
-        "repetitions": 0, "lastSeen": last_seen,
+        "status": status, "ease": 2.5, "interval": 1,
+        "repetitions": 0, "lastSeen": None, "nextReview": next_review,
+        "last_session_version": None,
     }
 
-def make_due(word_id):
-    """期限到来済みの green 単語（昨日学習・interval=1）"""
-    return make_word(word_id, status="green", interval=1, last_seen="2026-03-13")
+def make_due(word_id, status="green"):
+    """期限到来済みの単語（昨日学習）"""
+    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+    return make_word(word_id, status=status, next_review=yesterday)
+
+def make_future(word_id, status="green"):
+    """期限が未来の単語"""
+    tomorrow = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+    return make_word(word_id, status=status, next_review=tomorrow)
 
 # ── select_words: red ≥ 1 のとき（現行仕様） ────────────────────────────────
 
 def test_select_words_prioritizes_red():
     words = [make_word(i) for i in range(1, 50)]
-    words[0]["status"] = "red"
+    words[0] = make_due(1, status="red")
     selected = select_words(words, daily_limit=10)
     assert any(w["id"] == 1 for w in selected)
 
@@ -47,7 +54,7 @@ def test_select_words_respects_limit():
 
 def test_red_nonzero_due_not_capped():
     """red ≥ 1 のとき due は DUE_MAX で打ち切られない（現行仕様）"""
-    red = [make_word(1, status="red")]
+    red = [make_due(1, status="red")]
     due = [make_due(i) for i in range(2, 22)]   # 20語
     new = [make_word(i) for i in range(100, 200)]
     selected = select_words(red + due + new, daily_limit=30)
@@ -56,7 +63,7 @@ def test_red_nonzero_due_not_capped():
 
 def test_red_nonzero_total_respects_limit():
     """red ≥ 1 のとき合計は daily_limit を超えない"""
-    red = [make_word(i, status="red") for i in range(1, 11)]    # 10語
+    red = [make_due(i, status="red") for i in range(1, 11)]    # 10語
     due = [make_due(i) for i in range(100, 120)]                 # 20語
     new = [make_word(i) for i in range(200, 300)]
     selected = select_words(red + due + new, daily_limit=30)
@@ -99,25 +106,14 @@ def test_red_zero_due_zero_all_new():
     assert len(selected) == 30
     assert all(w["status"] == "new" for w in selected)
 
-# ── SM-2: interval 設定 ──────────────────────────────────────────────────────
+def test_future_due_is_ignored():
+    """nextReview が未来の単語はスキップされる"""
+    future = [make_future(1)]
+    new = [make_word(i) for i in range(100, 200)]
+    selected = select_words(future + new, daily_limit=30)
+    assert not any(w["id"] == 1 for w in selected)
 
-def test_sm2_first_correct_interval_is_3():
-    """1回目正解（repetitions: 0→1）→ interval=3"""
-    _, interval, repetitions = sm2_update(ease=2.5, interval=1, repetitions=0, quality=4)
-    assert repetitions == 1
-    assert interval == 3
-
-def test_sm2_second_correct_interval_is_6():
-    """2回目正解（repetitions: 1→2）→ interval=6（変更なし）"""
-    _, interval, repetitions = sm2_update(ease=2.5, interval=3, repetitions=1, quality=4)
-    assert repetitions == 2
-    assert interval == 6
-
-def test_sm2_incorrect_resets():
-    """不正解 → interval=1, repetitions=0 にリセット"""
-    _, interval, repetitions = sm2_update(ease=2.5, interval=3, repetitions=1, quality=0)
-    assert interval == 1
-    assert repetitions == 0
+# ── progress_sync マージ ────────────────────────────────────────────────────
 
 def test_medical_themes_not_empty():
     assert len(MEDICAL_THEMES) >= 5
@@ -139,6 +135,8 @@ def test_load_progress_preserves_zero_values():
                 "interval_days": 0,
                 "repetitions": 0,
                 "last_studied": None,
+                "next_review": None,
+                "last_session_version": None,
             }
         ]
 
