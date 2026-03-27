@@ -125,7 +125,9 @@ def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict
         if next_review is None:
             new.append(w)
         elif next_review <= now_iso:
-            if status == "red":
+            # 前回のセッションで「解き直し」により status が green に戻った場合でも、
+            # interval が 1 にリセットされていれば最優先復習（red扱い）とする
+            if status == "red" or w.get("interval", 1) == 1:
                 red.append(w)
             else:
                 due.append(w)
