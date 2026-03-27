@@ -108,12 +108,11 @@ def load_progress(sb, words: list[dict]) -> list[dict]:
 # ── SM-2 単語選定 ─────────────────────────────────────────
 def select_words(words: list[dict], daily_limit: int = DAILY_LIMIT) -> list[dict]:
     """
-    単語選択ロジック (SPEC.md 2026-03-25 準拠)
-    1. 復習枠 (最大40語): next_review <= now (red優先 -> due)
-    2. 新規枠 (最低10語 + α): next_review is None
-    合計50語
+    単語選択ロジック (SPEC.md 2026-03-28 準拠)
     """
-    now_iso = datetime.now(timezone.utc).isoformat()
+    # タイムゾーンのズレを防ぐため、ユーザーの居住地(JST)基準のISO時刻を取得
+    JST = timezone(timedelta(hours=9), "JST")
+    now_iso = datetime.now(JST).isoformat()
 
     red = []
     due = []
