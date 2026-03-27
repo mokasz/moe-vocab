@@ -15,6 +15,12 @@ import time
 from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# プロジェクトルートの1つ上の .env を読み込む
+DOTENV_PATH = Path(__file__).parent.parent.parent / ".env"
+load_dotenv(dotenv_path=DOTENV_PATH)
+
 # ── 設定 ────────────────────────────────────────────────
 BOOK_KEY = "moe-target1900"
 MOE_USER_EMAIL = "moeloveslemon1921@gmail.com"
@@ -202,8 +208,8 @@ def get_gemini():
     from google import genai
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        print("Error: GEMINI_API_KEY not set.")
-        sys.exit(1)
+        print("  WARNING: GEMINI_API_KEY not set, skipping passage generation")
+        return None
     return genai.Client(api_key=api_key)
 
 
@@ -302,12 +308,16 @@ def main():
 
     # 5. 医学系パッセージ生成
     client = get_gemini()
-    passage = generate_passage(client, selected)
-    if passage:
-        passage["audio"] = f"passage_{date.today().isoformat()}.mp3"
-        print(f"  generated passage (theme: {passage.get('theme', '?')})")
+    if client:
+        passage = generate_passage(client, selected)
+        if passage:
+            passage["audio"] = f"passage_{date.today().isoformat()}.mp3"
+            print(f"  generated passage (theme: {passage.get('theme', '?')})")
+        else:
+            print("  WARNING: passage generation failed, using empty passage")
+            passage = {}
     else:
-        print("  WARNING: passage generation failed, using empty passage")
+        passage = {}
 
     # 5. words.json 出力
     # アプリ側では常に 'new'（未回答）から開始させるため、ステータスをリセットする

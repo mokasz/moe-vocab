@@ -1,7 +1,13 @@
 import os
 from collections import defaultdict
 from datetime import datetime, timezone, timedelta
+from pathlib import Path
 from supabase import create_client
+from dotenv import load_dotenv
+
+# プロジェクトルートの1つ上の .env を読み込む
+DOTENV_PATH = Path(__file__).parent.parent / ".env"
+load_dotenv(dotenv_path=DOTENV_PATH)
 
 def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
     if quality < 2:

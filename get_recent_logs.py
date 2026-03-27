@@ -1,10 +1,19 @@
 import os
 from collections import defaultdict
+from pathlib import Path
 from supabase import create_client
+from dotenv import load_dotenv
+
+# プロジェクトルートの1つ上の .env を読み込む
+DOTENV_PATH = Path(__file__).parent.parent / ".env"
+load_dotenv(dotenv_path=DOTENV_PATH)
 
 def main():
-    url = "https://uzpmpjkkwapaohleejtt.supabase.co"
-    key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6cG1wamtrd2FwYW9obGVlanR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NzkzMjksImV4cCI6MjA4ODU1NTMyOX0.vnmV6eC05k4BRMR3SgrJBrn5x0gb0_4wI9_L39pGfl0"
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_SECRET_KEY")
+    if not url or not key:
+        print("Error: SUPABASE_URL or SUPABASE_SECRET_KEY not set.")
+        return
     sb = create_client(url, key)
     
     user_id = "a29d41be-9ee3-4890-9c03-cff3f7339c21"
