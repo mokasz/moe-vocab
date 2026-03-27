@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="words-version" content="1774620106">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -433,14 +436,16 @@
   let audioVer = '0'; // audio cache-busting version
 
   async function initApp() {
-    const v = document.querySelector('meta[name="words-version"]')?.content || '0';
-    const resp = await fetch(`data/words.json?v=${v}`);
+    // 強制的に最新のwords.jsonを取得（ブラウザキャッシュを無視）
+    const resp = await fetch('data/words.json', { cache: 'no-store' });
     wordsData = await resp.json();
     allWords = wordsData.words;
-    audioVer = String(wordsData.meta?.version || v);
+    
+    // サーバーから取得したJSON内のバージョンを真の最新バージョンとする
+    const currentVersion = String(wordsData.meta?.version || '0');
+    audioVer = currentVersion;
 
     // 単語セット切り替え検出: バージョンが変わっていれば前回のセッション位置を無効化
-    const currentVersion = String(wordsData.meta?.version || '');
     if (localStorage.getItem(VERSION_KEY) !== currentVersion) {
       sessionStorage.removeItem(SS_KEY);
       sessionStorage.removeItem(SS_START);
