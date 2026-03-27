@@ -7,7 +7,7 @@ def get_supabase():
     from supabase import create_client
     return create_client(
         os.environ["SUPABASE_URL"],
-        os.environ["SUPABASE_SERVICE_KEY"],
+        os.environ["SUPABASE_SECRET_KEY"],
     )
 
 def main():

@@ -192,9 +192,9 @@ Requirements:
 def get_supabase():
     from supabase import create_client
     url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    key = os.environ.get("SUPABASE_SECRET_KEY")
     if not url or not key:
-        print("Error: SUPABASE_URL or SUPABASE_SERVICE_KEY not set.")
+        print("Error: SUPABASE_URL or SUPABASE_SECRET_KEY not set.")
         sys.exit(1)
     return create_client(url, key)
 
@@ -208,44 +208,42 @@ def get_gemini():
 
 
 # ── 遅延アラート ──────────────────────────────────────────
-def check_overdue_alerts(words: list[dict]):
-    """JST基準で、本来の復習日から2日（48時間）以上遅れている単語を検出し、アラートを表示する。"""
-    # 現在のJST時刻を取得
+def check_overdue_alerts(all_words: list[dict], selected_words: list[dict]):
+    """JST基準で、本来の復習日から2日（48時間）以上遅れている単語のうち、
+    本日の学習セットから漏れたものを検出し、アラートを表示する。"""
     now_jst = datetime.now(timezone(timedelta(hours=9)))
-    # 今日のJST 0:00 を計算
     today_midnight_jst = now_jst.replace(hour=0, minute=0, second=0, microsecond=0)
-    
-    # アラートの閾値: 今日の0時から起算して2日（48時間）前
-    # つまり、「一昨日以前の0時」が期限のものが対象
     threshold_jst = today_midnight_jst - timedelta(days=2)
     
+    selected_ids = {w['id'] for w in selected_words}
     overdue_words = []
-    for w in words:
+    
+    for w in all_words:
+        # 本日のセットに選ばれたものは除外（今日学習するため）
+        if w['id'] in selected_ids:
+            continue
+            
         nr_str = w.get("nextReview")
         if nr_str:
             try:
-                # nextReview を UTC から JST に変換
                 nr_utc = datetime.fromisoformat(nr_str.replace('Z', '+00:00'))
                 nr_jst = nr_utc.astimezone(timezone(timedelta(hours=9)))
                 
-                # JST基準で閾値以前なら遅延と判定
                 if nr_jst <= threshold_jst:
                     overdue_words.append(w)
             except:
                 continue
     
     if overdue_words:
-        print(f"\n\033[91m⚠️  ALERT: 2日(48時間)以上復習が遅れている単語が {len(overdue_words)} 語あります！\033[0m")
-        # 最も古い5語を表示
+        print(f"\n\033[91m⚠️  ALERT: 本日の学習枠から漏れ、2日(48時間)以上復習が遅延する単語が {len(overdue_words)} 語あります！\033[0m")
         overdue_words.sort(key=lambda x: x.get("nextReview"))
         for w in overdue_words[:5]:
-            # 分かりやすいように JST で表示
             nr_utc = datetime.fromisoformat(w['nextReview'].replace('Z', '+00:00'))
             nr_jst = nr_utc.astimezone(timezone(timedelta(hours=9)))
             print(f"  - [{w['id']}] {w['word']} (Due: {nr_jst.strftime('%Y-%m-%d %H:%M JST')})")
         if len(overdue_words) > 5:
             print(f"  ...他 {len(overdue_words)-5} 語")
-        print("\033[91m復習枠の拡大や新規単語の抑制を検討してください。\033[0m\n")
+        print("\033[91m復習枠の拡大(DAILY_LIMIT増加)や新規単語(MIN_NEW)の抑制を検討してください。\033[0m\n")
 
 
 # ── メイン ────────────────────────────────────────────────
@@ -295,14 +293,14 @@ def main():
     words = load_progress(sb, words)
     print("  merged Supabase progress")
 
-    # 3. 遅延チェック（アラート）
-    check_overdue_alerts(words)
-
-    # 4. 単語選定 (SM-2計算はブラウザで行うため、ここでは選定のみ)
+    # 3. 単語選定 (SM-2計算はブラウザで行うため、ここでは選定のみ)
     selected = select_words(words, daily_limit=DAILY_LIMIT)
     print(f"  selected {len(selected)} words for today")
 
-    # 4. 医学系パッセージ生成
+    # 4. 遅延チェック（アラート）: 選ばれなかった単語の中に深刻な遅延がないか確認
+    check_overdue_alerts(words, selected)
+
+    # 5. 医学系パッセージ生成
     client = get_gemini()
     passage = generate_passage(client, selected)
     if passage:

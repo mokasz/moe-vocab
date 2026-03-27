@@ -18,9 +18,9 @@ def sm2_update(ease: float, interval: int, repetitions: int, quality: int):
 
 def main():
     url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    key = os.environ.get("SUPABASE_SECRET_KEY")
     if not url or not key:
-        print("Error: Missing SUPABASE_URL or SUPABASE_SERVICE_KEY")
+        print("Error: Missing SUPABASE_URL or SUPABASE_SECRET_KEY")
         return
         
     sb = create_client(url, key)

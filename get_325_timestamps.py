@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 def main():
     url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    key = os.environ.get("SUPABASE_SECRET_KEY")
     sb = create_client(url, key)
 
     user_id = "a29d41be-9ee3-4890-9c03-cff3f7339c21"

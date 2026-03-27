@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 def main():
     url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    key = os.environ.get("SUPABASE_SECRET_KEY")
     if not url or not key:
         print("Missing env vars")
         return

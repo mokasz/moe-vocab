@@ -6,7 +6,7 @@ import time
 
 def main():
     url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    key = os.environ.get("SUPABASE_SECRET_KEY")
     
     # 接続試行
     for attempt in range(3):
