@@ -480,9 +480,12 @@
             // それ以外（古いセッションの記録）の場合は、'new'（未回答）として扱う。
             const isSameSession = currentVersion && r.last_session_version === currentVersion;
             w.status               = isSameSession ? (r.status || 'new') : 'new';
-            
-            w.ease                 = r.ease_factor;
-            w.interval             = r.interval_days;
+
+            // セッション内での完了フラグ（UI制御用）
+            // DB上の status が red でも、このセッションで一度 pass していれば true になる
+            w.session_done         = isSameSession && r.status !== 'red';
+
+            w.ease                 = r.ease_factor;            w.interval             = r.interval_days;
             w.repetitions          = r.repetitions;
             w.lastSeen             = r.last_studied;
             w.nextReview           = r.next_review;
@@ -601,7 +604,7 @@
       cardIndex = saved; // 有効なセッション（今日）→ 途中再開
     } else {
       // セッション状態なし or stale → 単語データから直接判定
-      const allDone = cardQueue.every(w => w.status && w.status !== 'new');
+      const allDone = cardQueue.every(w => w.session_done);
       cardIndex = allDone ? cardQueue.length : 0;
       sessionStorage.setItem(SS_START, Date.now());
       sessionStorage.setItem(SS_KEY, cardIndex);
@@ -744,13 +747,14 @@
         // 良 → 悪 に転じた場合のみ SM-2 をリセット（最悪評価の保護）
         word.status = 'red';
         sm2Update(word, 0);
-      } else if (word.status === 'red' && quality >= 4) {
-        // 悪 → 良 に転じた場合：
-        // セッションを完了させるためにステータスは green に戻すが、
-        // SM-2 の再計算（良化）は行わない（Measure B: 最悪評価の保持）
-        word.status = 'green';
       }
+      // 解き直しで正解(❌→✅)した場合：
+      // SM-2計算はスキップし、statusは'red'のまま保持する。
+      // これによりDBには「要注意」として記録され、UI上のセッション完了は
+      // cardQueue（未回答リスト）の消化状況で判定される。
     }
+
+    word.session_done = (quality >= 4);
 
     // 次回復習日時の算出（絶対時刻 ISO8601）
     // next_review = (meta.version * 1000) + (interval_days * 24 * 60 * 60 * 1000)
@@ -783,17 +787,18 @@
     screen.className = 'done-screen';
 
     const h2 = document.createElement('h2');
-    const redCount = allWords.filter(w => w.status === 'red').length;
-    h2.textContent = redCount === 0 ? '🎉 全問グリーン！' : '✅ セッション完了';
+    // セッション内で一度も pass できていない単語を抽出
+    const retryWords = allWords.filter(w => !w.session_done);
+    h2.textContent = retryWords.length === 0 ? '🎉 全問グリーン！' : '✅ セッション完了';
     screen.appendChild(h2);
 
     const p = document.createElement('p');
-    const knownCount  = allWords.filter(w => w.status === 'green').length;
-    const unknownCount = allWords.filter(w => w.status === 'red').length;
+    const knownCount  = allWords.filter(w => w.session_done).length;
+    const unknownCount = retryWords.length;
     p.textContent = '知ってた: ' + knownCount + '語 / 知らなかった: ' + unknownCount + '語';
     screen.appendChild(p);
 
-    if (redCount > 0) {
+    if (retryWords.length > 0) {
       const retryMsg = document.createElement('p');
       retryMsg.textContent = '🔁 知らなかった単語を復習します…';
       retryMsg.style.color = 'var(--text-sub)';
@@ -801,7 +806,7 @@
       screen.appendChild(retryMsg);
       setTimeout(() => {
         isReviewSession = true; // リトライも SS_KEY を汚さない
-        cardQueue = allWords.filter(w => w.status === 'red');
+        cardQueue = retryWords;
         cardIndex = 0;
         sessionStats = { known: 0, unknown: 0 };
         showCardFront();
@@ -1078,13 +1083,17 @@
       const badge = document.createElement('span');
       badge.className = 'status-badge status-' + (w.status || 'new');
       badge.textContent = w.status === 'green' ? '✅' : w.status === 'red' ? '❌' : '🆕';
-      if (inRemaining || w.status === 'new') badge.style.opacity = '0.35';
+      // セッション内でまだ回答していないか、キューに残っている場合は薄く表示
+      if (inRemaining || (!w.last_session_version || w.last_session_version !== wordsData.meta?.version)) {
+        badge.style.opacity = '0.35';
+      }
 
       item.appendChild(idEl);
       item.appendChild(wordEl);
       item.appendChild(badge);
 
-      if (w.status === 'green') {
+      // セッション内で pass できた単語のみ「もう一回」を許可
+      if (w.session_done) {
         const btn = document.createElement('button');
         btn.className = 'mouikkai-btn';
         btn.dataset.wordId = w.id;
