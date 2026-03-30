@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1774852599">
+  <meta name="words-version" content="1774876197">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -756,9 +756,10 @@
 
     word.session_done = (quality >= 4);
 
-    // 次回復習日時の算出（絶対時刻 ISO8601）
-    // next_review = (meta.version * 1000) + (interval_days * 24 * 60 * 60 * 1000)
-    word.nextReview = new Date((currentSessionVersion * 1000) + (word.interval * 24 * 60 * 60 * 1000)).toISOString();
+    // 次回復習日の算出（JST 日付文字列 YYYY-MM-DD）
+    // next_review = (meta.version * 1000) + (interval_days * 24 * 60 * 60 * 1000) → JST 日付に変換
+    word.nextReview = new Date((currentSessionVersion * 1000) + (word.interval * 24 * 60 * 60 * 1000))
+      .toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
     word.lastSeen = new Date().toISOString(); // 打鍵時刻（表示用/参考用）
 
     saveProgress(word);
