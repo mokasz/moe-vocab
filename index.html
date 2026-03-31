@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1774876197">
+  <meta name="words-version" content="1774964047">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -1184,6 +1184,9 @@
     const secToPart = s => s <= 8 ? 1 : s <= 15 ? 2 : 3;
 
     // allProgress（全1900語）から green 数を集計
+    // NOTE: 進捗タブは allProgress のみを使用。allWords による補正は行わない。
+    // 理由: allWords はセッションベースでリセットされる（status='new'）ため、
+    // 補正すると Supabase の正しい進捗が失われる。
     const sectionKnown = {};
     for (let s = 1; s <= 19; s++) sectionKnown[s] = 0;
     const partKnown = { 1: 0, 2: 0, 3: 0 };
@@ -1195,14 +1198,6 @@
           partKnown[secToPart(sec)]++;
         }
       }
-    });
-    // 今日の単語は allWords の最新ステータスで allProgress を上書き補正
-    allWords.forEach(w => {
-      const prev = allProgress[String(w.id)];
-      const prevGreen = prev && prev.status === 'green';
-      const nowGreen  = w.status === 'green';
-      if (nowGreen && !prevGreen) { sectionKnown[w.section]++; partKnown[w.part]++; }
-      if (!nowGreen && prevGreen) { sectionKnown[w.section]--; partKnown[w.part]--; }
     });
 
     const sectionStats = {};
