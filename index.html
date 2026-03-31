@@ -383,6 +383,7 @@
   const SUPA_KEY = 'sb_publishable_YCsV4Wpn8tb8gwLrgsPf2g_xAX0Q4gt';
   const BOOK_KEY    = 'moe-target1900';
   const PENDING_KEY = BOOK_KEY + '_sync_pending';
+  const REVIEW_LOG_KEY = BOOK_KEY + '_review_log_pending';
   const VERSION_KEY = 'moe_words_version'; // 単語セット切り替え検出用
   let isSyncing = false;
   const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -498,29 +499,61 @@
 
   async function flushPending() {
     if (!currentUser || isSyncing) return;
+
+    // ── progress_sync 処理 ─────────────────────────────────────────────────────
     const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-    const entries = Object.values(pending);
-    if (entries.length === 0) return;
+    const progressEntries = Object.values(pending);
+
+    // ── review_log 処理 ────────────────────────────────────────────────────────
+    const logPending = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
+    const logEntries = [...logPending]; // コピー
+
+    if (progressEntries.length === 0 && logEntries.length === 0) return;
+
     isSyncing = true;
     localStorage.removeItem(PENDING_KEY);
+    localStorage.removeItem(REVIEW_LOG_KEY);
+
     try {
-      for (const payload of entries) {
+      // progress_sync upsert
+      for (const payload of progressEntries) {
         const { error } = await sb.from('progress_sync').upsert(
           payload, { onConflict: 'user_id,book_key,word_key' }
         );
         if (error) throw error;
       }
-    } catch (e) {
-      const current = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-      for (const payload of entries) {
-        if (!(payload.word_key in current)) current[payload.word_key] = payload;
+
+      // review_log insert（成功したものから順にlocalStorageから削除）
+      const succeededLogIds = [];
+      for (const logEntry of logEntries) {
+        const { error } = await sb.from('review_log').insert(logEntry);
+        if (error) {
+          console.warn('[flushPending] review_log insert error:', error);
+          throw error; // ここで例外を投げて残りをロールバック
+        }
+        succeededLogIds.push(logEntry.id);
       }
-      localStorage.setItem(PENDING_KEY, JSON.stringify(current));
+
+    } catch (e) {
+      // progress_sync のロールバック（失敗分を復元）
+      const currentProgress = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+      for (const payload of progressEntries) {
+        if (!(payload.word_key in currentProgress)) currentProgress[payload.word_key] = payload;
+      }
+      localStorage.setItem(PENDING_KEY, JSON.stringify(currentProgress));
+
+      // review_log のロールバック（成功した分を除外して復元）
+      const remainingLogs = logEntries.filter(log => !succeededLogIds.includes(log.id));
+      localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(remainingLogs));
+
       console.warn('[flushPending] sync error, will retry:', e);
     } finally {
       isSyncing = false;
-      const remaining = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-      if (Object.keys(remaining).length > 0) flushPending();
+      const remainingProgress = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+      const remainingLogs = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
+      if (Object.keys(remainingProgress).length > 0 || remainingLogs.length > 0) {
+        flushPending();
+      }
     }
   }
 
@@ -569,20 +602,22 @@
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
     document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === name + 'View'));
     if (name === 'progress') renderProgress();
-    if (name === 'card' && pendingReview.length > 0) {
-      if (cardIndex >= cardQueue.length) {
-        // セッション完了後 → pendingReview で置き換え・リセット
-        cardQueue = [...pendingReview];
-        cardIndex = 0;
-        sessionStats = { known: 0, unknown: 0 };
-      } else {
-        // セッション途中 → キューの末尾に追加するだけ。位置・統計は維持
-        const existingIds = new Set(cardQueue.map(w => w.id));
-        pendingReview.forEach(w => { if (!existingIds.has(w.id)) cardQueue.push(w); });
+    if (name === 'card') {
+      if (pendingReview.length > 0) {
+        if (cardIndex >= cardQueue.length) {
+          // セッション完了後 → pendingReview で置き換え・リセット
+          cardQueue = [...pendingReview];
+          cardIndex = 0;
+          sessionStats = { known: 0, unknown: 0 };
+        } else {
+          // セッション途中 → キューの末尾に追加するだけ。位置・統計は維持
+          const existingIds = new Set(cardQueue.map(w => w.id));
+          pendingReview.forEach(w => { if (!existingIds.has(w.id)) cardQueue.push(w); });
+        }
+        pendingReview = [];
+        isReviewSession = true; // ← pendingReview 処理時のみ true
       }
-      pendingReview = [];
-      isReviewSession = true;
-      showCardFront();
+      showCardFront(); // ← 常に呼び出す（条件分岐の外に移動）
     }
   }
 
@@ -763,13 +798,20 @@
     word.lastSeen = new Date().toISOString(); // 打鍵時刻（表示用/参考用）
 
     saveProgress(word);
-    
-    // review_log には「実際に押したボタン」の結果を記録する
+
+    // review_log には「実際に押したボタン」の結果を記録する（localStorage経由でリトライ付き）
     const actualRating = quality >= 4 ? 4 : 1;
-    sb.from('review_log').insert({
-      user_id: currentUser.id, book_key: BOOK_KEY,
-      word_key: String(word.id), rating: actualRating
-    }).then(({ error }) => { if (error) console.warn('[review_log] error:', error); });
+    const logEntry = {
+      id: `${Date.now()}_${word.id}_${Math.random().toString(36).substr(2, 9)}`, // 一意ID
+      user_id: currentUser.id,
+      book_key: BOOK_KEY,
+      word_key: String(word.id),
+      rating: actualRating
+    };
+    const logPending = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
+    logPending.push(logEntry);
+    localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(logPending));
+    flushPending(); // progress_sync と review_log をまとめて送信
 
     if (quality >= 4) sessionStats.known++;
     else sessionStats.unknown++;
