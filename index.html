@@ -514,26 +514,14 @@
     localStorage.removeItem(PENDING_KEY);
     localStorage.removeItem(REVIEW_LOG_KEY);
 
+    // ── progress_sync upsert（失敗してもリトライ）───────────────────────────────
     try {
-      // progress_sync upsert
       for (const payload of progressEntries) {
         const { error } = await sb.from('progress_sync').upsert(
           payload, { onConflict: 'user_id,book_key,word_key' }
         );
         if (error) throw error;
       }
-
-      // review_log insert（成功したものから順にlocalStorageから削除）
-      const succeededLogIds = [];
-      for (const logEntry of logEntries) {
-        const { error } = await sb.from('review_log').insert(logEntry);
-        if (error) {
-          console.warn('[flushPending] review_log insert error:', error);
-          throw error; // ここで例外を投げて残りをロールバック
-        }
-        succeededLogIds.push(logEntry.id);
-      }
-
     } catch (e) {
       // progress_sync のロールバック（失敗分を復元）
       const currentProgress = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
@@ -541,19 +529,35 @@
         if (!(payload.word_key in currentProgress)) currentProgress[payload.word_key] = payload;
       }
       localStorage.setItem(PENDING_KEY, JSON.stringify(currentProgress));
+      console.warn('[flushPending] progress_sync error, will retry:', e);
+    }
 
-      // review_log のロールバック（成功した分を除外して復元）
+    // ── review_log insert（独立して処理。失敗しても進捗には影響しない）──────────────
+    try {
+      const succeededLogIds = [];
+      for (const logEntry of logEntries) {
+        const { error } = await sb.from('review_log').insert(logEntry);
+        if (error) {
+          console.warn('[flushPending] review_log insert error, will retry:', error);
+          break; // ここで失敗したら残りは次回リトライ
+        }
+        succeededLogIds.push(logEntry.id);
+      }
+      // 成功した分を除外して保存（失敗した分は次回リトライ）
       const remainingLogs = logEntries.filter(log => !succeededLogIds.includes(log.id));
       localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(remainingLogs));
+    } catch (e) {
+      // 予期せぬエラー（ネットワーク切断等）は全て保存して次回リトライ
+      localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(logEntries));
+      console.warn('[flushPending] review_log unexpected error:', e);
+    }
 
-      console.warn('[flushPending] sync error, will retry:', e);
-    } finally {
-      isSyncing = false;
-      const remainingProgress = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-      const remainingLogs = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
-      if (Object.keys(remainingProgress).length > 0 || remainingLogs.length > 0) {
-        flushPending();
-      }
+    // ── リトライ判定 ────────────────────────────────────────────────────────────
+    isSyncing = false;
+    const remainingProgress = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+    const remainingLogs = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
+    if (Object.keys(remainingProgress).length > 0 || remainingLogs.length > 0) {
+      flushPending();
     }
   }
 
