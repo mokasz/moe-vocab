@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1774964047">
+  <meta name="words-version" content="1775055600">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -511,10 +511,8 @@
     if (progressEntries.length === 0 && logEntries.length === 0) return;
 
     isSyncing = true;
-    localStorage.removeItem(PENDING_KEY);
-    localStorage.removeItem(REVIEW_LOG_KEY);
 
-    // ── progress_sync upsert（失敗してもリトライ）───────────────────────────────
+    // ── progress_sync upsert（成功後にlocalStorageクリア）───────────────────────
     try {
       for (const payload of progressEntries) {
         const { error } = await sb.from('progress_sync').upsert(
@@ -522,33 +520,31 @@
         );
         if (error) throw error;
       }
+      // 成功 → localStorage をクリア
+      localStorage.removeItem(PENDING_KEY);
     } catch (e) {
-      // progress_sync のロールバック（失敗分を復元）
-      const currentProgress = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-      for (const payload of progressEntries) {
-        if (!(payload.word_key in currentProgress)) currentProgress[payload.word_key] = payload;
-      }
-      localStorage.setItem(PENDING_KEY, JSON.stringify(currentProgress));
       console.warn('[flushPending] progress_sync error, will retry:', e);
     }
 
-    // ── review_log insert（独立して処理。失敗しても進捗には影響しない）──────────────
+    // ── review_log insert（成功後にlocalStorageクリア）──────────────────────────
     try {
-      const succeededLogIds = [];
-      for (const logEntry of logEntries) {
-        const { error } = await sb.from('review_log').insert(logEntry);
+      let succeededCount = 0;
+      for (let i = 0; i < logEntries.length; i++) {
+        const { error } = await sb.from('review_log').insert(logEntries[i]);
         if (error) {
           console.warn('[flushPending] review_log insert error, will retry:', error);
-          break; // ここで失敗したら残りは次回リトライ
+          break; // 失敗したら残りは次回リトライ
         }
-        succeededLogIds.push(logEntry.id);
+        succeededCount++;
       }
-      // 成功した分を除外して保存（失敗した分は次回リトライ）
-      const remainingLogs = logEntries.filter(log => !succeededLogIds.includes(log.id));
-      localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(remainingLogs));
+      // 成功した分を除外して保存
+      const remainingLogs = logEntries.slice(succeededCount);
+      if (remainingLogs.length === 0) {
+        localStorage.removeItem(REVIEW_LOG_KEY);
+      } else {
+        localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(remainingLogs));
+      }
     } catch (e) {
-      // 予期せぬエラー（ネットワーク切断等）は全て保存して次回リトライ
-      localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(logEntries));
       console.warn('[flushPending] review_log unexpected error:', e);
     }
 
@@ -796,9 +792,11 @@
     word.session_done = (quality >= 4);
 
     // 次回復習日の算出（JST 日付文字列 YYYY-MM-DD）
-    // next_review = (meta.version * 1000) + (interval_days * 24 * 60 * 60 * 1000) → JST 日付に変換
-    word.nextReview = new Date((currentSessionVersion * 1000) + (word.interval * 24 * 60 * 60 * 1000))
-      .toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+    // next_review = 今日のJST日付 + interval_days
+    const todayJST = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+    const baseDate = new Date(todayJST + 'T00:00:00Z');
+    baseDate.setUTCDate(baseDate.getUTCDate() + word.interval);
+    word.nextReview = baseDate.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
     word.lastSeen = new Date().toISOString(); // 打鍵時刻（表示用/参考用）
 
     saveProgress(word);
@@ -806,7 +804,6 @@
     // review_log には「実際に押したボタン」の結果を記録する（localStorage経由でリトライ付き）
     const actualRating = quality >= 4 ? 4 : 1;
     const logEntry = {
-      id: `${Date.now()}_${word.id}_${Math.random().toString(36).substr(2, 9)}`, // 一意ID
       user_id: currentUser.id,
       book_key: BOOK_KEY,
       word_key: String(word.id),
