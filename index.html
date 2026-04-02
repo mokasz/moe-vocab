@@ -538,7 +538,10 @@
         succeededCount++;
       }
       // 成功した分を除外して保存
-      const remainingLogs = logEntries.slice(succeededCount);
+      // 注意: logEntries 読み取り後に judge() が追加したエントリを保護するため、
+      // 現在の localStorage を再読み込みして先頭 succeededCount 件だけ削除する
+      const currentLogs = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
+      const remainingLogs = currentLogs.slice(succeededCount);
       if (remainingLogs.length === 0) {
         localStorage.removeItem(REVIEW_LOG_KEY);
       } else {
@@ -792,11 +795,9 @@
     word.session_done = (quality >= 4);
 
     // 次回復習日の算出（JST 日付文字列 YYYY-MM-DD）
-    // next_review = 今日のJST日付 + interval_days
-    const todayJST = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
-    const baseDate = new Date(todayJST + 'T00:00:00Z');
-    baseDate.setUTCDate(baseDate.getUTCDate() + word.interval);
-    word.nextReview = baseDate.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+    // next_review = meta.version（words.json生成時刻・Unix秒）+ interval_days
+    const nextReviewMs = (wordsData.meta.version * 1000) + (word.interval * 24 * 60 * 60 * 1000);
+    word.nextReview = new Date(nextReviewMs).toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
     word.lastSeen = new Date().toISOString(); // 打鍵時刻（表示用/参考用）
 
     saveProgress(word);
@@ -832,7 +833,7 @@
 
     const h2 = document.createElement('h2');
     // セッション内で一度も pass できていない単語を抽出
-    const retryWords = allWords.filter(w => !w.session_done);
+    const retryWords = allWords.filter(w => w.session_done === false);
     h2.textContent = retryWords.length === 0 ? '🎉 全問グリーン！' : '✅ セッション完了';
     screen.appendChild(h2);
 
