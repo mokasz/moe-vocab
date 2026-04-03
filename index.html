@@ -484,7 +484,11 @@
 
             // セッション内での完了フラグ（UI制御用）
             // DB上の status が red でも、このセッションで一度 pass していれば true になる
-            w.session_done         = isSameSession && r.status !== 'red';
+            // judge() が既にセットした値（true/false）は上書きしない。
+            // undefined（未回答）の場合のみ Supabase から復元する。
+            if (w.session_done === undefined) {
+              w.session_done = isSameSession && r.status !== 'red';
+            }
 
             w.ease                 = r.ease_factor;            w.interval             = r.interval_days;
             w.repetitions          = r.repetitions;
@@ -493,7 +497,14 @@
             w.last_session_version = r.last_session_version;
           }
         });
-        renderAll();
+        // セッション進行中（カード回答開始後 or 復習中）は renderCards() を実行しない。
+        // loadFromSupabase() の遅延応答が自動復習の state を上書きするのを防ぐ。
+        if (cardIndex === 0 && !isReviewSession) {
+          renderAll();
+        } else {
+          renderPassage();
+          renderProgress();
+        }
       });
   }
 
