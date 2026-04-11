@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1775829824">
+  <meta name="words-version" content="1775905778">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -379,8 +379,12 @@
 
 <script>
   // ── Config ──────────────────────────────────────────────────────────────
-  const SUPA_URL = 'https://uzpmpjkkwapaohleejtt.supabase.co';
-  const SUPA_KEY = 'sb_publishable_YCsV4Wpn8tb8gwLrgsPf2g_xAX0Q4gt';
+  const SUPA_URL = location.hostname === 'localhost'
+    ? 'http://127.0.0.1:54321'
+    : 'https://uzpmpjkkwapaohleejtt.supabase.co';
+  const SUPA_KEY = location.hostname === 'localhost'
+    ? 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH'
+    : 'sb_publishable_YCsV4Wpn8tb8gwLrgsPf2g_xAX0Q4gt';
   const BOOK_KEY    = 'moe-target1900';
   const PENDING_KEY = BOOK_KEY + '_sync_pending';
   const REVIEW_LOG_KEY = BOOK_KEY + '_review_log_pending';
@@ -1076,7 +1080,23 @@
       const jaEl = document.createElement('p');
       jaEl.className = 'passage-text';
       jaEl.style.color = 'var(--text-sub)';
-      jaEl.textContent = p.text_ja;
+      const jaKws = (p.highlighted_words_ja || []).filter(w => w.length > 0);
+      if (jaKws.length === 0) {
+        jaEl.textContent = p.text_ja;
+      } else {
+        const jaEsc = jaKws.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        const jaPat = new RegExp('(' + jaEsc.join('|') + ')', 'g');
+        let jaLast = 0, jaM;
+        const jaRaw = p.text_ja;
+        while ((jaM = jaPat.exec(jaRaw)) !== null) {
+          if (jaM.index > jaLast) jaEl.appendChild(document.createTextNode(jaRaw.slice(jaLast, jaM.index)));
+          const jamark = document.createElement('mark');
+          jamark.textContent = jaM[0];
+          jaEl.appendChild(jamark);
+          jaLast = jaM.index + jaM[0].length;
+        }
+        if (jaLast < jaRaw.length) jaEl.appendChild(document.createTextNode(jaRaw.slice(jaLast)));
+      }
       wrap.appendChild(jaEl);
     }
 
