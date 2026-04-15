@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1776169428">
+  <meta name="words-version" content="1775905778">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -457,7 +457,6 @@
       localStorage.setItem(VERSION_KEY, currentVersion);
     }
 
-    flushPending();        // 前回セッションの未送信エントリをバックグラウンドで送信
     renderAll();           // 全語 new で即座に表示
     loadFromSupabase();    // バックグラウンドで進捗を取得・再描画（await しない）
     // 30秒ごとにリトライ（オフライン復帰後の未送信分を送信）
@@ -816,7 +815,9 @@
     word.nextReview = new Date(nextReviewMs).toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
     word.lastSeen = new Date().toISOString(); // 打鍵時刻（表示用/参考用）
 
-    // review_log を先に localStorage に書く（flushPending が確実にスナップショットに含める）
+    saveProgress(word);
+
+    // review_log には「実際に押したボタン」の結果を記録する（localStorage経由でリトライ付き）
     const actualRating = quality >= 4 ? 4 : 1;
     const logEntry = {
       user_id: currentUser.id,
@@ -827,8 +828,7 @@
     const logPending = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) || '[]');
     logPending.push(logEntry);
     localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(logPending));
-
-    saveProgress(word); // 内部で flushPending() を呼ぶ。この時点で review_log エントリが存在する
+    flushPending(); // progress_sync と review_log をまとめて送信
 
     if (quality >= 4) sessionStats.known++;
     else sessionStats.unknown++;
