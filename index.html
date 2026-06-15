@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1781431131">
+  <meta name="words-version" content="1780832058">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -472,19 +472,10 @@
       .eq('user_id', currentUser.id)
       .eq('book_key', BOOK_KEY)
       .then(({ data, error }) => {
-        if (error) { console.warn('[loadFromSupabase] error:', error); }
-        const hasData = !error && data && data.length > 0;
-        const hasPending = localStorage.getItem(PENDING_KEY);
-        if (!hasData && !hasPending) return;
-
+        if (error) { console.warn('[loadFromSupabase] error:', error); return; }
+        if (!data || data.length === 0) return;
         const map = {};
-        if (data) {
-          data.forEach(r => { map[r.word_key] = r; });
-        }
-        const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-        Object.keys(pending).forEach(k => {
-          map[k] = { ...map[k], ...pending[k] };
-        });
+        data.forEach(r => { map[r.word_key] = r; });
         allProgress = map; // 全進捗キャッシュを更新
         
         const currentVersion = wordsData?.meta?.version;
