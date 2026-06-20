@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1781917845">
+  <meta name="words-version" content="1781431131">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -537,34 +537,18 @@
 
     isSyncing = true;
 
-    // ── progress_sync upsert（成功後に成功分をlocalStorageから削除）─────────────────
-    const succeededKeys = [];
+    // ── progress_sync upsert（成功後にlocalStorageクリア）───────────────────────
     try {
       for (const payload of progressEntries) {
         const { error } = await sb.from('progress_sync').upsert(
           payload, { onConflict: 'user_id,book_key,word_key' }
         );
         if (error) throw error;
-        succeededKeys.push(payload.word_key);
       }
+      // 成功 → localStorage をクリア
+      localStorage.removeItem(PENDING_KEY);
     } catch (e) {
       console.warn('[flushPending] progress_sync error, will retry:', e);
-    } finally {
-      if (succeededKeys.length > 0) {
-        const currentPending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-        for (const k of succeededKeys) {
-          // 送信済みスナップショットと同一の場合のみ削除（再回答で更新済みなら残す）
-          const sent = progressEntries.find(p => p.word_key === k);
-          const cur = currentPending[k];
-          if (cur && sent && cur.last_studied !== sent.last_studied) continue;
-          delete currentPending[k];
-        }
-        if (Object.keys(currentPending).length === 0) {
-          localStorage.removeItem(PENDING_KEY);
-        } else {
-          localStorage.setItem(PENDING_KEY, JSON.stringify(currentPending));
-        }
-      }
     }
 
     // ── review_log insert（成功後にlocalStorageクリア）──────────────────────────
