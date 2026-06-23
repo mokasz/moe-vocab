@@ -537,18 +537,34 @@
 
     isSyncing = true;
 
-    // ── progress_sync upsert（成功後にlocalStorageクリア）───────────────────────
+    // ── progress_sync upsert（成功後に成功分をlocalStorageから削除）─────────────────
+    const succeededKeys = [];
     try {
       for (const payload of progressEntries) {
         const { error } = await sb.from('progress_sync').upsert(
           payload, { onConflict: 'user_id,book_key,word_key' }
         );
         if (error) throw error;
+        succeededKeys.push(payload.word_key);
       }
-      // 成功 → localStorage をクリア
-      localStorage.removeItem(PENDING_KEY);
     } catch (e) {
       console.warn('[flushPending] progress_sync error, will retry:', e);
+    } finally {
+      if (succeededKeys.length > 0) {
+        const currentPending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+        for (const k of succeededKeys) {
+          // 送信済みスナップショットと同一の場合のみ削除（再回答で更新済みなら残す）
+          const sent = progressEntries.find(p => p.word_key === k);
+          const cur = currentPending[k];
+          if (cur && sent && cur.last_studied !== sent.last_studied) continue;
+          delete currentPending[k];
+        }
+        if (Object.keys(currentPending).length === 0) {
+          localStorage.removeItem(PENDING_KEY);
+        } else {
+          localStorage.setItem(PENDING_KEY, JSON.stringify(currentPending));
+        }
+      }
     }
 
     // ── review_log insert（成功後にlocalStorageクリア）──────────────────────────
