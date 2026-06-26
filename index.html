@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1781431131">
+  <meta name="words-version" content="1781917845">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -696,6 +696,13 @@
     stopAudio();
     const v = document.getElementById('cardView');
     while (v.firstChild) v.removeChild(v.firstChild);
+
+    if (!isReviewSession) {
+      while (cardIndex < cardQueue.length && cardQueue[cardIndex].session_done === true) {
+        cardIndex++;
+      }
+      sessionStorage.setItem(SS_KEY, cardIndex);
+    }
 
     if (cardIndex >= cardQueue.length) {
       showDoneScreen();
