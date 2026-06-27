@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moe's Vocab Progress Dashboard</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Chart.js, PapaParse & Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #0a0b10;
+      --bg-gradient: radial-gradient(circle at top right, #131526, #0a0b10 60%);
+      --surface: rgba(20, 22, 38, 0.7);
+      --surface-hover: rgba(28, 30, 52, 0.9);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-focus: rgba(99, 102, 241, 0.4);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #6366f1; /* Indigo */
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      
+      --color-new: #1e293b;
+      --color-learning: #f43f5e;
+      --color-m1: #a7f3d0;
+      --color-m2: #6ee7b7;
+      --color-m3: #34d399;
+      --color-m4: #10b981;
+      --color-m5: #047857;
+      --color-red: #f43f5e;
+      --color-green: #10b981;
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+
+    *::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    *::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+    }
+
+    body {
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      color: var(--text);
+      font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(10, 11, 16, 0.8);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-container {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .logo-container svg {
+      width: 22px;
+      height: 22px;
+      fill: white;
+    }
+
+    .title-area h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #f3f4f6, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .title-area p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      gap: 6px;
+    }
+
+    .status-badge.loading {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .status-badge.connected {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-badge.error {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    main {
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Loading Overlay & Setup Card */
+    #setupContainer {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      max-width: 600px;
+      width: 100%;
+      margin: 60px auto;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .csv-drop-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 32px;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .csv-drop-zone:hover, .csv-drop-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .csv-drop-zone svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* KPI Summary Cards */
+    .kpi-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .kpi-card.green::before { background: var(--color-green); }
+    .kpi-card.red::before { background: var(--color-red); }
+    .kpi-card.yellow::before { background: #fbbf24; }
+
+    .kpi-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .kpi-subtext {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .kpi-progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    .kpi-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .kpi-card.green .kpi-progress-fill { background: var(--color-green); }
+    .kpi-card.red .kpi-progress-fill { background: var(--color-red); }
+
+    /* Interactive Grid & Detail Panel */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .grid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grid-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .grid-legend {
+      display: flex;
+      gap: 16px;
+      font-size: 0.8rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .legend-color.new { background: var(--color-new); }
+    .legend-color.learning { background: var(--color-learning); }
+    .legend-color.m1 { background: var(--color-m1); }
+    .legend-color.m2 { background: var(--color-m2); }
+    .legend-color.m3 { background: var(--color-m3); }
+    .legend-color.m4 { background: var(--color-m4); }
+    .legend-color.m5 { background: var(--color-m5); }
+
+    .part-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .part-title span.pct {
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(13px, 1fr));
+      gap: 3px;
+      margin-bottom: 20px;
+    }
+
+    .grid-cell {
+      aspect-ratio: 1;
+      border-radius: 2px;
+      background: var(--color-new);
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.15s ease;
+      position: relative;
+    }
+
+    .grid-cell:hover {
+      transform: scale(1.4);
+      z-index: 2;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    .grid-cell.learning {
+      background: var(--color-learning);
+    }
+
+    .grid-cell.m1 {
+      background: var(--color-m1);
+    }
+
+    .grid-cell.m2 {
+      background: var(--color-m2);
+    }
+
+    .grid-cell.m3 {
+      background: var(--color-m3);
+    }
+
+    .grid-cell.m4 {
+      background: var(--color-m4);
+    }
+
+    .grid-cell.m5 {
+      background: var(--color-m5);
+    }
+    
+    .grid-cell.selected {
+      box-shadow: 0 0 0 2px #fff, 0 0 10px var(--accent);
+      transform: scale(1.3);
+      z-index: 1;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: #1e293b;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 100;
+    }
+
+    .grid-cell:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Detail Card */
+    .detail-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: sticky;
+      top: 110px;
+      transition: border-color 0.2s ease;
+    }
+
+    .detail-card.active {
+      border-color: var(--card-border-focus);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .word-badge {
+      font-size: 0.8rem;
+      background: rgba(255,255,255,0.06);
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: var(--text-muted);
+    }
+
+    .detail-word {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pronounce-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+
+    .pronounce-btn:hover {
+      background: rgba(99, 102, 241, 0.1);
+      color: #818cf8;
+      transform: scale(1.1);
+    }
+
+    .pronounce-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .detail-translation {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .detail-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .section-content {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .sentence-block {
+      background: rgba(255,255,255,0.02);
+      border-left: 2px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .sentence-en {
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .sentence-ja {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .detail-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    /* Charts Section */
+    .charts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 350px;
+    }
+
+    .chart-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mistakes Leaderboard */
+    .leaderboard-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .leaderboard-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      width: 100%;
+      max-width: 320px;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .leaderboard-table-wrapper {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .leaderboard-table th, .leaderboard-table td {
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .leaderboard-table th {
+      background: rgba(255,255,255,0.02);
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      user-select: none;
+    }
+
+    .leaderboard-table th[onclick] {
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .leaderboard-table th[onclick]:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
+
+    .sort-icon {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.7rem;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .leaderboard-table tr {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .leaderboard-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .leaderboard-table tr.active {
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .rank-col {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      width: 60px;
+    }
+    
+    .leaderboard-table tr:nth-child(1) .rank-col { color: #f59e0b; } /* Gold */
+    .leaderboard-table tr:nth-child(2) .rank-col { color: #94a3b8; } /* Silver */
+    .leaderboard-table tr:nth-child(3) .rank-col { color: #b45309; } /* Bronze */
+
+    .word-col {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .failures-badge {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fb7185;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .success-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .error-rate-col {
+      font-weight: 600;
+    }
+
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .pagination-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .pagination-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ── Prediction Card ── */
+    .prediction-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prediction-grid {
+      display: grid;
+      grid-template-columns: 320px 280px 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 1000px) {
+      .prediction-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    .control-group {
+      background: rgba(255,255,255,0.02);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .control-value {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.1);
+      outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+      transition: transform 0.1s ease;
+    }
+
+    .slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .pred-col-milestones {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .milestone-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .milestone-box.highlight {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(99, 102, 241, 0.05));
+      border-color: rgba(16, 185, 129, 0.2);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.05);
+    }
+
+    .milestone-value {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+
+    .milestone-date {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .pred-col-chart {
+      background: rgba(255,255,255,0.01);
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    /* ── Login Screen Overlay ── */
+    #loginScreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .login-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .login-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .login-divider {
+      height: 1px;
+      background: var(--card-border);
+      margin: 8px 0;
+    }
+
+    #loginBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    #loginBtn:hover { opacity: 0.85; }
+
+    .google-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .back-link-btn:hover, #logoutBtn:hover {
+      color: var(--text) !important;
+      border-color: var(--accent) !important;
+      background: var(--accent-glow) !important;
+    }
+
+    .detail-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.6rem;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.15s ease;
+      z-index: 10;
+    }
+    
+    .detail-close-btn:hover {
+      color: var(--text);
+    }
+
+    /* ── Mobile & Smartphone Responsive Adjustments ── */
+    @media (max-width: 600px) {
+      header {
+        padding: 16px 16px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+      }
+      .brand-section {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+      }
+      .title-area {
+        text-align: center;
+      }
+      .title-area h1 {
+        font-size: 1.3rem;
+      }
+      .title-area p {
+        font-size: 0.8rem;
+      }
+      .header-controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+      }
+      .back-link-btn, #logoutBtn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+      }
+      #userChip {
+        font-size: 0.8rem;
+        margin-right: 0 !important;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 2px;
+      }
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+      }
+      main {
+        padding: 16px;
+        gap: 20px;
+      }
+      .kpi-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .kpi-card {
+        padding: 16px;
+      }
+      .kpi-value {
+        font-size: 1.8rem;
+      }
+      .grid-card {
+        padding: 16px;
+      }
+      .detail-card {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        background: #101222; /* Matches surface color */
+        border-top: 2px solid var(--card-border-focus);
+        border-radius: 20px 20px 0 0;
+        padding: 24px 20px;
+        box-shadow: 0 -8px 32px rgba(0,0,0,0.8);
+        transform: translateY(105%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .detail-card.active {
+        transform: translateY(0);
+      }
+      .detail-close-btn {
+        display: block !important;
+      }
+      .prediction-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .control-group {
+        padding: 12px;
+      }
+      .charts-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .chart-card {
+        padding: 16px;
+        min-height: 280px;
+      }
+      /* Grid cells on mobile: slightly larger gap and touch targets if possible */
+      .word-grid {
+        gap: 3px;
+      }
+      .grid-cell {
+        width: 12px;
+        height: 12px;
+      }
+
+      /* Leaderboard Mobile List Item Layout */
+      .leaderboard-table thead {
+        display: none !important;
+      }
+      .leaderboard-table tr {
+        display: grid !important;
+        grid-template-columns: 36px 1fr 100px !important;
+        grid-template-rows: auto auto !important;
+        grid-template-areas: 
+          "rank word stats"
+          "rank ja stats" !important;
+        gap: 6px 12px !important;
+        padding: 12px 10px !important;
+        border-bottom: 1px solid var(--card-border) !important;
+        align-items: center !important;
+      }
+      .leaderboard-table td {
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+        text-align: left !important;
+      }
+      .leaderboard-table .rank-col {
+        grid-area: rank;
+        font-size: 1.1rem;
+        font-weight: 700;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+      .leaderboard-table .id-col {
+        display: none !important;
+      }
+      .leaderboard-table .word-col {
+        grid-area: word;
+        display: inline !important;
+        font-weight: 600;
+        color: var(--accent);
+      }
+      .leaderboard-table .ja-col {
+        grid-area: ja;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+      .leaderboard-table .incorrect-col,
+      .leaderboard-table .correct-col,
+      .leaderboard-table .error-rate-col {
+        display: none !important;
+      }
+      .leaderboard-table .mobile-stats-col {
+        grid-area: stats;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      .leaderboard-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+      }
+      #mobileSortContainer {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        justify-content: space-between;
+        width: 100%;
+      }
+      #mobileSortSelect {
+        flex: 1;
+        max-width: 200px;
+      }
+      #leaderboardCount {
+        text-align: right;
+        font-size: 0.8rem !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen Overlay -->
+<div id="loginScreen" style="display: none;">
+  <div class="login-card">
+    <div class="login-title">Moe's Vocab</div>
+    <div class="login-subtitle">進捗ダッシュボード</div>
+    <div class="login-divider"></div>
+    <button id="loginBtn">
+      <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="rgba(255,255,255,0.85)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="rgba(255,255,255,0.7)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+        <path fill="rgba(255,255,255,0.6)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Googleでログイン
+    </button>
+  </div>
+</div>
+
+  <header>
+    <div class="brand-section">
+      <div class="logo-container">
+        <!-- SVG Book with Chart/Stats Graph lines -->
+        <svg viewBox="0 0 24 24">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>
+      </div>
+      <div class="title-area">
+        <h1>Moe's Vocab Progress</h1>
+        <p>Target 1900 学習効果・進捗分析</p>
+      </div>
+    </div>
+    <div class="header-controls" style="display: flex; align-items: center;">
+      <a href="index.html" id="backToAppBtn" class="back-link-btn" style="display:none; margin-right: 16px; padding: 8px 16px; border: 1px solid var(--card-border); border-radius: 6px; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; transition: all 0.2s;">← 学習画面へ戻る</a>
+      <span id="userChip" style="font-size: 0.85rem; color: var(--text-muted); margin-right: 16px; display: none; font-weight: 600;"></span>
+      <button id="logoutBtn" style="display:none; padding: 8px 16px; background: transparent; border: 1px solid var(--card-border); border-radius: 6px; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-weight: 600;">ログアウト</button>
+      <div id="connectionStatus" class="status-badge loading" style="margin-left: 8px;">
+        <span class="dot">●</span> <span class="status-text">データを取得中...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container when waiting for local CSV -->
+  <div id="setupContainer" class="hidden">
+    <h2 style="font-size:1.5rem;font-weight:600">CSVファイルを読み込みます</h2>
+    <p style="color:var(--text-muted);font-size:0.95rem;max-width:480px;line-height:1.6">
+      分析にはターゲット1900の単語リストが必要です。<br>
+      <code>raw_data/target1900_master_enriched.csv</code> を選択するか、ここにドラッグ＆ドロップしてください。
+    </p>
+    
+    <div class="csv-drop-zone" id="csvDropZone">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+      </svg>
+      <p style="font-weight:600;margin-bottom:4px">CSVファイルをドラッグ＆ドロップ</p>
+      <p style="color:var(--text-muted);font-size:0.8rem">またはクリックしてファイルを選択</p>
+      <input type="file" id="csvFileInput" accept=".csv" class="hidden">
+    </div>
+
+    <div id="setupProgress" style="display:none;color:var(--accent);font-weight:600">
+      CSVデータをパース中...
+    </div>
+  </div>
+
+  <main id="dashboardContent">
+    <!-- KPI Summary Section -->
+    <section class="kpi-container">
+      <!-- Total Studied -->
+      <div class="kpi-card yellow">
+        <div class="kpi-label">学習済み総数</div>
+        <div class="kpi-value" id="kpiTotalStudied">0 <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">/ 1900</span></div>
+        <div class="kpi-subtext" id="kpiTotalPct">0% 習得開始</div>
+        <div class="kpi-progress-bar">
+          <div class="kpi-progress-fill" id="kpiTotalFill" style="background:#fbbf24"></div>
+        </div>
+      </div>
+      <!-- Mastered -->
+      <div class="kpi-card green">
+        <div class="kpi-label">習得完了 (Interval &gt;= 14日)</div>
+        <div class="kpi-value" id="kpiGreen">0 <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">語</span></div>
+        <div class="kpi-subtext" id="kpiGreenPct">全単語の 0%</div>
+        <div class="kpi-progress-bar">
+          <div class="kpi-progress-fill" id="kpiGreenFill"></div>
+        </div>
+      </div>
+      <!-- In Progress -->
+      <div class="kpi-card red">
+        <div class="kpi-label">学習中 (Interval &lt; 14日)</div>
+        <div class="kpi-value" id="kpiRed">0 <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">語</span></div>
+        <div class="kpi-subtext" id="kpiRedPct">全単語の 0%</div>
+        <div class="kpi-progress-bar">
+          <div class="kpi-progress-fill" id="kpiRedFill"></div>
+        </div>
+      </div>
+      <!-- Review Logs Count -->
+      <div class="kpi-card">
+        <div class="kpi-label">累計回答アクション数</div>
+        <div class="kpi-value" id="kpiLogsCount">0 <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">回</span></div>
+        <div class="kpi-subtext" id="kpiAccuracy">正解率 0%</div>
+        <div class="kpi-progress-bar">
+          <div class="kpi-progress-fill" id="kpiAccuracyFill" style="background:var(--accent)"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Grid Section & Selection Details -->
+    <div class="dashboard-layout">
+      <!-- 1900 Grid Visualizer -->
+      <div class="grid-card">
+        <div class="grid-header">
+          <h2 class="grid-title">1900語 進捗グリッド</h2>
+          <div class="grid-legend" style="flex-wrap: wrap; justify-content: flex-end; gap: 8px;">
+            <div class="legend-item"><div class="legend-color new"></div>未学習</div>
+            <div class="legend-item"><div class="legend-color learning"></div>学習中 (&lt;14日)</div>
+            <div class="legend-item"><div class="legend-color m1"></div>初期 (14-20日)</div>
+            <div class="legend-item"><div class="legend-color m2"></div>習得中 (21-29日)</div>
+            <div class="legend-item"><div class="legend-color m3"></div>安定 (30-59日)</div>
+            <div class="legend-item"><div class="legend-color m4"></div>非常に安定 (60-89日)</div>
+            <div class="legend-item"><div class="legend-color m5"></div>完全定着 (&ge;90日)</div>
+          </div>
+        </div>
+
+        <!-- Part 3 -->
+        <div>
+          <div class="part-title">
+            <span>Part 3：難単語 400語 (#1501 - #1900)</span>
+            <span class="pct" id="part3Pct">0% Mastered</span>
+          </div>
+          <div class="word-grid" id="gridPart3"></div>
+        </div>
+
+        <!-- Part 2 -->
+        <div>
+          <div class="part-title">
+            <span>Part 2：重要 700語 (#801 - #1500)</span>
+            <span class="pct" id="part2Pct">0% Mastered</span>
+          </div>
+          <div class="word-grid" id="gridPart2"></div>
+        </div>
+
+        <!-- Part 1 -->
+        <div>
+          <div class="part-title">
+            <span>Part 1：基本 800語 (#1 - #800)</span>
+            <span class="pct" id="part1Pct">0% Mastered</span>
+          </div>
+          <div class="word-grid" id="gridPart1"></div>
+        </div>
+      </div>
+
+      <!-- Detail Card Backdrop Overlay (Mobile only) -->
+      <div id="detailBackdrop" onclick="closeDetailCard()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:190; backdrop-filter:blur(4px);"></div>
+
+      <!-- Detail Card (Sticky Side Column / Bottom Sheet on Mobile) -->
+      <div class="detail-card" id="detailCard">
+        <button class="detail-close-btn" onclick="closeDetailCard()" style="display:none;">×</button>
+        <div class="detail-header">
+          <span class="word-badge" id="detailId">#----</span>
+          <span class="word-badge" id="detailPartSec">Part - / Sec -</span>
+        </div>
+        <div>
+          <div class="detail-word">
+            <span id="detailWordText">単語を選択</span>
+            <button class="pronounce-btn" id="detailAudioBtn" style="display:none;" onclick="playWordAudio()">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+              </svg>
+            </button>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:2px" id="detailPos">-</div>
+        </div>
+        <div class="detail-translation" id="detailTranslation">-</div>
+        
+        <div class="detail-section">
+          <div class="section-label">例文</div>
+          <div class="section-content sentence-block">
+            <div class="sentence-en" id="detailSentenceEn">-</div>
+            <div class="sentence-ja" id="detailSentenceJa">-</div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-label">SM-2 記憶ステータス</div>
+          <div class="detail-stats-grid">
+            <div class="stat-box">
+              <span class="section-label">間隔 (Interval)</span>
+              <span class="stat-num" id="detailStatInterval">- 日</span>
+            </div>
+            <div class="stat-box">
+              <span class="section-label">記憶係数 (Ease)</span>
+              <span class="stat-num" id="detailStatEase">-</span>
+            </div>
+            <div class="stat-box" style="margin-top:8px">
+              <span class="section-label">連続正解数</span>
+              <span class="stat-num" id="detailStatReps">- 回</span>
+            </div>
+            <div class="stat-box" style="margin-top:8px">
+              <span class="section-label">現在のステータス</span>
+              <span class="stat-num" id="detailStatStatus" style="font-size:0.9rem;font-weight:600">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <div class="section-label">回答履歴統計</div>
+          <div class="detail-stats-grid">
+            <div class="stat-box">
+              <span class="section-label">正解数 (✅)</span>
+              <span class="stat-num" id="detailStatCorrect" style="color:var(--color-green)">- 回</span>
+            </div>
+            <div class="stat-box">
+              <span class="section-label">不正解数 (❌)</span>
+              <span class="stat-num" id="detailStatIncorrect" style="color:var(--color-red)">- 回</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Prediction Section -->
+    <section class="prediction-card" id="predictionSection">
+      <div class="grid-header" style="margin-bottom: 20px;">
+        <h2 class="grid-title">全単語習得完了の予測シミュレーション</h2>
+        <span style="font-size:0.85rem;color:var(--text-muted)">日々の学習ペースに基づき、いつ頃1900語を完了できるかを予測します</span>
+      </div>
+      
+      <div class="prediction-grid">
+        <!-- Controls Column -->
+        <div class="pred-col-controls">
+          <div class="control-group">
+            <label class="section-label" style="display:flex; justify-content:space-between; font-weight: 600;">
+              <span>新規単語の追加ペース</span>
+              <span class="control-value" id="paceValue">10語 / 日</span>
+            </label>
+            <input type="range" id="paceSlider" min="5" max="30" step="1" class="slider" style="width:100%; margin-top:8px;">
+            <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:6px;">
+              ※過去の実績平均: <strong>9.6語 / 日</strong> (MIN_NEW=10の設定)
+            </span>
+          </div>
+
+          <div class="control-group" style="margin-top: 16px;">
+            <label class="section-label" style="display:flex; justify-content:space-between; font-weight: 600;">
+              <span>定着までに要する期間 (Graduation)</span>
+              <span class="control-value" id="delayValue">14日</span>
+            </label>
+            <input type="range" id="delaySlider" min="7" max="28" step="1" class="slider" style="width:100%; margin-top:8px;">
+            <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:6px;">
+              ※新出単語がInterval &gt;= 14日に育つまでの平均日数
+            </span>
+          </div>
+        </div>
+
+        <!-- Milestones Column -->
+        <div class="pred-col-milestones">
+          <div class="milestone-box">
+            <span class="section-label">全1900語の学習開始まで</span>
+            <div class="milestone-value" id="predDaysToStudy">-日</div>
+            <div class="milestone-date" id="predDateToStudy">-</div>
+          </div>
+          
+          <div class="milestone-box highlight">
+            <span class="section-label" style="color:var(--color-m4); font-weight: 600;">✨ 全単語の習得完了 (長期記憶化)</span>
+            <div class="milestone-value" id="predDaysToMaster" style="color:var(--color-green)">-日</div>
+            <div class="milestone-date" id="predDateToMaster" style="font-weight:700;">-</div>
+          </div>
+        </div>
+
+        <!-- Chart Column -->
+        <div class="pred-col-chart">
+          <div style="position:relative; height:200px; width:100%;">
+            <canvas id="predictionChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts Container (Ease and Interval Distributions) -->
+    <section class="charts-container">
+      <!-- Ease Factor Chart -->
+      <div class="chart-card">
+        <h3 class="chart-title">
+          <span>Ease Factor (記憶係数) 分布</span>
+          <span style="font-size:0.8rem;color:var(--text-muted)">低いほど記憶に定着しにくい難語</span>
+        </h3>
+        <div class="chart-wrapper">
+          <canvas id="easeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Interval Distribution Chart -->
+      <div class="chart-card">
+        <h3 class="chart-title">
+          <span>復習間隔 (Interval) 分布</span>
+          <span style="font-size:0.8rem;color:var(--text-muted)">間隔が長いほど長期記憶として定着</span>
+        </h3>
+        <div class="chart-wrapper">
+          <canvas id="intervalChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Repeated Mistakes Leaderboard -->
+    <section class="leaderboard-card">
+      <div class="grid-header">
+        <h2 class="grid-title">お手つき単語ランキング (苦手な単語 Top 50)</h2>
+        <span style="font-size:0.85rem;color:var(--text-muted)">回答履歴で「知らなかった (❌)」の回数が多い順</span>
+      </div>
+
+      <div class="leaderboard-toolbar">
+        <input type="text" id="leaderboardSearch" class="search-input" placeholder="単語または日本語訳で検索...">
+        
+        <!-- Mobile Sort Selector (Visible on Mobile only) -->
+        <div class="mobile-sort-container" id="mobileSortContainer" style="display:none;">
+          <span style="font-size:0.8rem;color:var(--text-muted)">ソート:</span>
+          <select id="mobileSortSelect" onchange="handleMobileSort(this.value)" style="background:var(--surface); border:1px solid var(--card-border); color:var(--text); padding:6px 12px; border-radius:6px; font-size:0.8rem; font-family:inherit; outline:none; cursor:pointer; -webkit-appearance:none; padding-right:24px; background-image:url('data:image/svg+xml;utf8,<svg fill=\"%239ca3af\" height=\"16\" viewBox=\"0 0 24 24\" width=\"16\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/></svg>'); background-repeat:no-repeat; background-position:right 6px center;">
+            <option value="incorrect">不正解 (❌) 多い順</option>
+            <option value="correct">正解 (✅) 多い順</option>
+            <option value="errorRate">誤答率 高い順</option>
+          </select>
+        </div>
+        
+        <div style="font-size:0.85rem;color:var(--text-muted)" id="leaderboardCount">該当: 0語</div>
+      </div>
+
+      <div class="leaderboard-table-wrapper">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th class="rank-col">順位</th>
+              <th>単語 ID</th>
+              <th>英単語</th>
+              <th>日本語訳</th>
+              <th style="text-align:center; cursor:pointer;" onclick="sortLeaderboard('incorrect')">
+                不正解 (❌) <span class="sort-icon" id="iconMistakes">▼</span>
+              </th>
+              <th style="text-align:center; cursor:pointer;" onclick="sortLeaderboard('correct')">
+                正解 (✅) <span class="sort-icon" id="iconCorrect" style="opacity:0.3;">▼</span>
+              </th>
+              <th style="text-align:center; cursor:pointer;" onclick="sortLeaderboard('errorRate')">
+                誤答率 <span class="sort-icon" id="iconErrorRate" style="opacity:0.3;">▼</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr>
+              <td colspan="8" class="empty-state">データを読み込み中...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination for Leaderboard -->
+      <div class="pagination">
+        <span class="pagination-info" id="paginationInfo">1-10 of 50</span>
+        <button class="pagination-btn" id="prevPageBtn" disabled onclick="changePage(-1)">
+          <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+        </button>
+        <button class="pagination-btn" id="nextPageBtn" disabled onclick="changePage(1)">
+          <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // --- State ---
+    let allProgress = {}; // word_id -> progress record
+    let reviewLogs = []; // raw logs from local JSON
+    let wordDict = {}; // word_id -> csv row dict
+    let logSummary = {}; // word_id -> { correct: X, incorrect: Y, total: Z }
+    let selectedWordId = null;
+    let leaderboardData = [];
+    let leaderboardFiltered = [];
+    let leaderboardPage = 0;
+    const leaderboardPageSize = 10;
+
+    // Supabase config & state
+    const SUPA_URL = location.hostname === 'localhost'
+      ? 'http://127.0.0.1:54321'
+      : 'https://uzpmpjkkwapaohleejtt.supabase.co';
+    const SUPA_KEY = location.hostname === 'localhost'
+      ? 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH'
+      : 'sb_publishable_YCsV4Wpn8tb8gwLrgsPf2g_xAX0Q4gt';
+    const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    let currentUser = null;
+    let currentMode = 'parent'; // 'parent' or 'child'
+
+    // Charts references
+    let easeChart = null;
+    let intervalChart = null;
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+      setupDropZone();
+      initPrediction();
+      bootAuth();
+    });
+
+    function bootAuth() {
+      // Bind Auth UI handlers
+      document.getElementById('loginBtn').onclick = () => sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: location.href }
+      });
+      document.getElementById('logoutBtn').onclick = () => sb.auth.signOut().then(() => location.reload());
+
+      // Listen for auth state changes
+      sb.auth.onAuthStateChange((event, session) => {
+        if (session && session.user) {
+          currentUser = session.user;
+          const email = currentUser.email;
+          if (email === 'moeloveslemon1921@gmail.com') {
+            currentMode = 'child';
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('backToAppBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('userChip').style.display = 'inline-block';
+            document.getElementById('userChip').textContent = '学習者: Moe';
+            tryFetchCSVAuto();
+          } else if (email === 'shiwei76@gmail.com') {
+            currentMode = 'parent';
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('backToAppBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('userChip').style.display = 'inline-block';
+            document.getElementById('userChip').textContent = '保護者: shiwei76';
+            tryFetchCSVAuto();
+          } else {
+            // Unauthorized
+            document.getElementById('loginScreen').style.display = 'flex';
+            const card = document.querySelector('#loginScreen .login-card');
+            card.innerHTML = `
+              <div class="login-title" style="color:var(--color-red)">アクセス権限エラー</div>
+              <div class="login-subtitle" style="font-size:0.9rem; margin-top:8px;">このアカウント (${email}) は登録されていないため、アクセスできません。</div>
+              <div class="login-divider"></div>
+              <button id="authErrorLogoutBtn" class="btn-primary" style="padding: 12px 24px; background: var(--color-red); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">他のアカウントでログイン</button>
+            `;
+            document.getElementById('authErrorLogoutBtn').onclick = () => sb.auth.signOut().then(() => location.reload());
+          }
+        } else {
+          currentUser = null;
+          document.getElementById('loginScreen').style.display = 'flex';
+        }
+      });
+    }
+
+    // Attempt to automatically fetch the CSV from raw_data relative path
+    async function tryFetchCSVAuto() {
+      showStatus('loading', 'CSV単語データベースをロード中...');
+      try {
+        const response = await fetch('raw_data/target1900_master_enriched.csv');
+        if (!response.ok) {
+          throw new Error('CSV not found locally. Status: ' + response.status);
+        }
+        const csvText = await response.text();
+        parseCSVText(csvText);
+      } catch (err) {
+        console.warn('Auto CSV load failed, showing upload interface:', err);
+        showCSVUploadUI();
+      }
+    }
+
+    function showCSVUploadUI() {
+      showStatus('error', 'CSVロード失敗 (手動で読み込んでください)');
+      document.getElementById('setupContainer').classList.remove('hidden');
+      document.getElementById('dashboardContent').classList.add('hidden');
+    }
+
+    function setupDropZone() {
+      const dropZone = document.getElementById('csvDropZone');
+      const fileInput = document.getElementById('csvFileInput');
+
+      dropZone.addEventListener('click', () => fileInput.click());
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      ['dragleave', 'dragend'].forEach(type => {
+        dropZone.addEventListener(type, () => {
+          dropZone.classList.remove('dragover');
+        });
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    function handleFile(file) {
+      if (!file.name.endsWith('.csv')) {
+        alert('CSVファイルを指定してください。');
+        return;
+      }
+      
+      document.getElementById('setupProgress').style.display = 'block';
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        parseCSVText(e.target.result);
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    function parseCSVText(csvText) {
+      Papa.parse(csvText, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          if (results.data && results.data.length > 0) {
+            wordDict = {};
+            results.data.forEach(row => {
+              if (row.id) {
+                wordDict[String(row.id)] = row;
+              }
+            });
+            console.log(`Loaded ${Object.keys(wordDict).length} words from CSV.`);
+            
+            // Hide Setup UI
+            document.getElementById('setupContainer').classList.add('hidden');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+            
+            // Render basic grid shells
+            renderGridShells();
+            
+            // Load appropriate progress data
+            if (currentMode === 'child') {
+              loadLiveSupabaseData();
+            } else {
+              loadLocalProgressData();
+            }
+          } else {
+            alert('CSVのパース結果が空です。正しいファイルか確認してください。');
+          }
+        },
+        error: (err) => {
+          alert('CSVパースエラー: ' + err.message);
+        }
+      });
+    }
+
+    function formatLastStudied(isoString) {
+      if (!isoString) return 'なし';
+      try {
+        const date = new Date(isoString);
+        if (isNaN(date.getTime())) return 'なし';
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${month}/${day} ${hours}:${minutes}`;
+      } catch (e) {
+        return 'なし';
+      }
+    }
+
+    // --- Data Loading from Supabase Real-time (Child Mode) ---
+    async function loadLiveSupabaseData() {
+      showStatus('loading', 'Supabaseから最新データをロード中...');
+      try {
+        const user_id = "a29d41be-9ee3-4890-9c03-cff3f7339c21";
+        const book_key = "moe-target1900";
+
+        // 1. Fetch progress_sync
+        const { data: pData, error: pError } = await sb.from("progress_sync")
+                  .select("word_key, status, ease_factor, interval_days, repetitions, last_studied, next_review")
+                  .eq("user_id", user_id)
+                  .eq("book_key", book_key);
+
+        if (pError) throw pError;
+
+        // 2. Fetch review_log (paginated)
+        let logs = [];
+        let page = 0;
+        let page_size = 1000;
+        while (true) {
+          const { data: lData, error: lError } = await sb.from("review_log")
+                    .select("word_key, rating, reviewed_at")
+                    .eq("user_id", user_id)
+                    .eq("book_key", book_key)
+                    .order("reviewed_at", { ascending: false })
+                    .range(page * page_size, (page + 1) * page_size - 1);
+          
+          if (lError) throw lError;
+          if (!lData || lData.length === 0) break;
+          logs = logs.concat(lData);
+          if (lData.length < page_size) break;
+          page++;
+        }
+
+        allProgress = {};
+        if (pData) {
+          pData.forEach(r => {
+            allProgress[String(r.word_key)] = r;
+          });
+        }
+        reviewLogs = logs;
+
+        console.log(`Loaded live ${Object.keys(allProgress).length} progress records.`);
+        console.log(`Loaded live ${reviewLogs.length} review logs.`);
+
+        aggregateReviewLogs();
+        
+        // Render UI
+        updateKpis();
+        colorGrid();
+        updateCharts();
+        buildLeaderboard();
+        
+        // Select first studied word or word #1 by default
+        const defaultId = Object.keys(allProgress)[0] || '1';
+        selectWord(defaultId, false);
+        
+        // Calculate prediction
+        calculatePrediction();
+        
+        const lastStudied = reviewLogs.length > 0 ? reviewLogs[0].reviewed_at : null;
+        const lastStudiedStr = formatLastStudied(lastStudied);
+        showStatus('connected', `接続中 (最終学習: ${lastStudiedStr})`);
+      } catch (err) {
+        console.error('Error fetching live Supabase progress:', err);
+        showStatus('error', 'リアルタイムデータの取得に失敗しました。');
+      }
+    }
+
+    // --- Data Loading from Local JSON ---
+    async function loadLocalProgressData() {
+      showStatus('loading', '進捗データ（JSON）を読み込み中...');
+      try {
+        const response = await fetch('raw_data/progress_data.json');
+        if (!response.ok) {
+          throw new Error('進捗データファイルが見つかりません。');
+        }
+        const data = await response.json();
+        
+        allProgress = {};
+        if (data.progress) {
+          data.progress.forEach(r => {
+            allProgress[String(r.word_key)] = r;
+          });
+        }
+        
+        reviewLogs = data.logs || [];
+        
+        console.log(`Loaded ${Object.keys(allProgress).length} progress records.`);
+        console.log(`Loaded ${reviewLogs.length} review logs.`);
+        
+        aggregateReviewLogs();
+        
+        // Render UI
+        updateKpis();
+        colorGrid();
+        updateCharts();
+        buildLeaderboard();
+        
+        // Select first studied word or word #1 by default
+        const defaultId = Object.keys(allProgress)[0] || '1';
+        selectWord(defaultId, false);
+        
+        // Calculate prediction
+        calculatePrediction();
+        
+        const lastStudied = reviewLogs.length > 0 ? reviewLogs[0].reviewed_at : null;
+        const lastStudiedStr = formatLastStudied(lastStudied);
+        showStatus('connected', `同期完了 (最終学習: ${lastStudiedStr})`);
+      } catch (err) {
+        console.error('Error loading progress JSON:', err);
+        showStatus('error', '進捗データ(JSON)の読み込みに失敗しました。`python3 moe-vocab/scripts/run_dashboard.py` を実行してください。');
+      }
+    }
+
+    function aggregateReviewLogs() {
+      logSummary = {};
+      reviewLogs.forEach(log => {
+        const wk = String(log.word_key);
+        if (!logSummary[wk]) {
+          logSummary[wk] = { correct: 0, incorrect: 0, total: 0 };
+        }
+        logSummary[wk].total++;
+        if (log.rating === 4) {
+          logSummary[wk].correct++;
+        } else if (log.rating === 1) {
+          logSummary[wk].incorrect++;
+        }
+      });
+    }
+
+    // --- UI Render Grid ---
+    function renderGridShells() {
+      // Clear
+      document.getElementById('gridPart1').innerHTML = '';
+      document.getElementById('gridPart2').innerHTML = '';
+      document.getElementById('gridPart3').innerHTML = '';
+
+      // Part 1: 1-800
+      createGridCells(1, 800, document.getElementById('gridPart1'));
+      // Part 2: 801-1500
+      createGridCells(801, 1500, document.getElementById('gridPart2'));
+      // Part 3: 1501-1900
+      createGridCells(1501, 1900, document.getElementById('gridPart3'));
+    }
+
+    function createGridCells(start, end, container) {
+      const fragment = document.createDocumentFragment();
+      for (let i = start; i <= end; i++) {
+        const cell = document.createElement('div');
+        cell.id = `cell-${i}`;
+        cell.className = 'grid-cell';
+        cell.dataset.id = i;
+        
+        // Tooltip
+        const tip = document.createElement('div');
+        tip.className = 'tooltip';
+        tip.id = `tooltip-${i}`;
+        
+        const wInfo = wordDict[String(i)];
+        if (wInfo) {
+          tip.innerHTML = `<strong>#${i} ${wInfo.word}</strong><br>${wInfo.japanese}`;
+        } else {
+          tip.textContent = `#${i}`;
+        }
+        cell.appendChild(tip);
+
+        cell.addEventListener('click', () => selectWord(String(i)));
+        fragment.appendChild(cell);
+      }
+      container.appendChild(fragment);
+    }
+
+    function colorGrid() {
+      // Reset colors first
+      document.querySelectorAll('.grid-cell').forEach(el => {
+        el.className = 'grid-cell';
+      });
+
+      let partGreen = { 1: 0, 2: 0, 3: 0 };
+      const partTotal = { 1: 800, 2: 700, 3: 400 };
+
+      Object.entries(allProgress).forEach(([wk, record]) => {
+        const id = parseInt(wk);
+        const cell = document.getElementById(`cell-${id}`);
+        if (cell) {
+          const interval = record.interval_days || record.interval || 0;
+          if (interval < 14) {
+            cell.classList.add('learning');
+          } else {
+            // Count as mastered for part pct calculation (since interval >= 14)
+            const part = getPartFromId(id);
+            if (part) partGreen[part]++;
+            
+            if (interval < 21) cell.classList.add('m1');
+            else if (interval < 30) cell.classList.add('m2');
+            else if (interval < 60) cell.classList.add('m3');
+            else if (interval < 90) cell.classList.add('m4');
+            else cell.classList.add('m5');
+          }
+        }
+      });
+
+      // Update part completion percentages
+      [1, 2, 3].forEach(part => {
+        const pct = Math.round((partGreen[part] / partTotal[part]) * 100);
+        document.getElementById(`part${part}Pct`).textContent = `${pct}% 習得完了 (${partGreen[part]} / ${partTotal[part]}語)`;
+      });
+    }
+
+    // Helper to identify part from ID
+    function getPartFromId(id) {
+      if (id >= 1 && id <= 800) return 1;
+      if (id >= 801 && id <= 1500) return 2;
+      if (id >= 1501 && id <= 1900) return 3;
+      return null;
+    }
+
+    // --- KPIs Update ---
+    function updateKpis() {
+      const totalWords = 1900;
+      const progressEntries = Object.values(allProgress);
+      
+      const studiedCount = progressEntries.length;
+      const greenCount = progressEntries.filter(r => (r.interval_days || r.interval || 0) >= 14).length;
+      const redCount = progressEntries.filter(r => (r.interval_days || r.interval || 0) < 14).length;
+      
+      const studiedPct = Math.round((studiedCount / totalWords) * 100);
+      const greenPct = Math.round((greenCount / totalWords) * 100);
+      const redPct = Math.round((redCount / totalWords) * 100);
+
+      // DOM updates
+      document.getElementById('kpiTotalStudied').innerHTML = `${studiedCount} <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">/ ${totalWords}</span>`;
+      document.getElementById('kpiTotalPct').textContent = `${studiedPct}% 習得開始`;
+      document.getElementById('kpiTotalFill').style.width = `${studiedPct}%`;
+
+      document.getElementById('kpiGreen').innerHTML = `${greenCount} <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">語</span>`;
+      document.getElementById('kpiGreenPct').textContent = `全単語の ${greenPct}%`;
+      document.getElementById('kpiGreenFill').style.width = `${greenPct}%`;
+
+      document.getElementById('kpiRed').innerHTML = `${redCount} <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">語</span>`;
+      document.getElementById('kpiRedPct').textContent = `全単語の ${redPct}%`;
+      document.getElementById('kpiRedFill').style.width = `${redPct}%`;
+
+      // Logs KPI
+      document.getElementById('kpiLogsCount').innerHTML = `${reviewLogs.length} <span style="font-size:1.2rem;font-weight:400;color:var(--text-muted)">回</span>`;
+      
+      let totalCorrect = 0;
+      reviewLogs.forEach(l => { if (l.rating === 4) totalCorrect++; });
+      const accuracyPct = reviewLogs.length > 0 ? Math.round((totalCorrect / reviewLogs.length) * 100) : 0;
+      
+      document.getElementById('kpiAccuracy').textContent = `累計正解率 ${accuracyPct}%`;
+      document.getElementById('kpiAccuracyFill').style.width = `${accuracyPct}%`;
+    }
+
+    // --- Selection Details ---
+    const MOBILE_BREAKPOINT = 600;
+
+    function selectWord(wordId, forceOpenMobile = true) {
+      // Remove selected class from previous cell
+      if (selectedWordId) {
+        const prevCell = document.getElementById(`cell-${selectedWordId}`);
+        if (prevCell) prevCell.classList.remove('selected');
+      }
+
+      selectedWordId = wordId;
+      
+      const cell = document.getElementById(`cell-${wordId}`);
+      if (cell) cell.classList.add('selected');
+
+      const wordInfo = wordDict[wordId];
+      if (!wordInfo) {
+        console.warn(`Word details not found for ID: ${wordId}`);
+        return;
+      }
+
+      // Add glow active class to detail card
+      const detailCard = document.getElementById('detailCard');
+      detailCard.classList.remove('active');
+      void detailCard.offsetWidth; // Trigger reflow
+      if (window.innerWidth > MOBILE_BREAKPOINT || forceOpenMobile) {
+        detailCard.classList.add('active');
+      }
+
+      // Update details fields
+      document.getElementById('detailId').textContent = `#${wordId}`;
+      document.getElementById('detailPartSec').textContent = `Part ${wordInfo.part} / Sec ${wordInfo.section}`;
+      document.getElementById('detailWordText').textContent = wordInfo.word;
+      document.getElementById('detailPos').textContent = wordInfo.pos || '---';
+      document.getElementById('detailTranslation').textContent = wordInfo.japanese;
+      document.getElementById('detailSentenceEn').textContent = wordInfo.sentence || 'No sentence available';
+      document.getElementById('detailSentenceJa').textContent = wordInfo.sentence_ja || '';
+
+      // Set pronunciation audio button (exists if audio generated)
+      const audioBtn = document.getElementById('detailAudioBtn');
+      audioBtn.style.display = 'block';
+
+      // SM-2 values
+      const progress = allProgress[wordId];
+      const statusEl = document.getElementById('detailStatStatus');
+      
+      if (progress) {
+        document.getElementById('detailStatInterval').textContent = `${progress.interval_days || progress.interval || 0} 日`;
+        document.getElementById('detailStatEase').textContent = progress.ease_factor || progress.ease || '2.5';
+        document.getElementById('detailStatReps').textContent = `${progress.repetitions || 0} 回`;
+        
+        const interval = progress.interval_days || progress.interval || 0;
+        if (interval >= 14) {
+          statusEl.textContent = `習得完了 (Interval: ${interval}日)`;
+          statusEl.style.color = 'var(--color-green)';
+        } else {
+          statusEl.textContent = `学習中 (Interval: ${interval}日)`;
+          statusEl.style.color = 'var(--color-red)';
+        }
+      } else {
+        document.getElementById('detailStatInterval').textContent = '未学習';
+        document.getElementById('detailStatEase').textContent = '2.5 (初期値)';
+        document.getElementById('detailStatReps').textContent = '0 回';
+        statusEl.textContent = '未学習 (New)';
+        statusEl.style.color = 'var(--text-muted)';
+      }
+
+      // Log statistics
+      const stats = logSummary[wordId];
+      if (stats) {
+        document.getElementById('detailStatCorrect').textContent = `${stats.correct} 回`;
+        document.getElementById('detailStatIncorrect').textContent = `${stats.incorrect} 回`;
+      } else {
+        document.getElementById('detailStatCorrect').textContent = '0 回';
+        document.getElementById('detailStatIncorrect').textContent = '0 回';
+      }
+
+      // Highlight matching row in leaderboard if present
+      document.querySelectorAll('#leaderboardBody tr').forEach(row => {
+        row.classList.remove('active');
+        if (row.dataset.id === wordId) {
+          row.classList.add('active');
+        }
+      });
+
+      // Show mobile backdrop overlay if on mobile view and forceOpenMobile is true
+      if (window.innerWidth <= MOBILE_BREAKPOINT && forceOpenMobile) {
+        document.getElementById('detailBackdrop').style.display = 'block';
+      }
+    }
+
+    function closeDetailCard() {
+      const detailCard = document.getElementById('detailCard');
+      detailCard.classList.remove('active');
+      document.getElementById('detailBackdrop').style.display = 'none';
+    }
+
+    // Auto-dismiss mobile bottom sheet on resize past breakpoint
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > MOBILE_BREAKPOINT) {
+        document.getElementById('detailBackdrop').style.display = 'none';
+      }
+    });
+
+    // Local pronunciation function (Web Speech API as a high quality fallback)
+    function playWordAudio() {
+      if (!selectedWordId) return;
+      
+      const wordInfo = wordDict[selectedWordId];
+      if (!wordInfo) return;
+
+      // Try local server audio asset path first (e.g. data/audio/words/{id}.mp3)
+      const audioUrl = `data/audio/words/${selectedWordId}.mp3`;
+      const audio = new Audio(audioUrl);
+      
+      audio.play().catch(err => {
+        console.warn(`Local audio not found (${audioUrl}), falling back to Web Speech API:`, err);
+        // Fallback to synthesis
+        const utterance = new SpeechSynthesisUtterance(wordInfo.word);
+        utterance.lang = 'en-US';
+        speechSynthesis.speak(utterance);
+      });
+    }
+
+    // --- Chart.js Rendition ---
+    function updateCharts() {
+      const progressEntries = Object.values(allProgress);
+
+      // --- 1. Ease Factor Chart ---
+      const easeBins = { '1.30-1.60': 0, '1.61-1.90': 0, '1.91-2.20': 0, '2.21-2.50': 0, '2.51-2.80': 0, '2.81+': 0 };
+      progressEntries.forEach(r => {
+        const ease = parseFloat(r.ease_factor || r.ease || 2.5);
+        if (ease <= 1.6) easeBins['1.30-1.60']++;
+        else if (ease <= 1.9) easeBins['1.61-1.90']++;
+        else if (ease <= 2.2) easeBins['1.91-2.20']++;
+        else if (ease <= 2.5) easeBins['2.21-2.50']++;
+        else if (ease <= 2.8) easeBins['2.51-2.80']++;
+        else easeBins['2.81+']++;
+      });
+
+      if (easeChart) easeChart.destroy();
+      const ctxEase = document.getElementById('easeChart').getContext('2d');
+      easeChart = new Chart(ctxEase, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(easeBins),
+          datasets: [{
+            label: '単語数',
+            data: Object.values(easeBins),
+            backgroundColor: 'rgba(99, 102, 241, 0.65)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 1.5,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#9ca3af', font: { family: 'Outfit' } }
+            },
+            y: {
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: '#9ca3af', font: { family: 'Outfit' }, precision: 0 }
+            }
+          }
+        }
+      });
+
+      // --- 2. Interval Chart ---
+      const intervalBins = { '1日': 0, '2-4日': 0, '5-10日': 0, '11-30日': 0, '31-90日': 0, '90日以上': 0 };
+      progressEntries.forEach(r => {
+        const interval = parseInt(r.interval_days || r.interval || 0);
+        if (interval <= 1) intervalBins['1日']++;
+        else if (interval <= 4) intervalBins['2-4日']++;
+        else if (interval <= 10) intervalBins['5-10日']++;
+        else if (interval <= 30) intervalBins['11-30日']++;
+        else if (interval <= 90) intervalBins['31-90日']++;
+        else intervalBins['90日以上']++;
+      });
+
+      if (intervalChart) intervalChart.destroy();
+      const ctxInterval = document.getElementById('intervalChart').getContext('2d');
+      intervalChart = new Chart(ctxInterval, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(intervalBins),
+          datasets: [{
+            label: '単語数',
+            data: Object.values(intervalBins),
+            backgroundColor: 'rgba(16, 185, 129, 0.65)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 1.5,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#9ca3af', font: { family: 'Outfit' } }
+            },
+            y: {
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: '#9ca3af', font: { family: 'Outfit' }, precision: 0 }
+            }
+          }
+        }
+      });
+    }
+
+    // --- Mistakes Leaderboard Logic ---
+    function buildLeaderboard() {
+      // Gather all words with incorrect logs count > 0
+      leaderboardData = [];
+      Object.entries(logSummary).forEach(([wk, summary]) => {
+        if (summary.incorrect > 0) {
+          const wInfo = wordDict[wk];
+          const errorRate = Math.round((summary.incorrect / summary.total) * 100);
+          
+          leaderboardData.push({
+            id: wk,
+            word: wInfo ? wInfo.word : `Unknown (#${wk})`,
+            japanese: wInfo ? wInfo.japanese : '---',
+            incorrect: summary.incorrect,
+            correct: summary.correct,
+            errorRate: errorRate
+          });
+        }
+      });
+
+      // Apply initial sorting
+      applySorting();
+      updateHeaderIcons();
+
+      // Reset filter and search listener
+      const searchInput = document.getElementById('leaderboardSearch');
+      searchInput.removeEventListener('input', onSearchChange);
+      searchInput.addEventListener('input', onSearchChange);
+      
+      applyFilter();
+    }
+
+    let currentSortColumn = 'incorrect'; // 'incorrect', 'correct' or 'errorRate'
+    let currentSortDirection = 'desc'; // 'desc' or 'asc'
+
+    function handleMobileSort(column) {
+      currentSortColumn = column;
+      currentSortDirection = 'desc';
+      applySorting();
+      leaderboardPage = 0;
+      applyFilter();
+    }
+
+    function sortLeaderboard(column) {
+      if (currentSortColumn === column) {
+        // Toggle direction
+        currentSortDirection = currentSortDirection === 'desc' ? 'asc' : 'desc';
+      } else {
+        currentSortColumn = column;
+        currentSortDirection = 'desc'; // Default to desc for new column
+      }
+
+      applySorting();
+      leaderboardPage = 0;
+      applyFilter();
+      updateHeaderIcons();
+    }
+
+    function applySorting() {
+      leaderboardData.sort((a, b) => {
+        let valA, valB;
+        if (currentSortColumn === 'incorrect') {
+          valA = a.incorrect;
+          valB = b.incorrect;
+          if (valA === valB) {
+            return currentSortDirection === 'desc' ? b.errorRate - a.errorRate : a.errorRate - b.errorRate;
+          }
+        } else if (currentSortColumn === 'correct') {
+          valA = a.correct;
+          valB = b.correct;
+          if (valA === valB) {
+            return currentSortDirection === 'desc' ? b.errorRate - a.errorRate : a.errorRate - b.errorRate;
+          }
+        } else if (currentSortColumn === 'errorRate') {
+          valA = a.errorRate;
+          valB = b.errorRate;
+          if (valA === valB) {
+            return currentSortDirection === 'desc' ? b.incorrect - a.incorrect : a.incorrect - b.incorrect;
+          }
+        }
+
+        return currentSortDirection === 'desc' ? valB - valA : valA - valB;
+      });
+    }
+
+    function updateHeaderIcons() {
+      const iconMistakes = document.getElementById('iconMistakes');
+      const iconCorrect = document.getElementById('iconCorrect');
+      const iconErrorRate = document.getElementById('iconErrorRate');
+
+      // Reset all
+      iconMistakes.style.opacity = '0.3';
+      iconMistakes.style.transform = 'none';
+      iconCorrect.style.opacity = '0.3';
+      iconCorrect.style.transform = 'none';
+      iconErrorRate.style.opacity = '0.3';
+      iconErrorRate.style.transform = 'none';
+
+      if (currentSortColumn === 'incorrect') {
+        iconMistakes.style.opacity = '1';
+        iconMistakes.style.transform = currentSortDirection === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)';
+      } else if (currentSortColumn === 'correct') {
+        iconCorrect.style.opacity = '1';
+        iconCorrect.style.transform = currentSortDirection === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)';
+      } else if (currentSortColumn === 'errorRate') {
+        iconErrorRate.style.opacity = '1';
+        iconErrorRate.style.transform = currentSortDirection === 'asc' ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+    }
+
+    function onSearchChange() {
+      leaderboardPage = 0;
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const query = document.getElementById('leaderboardSearch').value.toLowerCase().trim();
+      
+      if (!query) {
+        leaderboardFiltered = [...leaderboardData];
+      } else {
+        leaderboardFiltered = leaderboardData.filter(item => 
+          item.word.toLowerCase().includes(query) || 
+          item.japanese.toLowerCase().includes(query) ||
+          item.id.includes(query)
+        );
+      }
+
+      document.getElementById('leaderboardCount').textContent = `該当: ${leaderboardFiltered.length}語`;
+      renderLeaderboardPage();
+    }
+
+    function renderLeaderboardPage() {
+      const tbody = document.getElementById('leaderboardBody');
+      tbody.innerHTML = '';
+
+      if (leaderboardFiltered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-state">該当する苦手単語はありません。</td></tr>`;
+        updatePaginationUI(0);
+        return;
+      }
+
+      const startIdx = leaderboardPage * leaderboardPageSize;
+      const endIdx = Math.min(startIdx + leaderboardPageSize, leaderboardFiltered.length);
+      const pageSlice = leaderboardFiltered.slice(startIdx, endIdx);
+
+      pageSlice.forEach((item, index) => {
+        const rank = startIdx + index + 1;
+        const row = document.createElement('tr');
+        row.dataset.id = item.id;
+        
+        if (selectedWordId === item.id) {
+          row.classList.add('active');
+        }
+
+        row.addEventListener('click', () => selectWord(item.id));
+
+        row.innerHTML = `
+          <td class="rank-col">${rank}</td>
+          <td class="id-col">#${item.id}</td>
+          <td class="word-col">${item.word}</td>
+          <td class="ja-col">${item.japanese}</td>
+          <td style="text-align:center;" class="incorrect-col"><span class="failures-badge">${item.incorrect}</span></td>
+          <td style="text-align:center;" class="correct-col"><span class="success-badge">${item.correct}</span></td>
+          <td style="text-align:center;" class="error-rate-col">${item.errorRate}%</td>
+          <td class="mobile-stats-col" style="display:none;">
+            <div style="text-align:right; font-size:0.8rem; line-height:1.4;">
+              <div>誤答: <span style="color:var(--color-red); font-weight:bold;">${item.incorrect}回</span></div>
+              <div>正答率: <span style="color:var(--color-green); font-weight:bold;">${100 - item.errorRate}%</span></div>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      updatePaginationUI(leaderboardFiltered.length);
+    }
+
+    function updatePaginationUI(totalItems) {
+      const totalPages = Math.ceil(totalItems / leaderboardPageSize);
+      const startIdx = leaderboardPage * leaderboardPageSize;
+      const endIdx = Math.min(startIdx + leaderboardPageSize, totalItems);
+
+      const infoEl = document.getElementById('paginationInfo');
+      if (totalItems === 0) {
+        infoEl.textContent = '0 - 0 of 0';
+      } else {
+        infoEl.textContent = `${startIdx + 1} - ${endIdx} of ${totalItems}`;
+      }
+
+      document.getElementById('prevPageBtn').disabled = (leaderboardPage === 0);
+      document.getElementById('nextPageBtn').disabled = (leaderboardPage >= totalPages - 1 || totalPages === 0);
+    }
+
+    function changePage(direction) {
+      leaderboardPage += direction;
+      renderLeaderboardPage();
+    }
+
+    // --- Status Bar Utility ---
+    function showStatus(type, text) {
+      const statusBadge = document.getElementById('connectionStatus');
+      const textEl = statusBadge.querySelector('.status-text');
+      
+      statusBadge.className = `status-badge ${type}`;
+      textEl.textContent = text;
+    }
+
+    // --- Prediction Module ---
+    let predictionChart = null;
+
+    function initPrediction() {
+      const paceSlider = document.getElementById('paceSlider');
+      const paceValue = document.getElementById('paceValue');
+      const delaySlider = document.getElementById('delaySlider');
+      const delayValue = document.getElementById('delayValue');
+
+      // Set historical default pace (9.62 -> 10)
+      paceSlider.value = 10;
+      paceValue.textContent = '10語 / 日';
+      
+      delaySlider.value = 14;
+      delayValue.textContent = '14日';
+
+      // Attach input events
+      paceSlider.addEventListener('input', (e) => {
+        paceValue.textContent = `${e.target.value}語 / 日`;
+        calculatePrediction();
+      });
+      delaySlider.addEventListener('input', (e) => {
+        delayValue.textContent = `${e.target.value}日`;
+        calculatePrediction();
+      });
+    }
+
+    function calculatePrediction() {
+      const totalWords = 1900;
+      const progressEntries = Object.values(allProgress);
+      const studiedCount = progressEntries.length;
+      
+      // Mastered = Interval >= 14 days
+      const greenCount = progressEntries.filter(r => (r.interval_days || r.interval || 0) >= 14).length;
+      const learningCount = studiedCount - greenCount;
+      const remainingNew = totalWords - studiedCount;
+
+      const newWordsPerDay = parseInt(document.getElementById('paceSlider').value);
+      const graduationDelay = parseInt(document.getElementById('delaySlider').value);
+
+      // Calculations
+      const daysToStudyAll = newWordsPerDay > 0 ? Math.ceil(remainingNew / newWordsPerDay) : 0;
+      const daysToMasterAll = daysToStudyAll + graduationDelay;
+
+      // Dates
+      const today = new Date();
+      
+      const studyAllDate = new Date(today);
+      studyAllDate.setDate(today.getDate() + daysToStudyAll);
+
+      const masterAllDate = new Date(today);
+      masterAllDate.setDate(today.getDate() + daysToMasterAll);
+
+      // Update DOM
+      document.getElementById('predDaysToStudy').textContent = `${daysToStudyAll}日`;
+      document.getElementById('predDateToStudy').textContent = studyAllDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' }) + '頃';
+
+      document.getElementById('predDaysToMaster').textContent = `${daysToMasterAll}日`;
+      document.getElementById('predDateToMaster').textContent = masterAllDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' }) + '頃';
+
+      // Update Prediction Chart
+      updatePredictionChart(studiedCount, greenCount, learningCount, remainingNew, newWordsPerDay, graduationDelay);
+    }
+
+    function updatePredictionChart(currentStudied, currentMastered, currentLearning, remainingNew, pace, delay) {
+      const labels = [];
+      const studiedData = [];
+      const masteredData = [];
+
+      const today = new Date();
+      const totalDays = Math.ceil(remainingNew / pace) + delay + 14;
+
+      const step = totalDays > 120 ? 7 : 1;
+
+      for (let d = 0; d <= totalDays; d += step) {
+        const futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + d);
+        labels.push(futureDate.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }));
+
+        // Studied projection
+        const projectedStudied = Math.min(1900, currentStudied + pace * d);
+        studiedData.push(projectedStudied);
+
+        // Mastered projection
+        let projectedMastered = currentMastered;
+        if (d < delay) {
+          projectedMastered += Math.round(d * (currentLearning / delay));
+        } else {
+          projectedMastered += currentLearning + Math.round((d - delay) * pace);
+        }
+        projectedMastered = Math.min(1900, projectedMastered);
+        masteredData.push(projectedMastered);
+      }
+
+      if (predictionChart) predictionChart.destroy();
+
+      const ctx = document.getElementById('predictionChart').getContext('2d');
+      predictionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '学習開始済み (累計)',
+              data: studiedData,
+              borderColor: 'rgba(251, 191, 36, 0.8)',
+              backgroundColor: 'rgba(251, 191, 36, 0.05)',
+              fill: true,
+              borderWidth: 2,
+              tension: 0.1,
+              pointRadius: 0
+            },
+            {
+              label: '習得完了 (Interval >= 14日)',
+              data: masteredData,
+              borderColor: 'rgba(16, 185, 129, 0.8)',
+              backgroundColor: 'rgba(16, 185, 129, 0.05)',
+              fill: true,
+              borderWidth: 2,
+              tension: 0.1,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { color: '#e5e7eb', font: { family: 'Outfit' } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.03)' },
+              ticks: { color: '#9ca3af', font: { family: 'Outfit' } }
+            },
+            y: {
+              max: 1900,
+              grid: { color: 'rgba(255,255,255,0.06)' },
+              ticks: { color: '#9ca3af', font: { family: 'Outfit' } }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
