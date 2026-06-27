@@ -1142,6 +1142,39 @@
     const wrap = document.createElement('div');
     wrap.className = 'progress-wrap';
 
+    // ── ダッシュボードリンクボタン ────────────────────────────
+    const dbLinkContainer = document.createElement('div');
+    dbLinkContainer.className = 'dashboard-link-container';
+    dbLinkContainer.style.marginBottom = '24px';
+    dbLinkContainer.style.textAlign = 'center';
+
+    const dbLink = document.createElement('a');
+    dbLink.href = 'dashboard.html';
+    dbLink.className = 'btn-primary';
+    dbLink.style.display = 'inline-block';
+    dbLink.style.padding = '12px 24px';
+    dbLink.style.background = 'var(--accent)';
+    dbLink.style.color = '#ffffff';
+    dbLink.style.borderRadius = '8px';
+    dbLink.style.textDecoration = 'none';
+    dbLink.style.fontWeight = '600';
+    dbLink.style.fontSize = '0.95rem';
+    dbLink.style.boxShadow = '0 4px 12px rgba(108, 142, 247, 0.2)';
+    dbLink.style.transition = 'all 0.2s ease';
+    dbLink.textContent = '📊 詳細分析ダッシュボードを開く';
+
+    dbLink.onmouseenter = () => {
+      dbLink.style.background = '#8da6f9';
+      dbLink.style.transform = 'translateY(-1px)';
+    };
+    dbLink.onmouseleave = () => {
+      dbLink.style.background = 'var(--accent)';
+      dbLink.style.transform = 'none';
+    };
+
+    dbLinkContainer.appendChild(dbLink);
+    wrap.appendChild(dbLinkContainer);
+
     // ── 今日の単語リスト ──────────────────────────────────────
     const todaySection = document.createElement('div');
     todaySection.className = 'today-section';
