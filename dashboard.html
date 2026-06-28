@@ -1008,204 +1008,6 @@
       background: var(--accent-glow) !important;
     }
 
-    /* ── Account Dropdown Menu ── */
-    .user-menu-container {
-      position: relative;
-    }
-    
-    .btn-user-menu {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .btn-user-menu:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      color: var(--text);
-    }
-    
-    .btn-user-menu .arrow-icon {
-      font-size: 0.7rem;
-      opacity: 0.7;
-      transition: transform 0.2s ease;
-      display: inline-block;
-    }
-    
-    .user-menu-container.open .btn-user-menu .arrow-icon {
-      transform: rotate(180deg);
-    }
-    
-    .user-dropdown {
-      display: none;
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      background: #11121d;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      box-shadow: var(--shadow-lg);
-      padding: 14px;
-      z-index: 100;
-      min-width: 220px;
-      text-align: left;
-      animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .dropdown-header {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .dropdown-email {
-      font-size: 0.85rem;
-      color: var(--text);
-      font-weight: 600;
-      margin-bottom: 12px;
-      word-break: break-all;
-    }
-    
-    .dropdown-logout-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      border: none;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-    
-    .dropdown-logout-btn:hover {
-      background: linear-gradient(135deg, #dc2626, #b91c1c);
-      box-shadow: 0 6px 14px rgba(239, 68, 68, 0.3);
-      transform: translateY(-1px);
-    }
-
-    /* ── Connection Status Badge & Circular Dot ── */
-    .connection-container {
-      position: relative;
-    }
-    
-    .status-badge-circle {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      outline: none;
-    }
-    
-    .status-badge-circle:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
-      transform: scale(1.05);
-    }
-    
-    .status-dot-circle {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      position: relative;
-    }
-    
-    /* Green status styles */
-    .status-badge-circle.connected .status-dot-circle {
-      background: var(--color-green);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-    }
-    
-    /* Loading status styles with pulse animation */
-    .status-badge-circle.loading .status-dot-circle {
-      background: #fbbf24;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-      animation: pulse-dot 1.5s infinite;
-    }
-    
-    /* Error status styles with error shake pulse */
-    .status-badge-circle.error .status-dot-circle {
-      background: var(--color-red);
-      box-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
-      animation: pulse-error 1.5s infinite;
-    }
-    
-    @keyframes pulse-dot {
-      0% { transform: scale(0.9); opacity: 0.6; }
-      50% { transform: scale(1.1); opacity: 1; }
-      100% { transform: scale(0.9); opacity: 0.6; }
-    }
-    
-    @keyframes pulse-error {
-      0% { transform: scale(0.85); box-shadow: 0 0 6px rgba(244, 63, 94, 0.4); }
-      50% { transform: scale(1.15); box-shadow: 0 0 14px rgba(244, 63, 94, 0.8); }
-      100% { transform: scale(0.85); box-shadow: 0 0 6px rgba(244, 63, 94, 0.4); }
-    }
-    
-    .status-popup {
-      display: none;
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      background: #11121d;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      box-shadow: var(--shadow-lg);
-      padding: 10px 14px;
-      z-index: 100;
-      min-width: 260px;
-      text-align: left;
-      font-size: 0.8rem;
-      line-height: 1.4;
-      color: var(--text);
-      animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* Back button & Desktop/Mobile text */
-    .back-link-btn {
-      margin-right: 16px;
-      padding: 8px 16px;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-    }
-    
-    .back-link-btn .mobile-text {
-      display: none;
-    }
-
     .detail-close-btn {
       position: absolute;
       top: 16px;
@@ -1229,69 +1031,48 @@
     /* ── Mobile & Smartphone Responsive Adjustments ── */
     @media (max-width: 600px) {
       header {
-        padding: 12px 16px;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+        padding: 16px 16px;
+        flex-direction: column;
         gap: 12px;
-        flex-wrap: wrap;
+        align-items: center;
       }
       .brand-section {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-        text-align: left;
-        order: 1;
-      }
-      .logo-container {
-        display: none;
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
       }
       .title-area {
-        text-align: left;
+        text-align: center;
       }
       .title-area h1 {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
       }
-      .title-area .sub-title {
-        display: none;
+      .title-area p {
+        font-size: 0.8rem;
       }
       .header-controls {
         flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 8px;
-        width: auto;
-        order: 2;
+        width: 100%;
       }
-      .back-link-btn {
-        padding: 6px 10px;
+      .back-link-btn, #logoutBtn {
+        padding: 6px 12px;
         font-size: 0.8rem;
         margin-right: 0 !important;
         margin-left: 0 !important;
       }
-      .back-link-btn .desktop-text {
-        display: none;
-      }
-      .back-link-btn .mobile-text {
-        display: inline;
-      }
-      .btn-user-menu {
-        padding: 6px 10px;
+      #userChip {
         font-size: 0.8rem;
+        margin-right: 0 !important;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 2px;
       }
-      .status-badge-circle {
-        width: 32px;
-        height: 32px;
-      }
-      .status-dot-circle {
-        width: 10px;
-        height: 10px;
-      }
-      .user-dropdown {
-        min-width: 200px;
-      }
-      .status-popup {
-        min-width: 220px;
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
       }
       main {
         padding: 16px;
@@ -1468,33 +1249,15 @@
       </div>
       <div class="title-area">
         <h1>Moe's Vocab Progress</h1>
-        <p class="sub-title">Target 1900 学習効果・進捗分析</p>
+        <p>Target 1900 学習効果・進捗分析</p>
       </div>
     </div>
-    <div class="header-controls">
-      <a href="index.html" id="backToAppBtn" class="back-link-btn" style="display:none;"><span class="desktop-text">← 学習画面へ戻る</span><span class="mobile-text">← 戻る</span></a>
-      
-      <!-- アカウントドロップダウンメニュー -->
-      <div id="userMenuContainer" class="user-menu-container" style="display: none;">
-        <button id="userMenuBtn" class="btn-user-menu">
-          <span id="userMenuLabel">保護者</span> <span class="arrow-icon">▼</span>
-        </button>
-        <div id="userDropdown" class="user-dropdown">
-          <div class="dropdown-header">ログインアカウント:</div>
-          <div id="userEmail" class="dropdown-email">-</div>
-          <button id="logoutBtn" class="dropdown-logout-btn">ログアウト</button>
-        </div>
-      </div>
-
-      <!-- 接続ステータス（緑の円） -->
-      <div class="connection-container">
-        <button id="connectionStatus" class="status-badge-circle loading" aria-label="接続状態">
-          <span class="status-dot-circle"></span>
-        </button>
-        <!-- タップしたときに表示される最終学習日時ポップアップ -->
-        <div id="statusPopup" class="status-popup">
-          <div id="statusPopupText">データを取得中...</div>
-        </div>
+    <div class="header-controls" style="display: flex; align-items: center;">
+      <a href="index.html" id="backToAppBtn" class="back-link-btn" style="display:none; margin-right: 16px; padding: 8px 16px; border: 1px solid var(--card-border); border-radius: 6px; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; transition: all 0.2s;">← 学習画面へ戻る</a>
+      <span id="userChip" style="font-size: 0.85rem; color: var(--text-muted); margin-right: 16px; display: none; font-weight: 600;"></span>
+      <button id="logoutBtn" style="display:none; padding: 8px 16px; background: transparent; border: 1px solid var(--card-border); border-radius: 6px; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-weight: 600;">ログアウト</button>
+      <div id="connectionStatus" class="status-badge loading" style="margin-left: 8px;">
+        <span class="dot">●</span> <span class="status-text">データを取得中...</span>
       </div>
     </div>
   </header>
@@ -1867,40 +1630,6 @@
       });
       document.getElementById('logoutBtn').onclick = () => sb.auth.signOut().then(() => location.reload());
 
-      // アカウントドロップダウンメニューのトグル
-      const userMenuBtn = document.getElementById('userMenuBtn');
-      const userDropdown = document.getElementById('userDropdown');
-      const userMenuContainer = document.getElementById('userMenuContainer');
-      
-      userMenuBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShow = userDropdown.style.display === 'block';
-        userDropdown.style.display = isShow ? 'none' : 'block';
-        userMenuContainer.classList.toggle('open', !isShow);
-        // ステータスポップアップは閉じる
-        document.getElementById('statusPopup').style.display = 'none';
-      });
-
-      // 接続ステータス（緑の円）のタップで最終学習日時を表示
-      const connectionStatus = document.getElementById('connectionStatus');
-      const statusPopup = document.getElementById('statusPopup');
-      
-      connectionStatus.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShow = statusPopup.style.display === 'block';
-        statusPopup.style.display = isShow ? 'none' : 'block';
-        // アカウントドロップダウンは閉じる
-        userDropdown.style.display = 'none';
-        userMenuContainer.classList.remove('open');
-      });
-
-      // ドロップダウンやポップアップ以外をクリックしたときに閉じる
-      document.addEventListener('click', () => {
-        if (userDropdown) userDropdown.style.display = 'none';
-        if (userMenuContainer) userMenuContainer.classList.remove('open');
-        if (statusPopup) statusPopup.style.display = 'none';
-      });
-
       // Listen for auth state changes
       sb.auth.onAuthStateChange((event, session) => {
         if (session && session.user) {
@@ -1909,24 +1638,18 @@
           if (email === 'moeloveslemon1921@gmail.com') {
             currentMode = 'child';
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('backToAppBtn').style.display = 'inline-flex';
-            
-            // ドロップダウン対応
-            document.getElementById('userMenuContainer').style.display = 'block';
-            document.getElementById('userMenuLabel').textContent = 'Moe';
-            document.getElementById('userEmail').textContent = email;
-            
+            document.getElementById('backToAppBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('userChip').style.display = 'inline-block';
+            document.getElementById('userChip').textContent = '学習者: Moe';
             tryFetchCSVAuto();
           } else if (email === 'shiwei76@gmail.com') {
             currentMode = 'parent';
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('backToAppBtn').style.display = 'inline-flex';
-            
-            // ドロップダウン対応
-            document.getElementById('userMenuContainer').style.display = 'block';
-            document.getElementById('userMenuLabel').textContent = '保護者';
-            document.getElementById('userEmail').textContent = email;
-            
+            document.getElementById('backToAppBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('userChip').style.display = 'inline-block';
+            document.getElementById('userChip').textContent = '保護者: shiwei76';
             tryFetchCSVAuto();
           } else {
             // Unauthorized
@@ -2746,12 +2469,10 @@
     // --- Status Bar Utility ---
     function showStatus(type, text) {
       const statusBadge = document.getElementById('connectionStatus');
-      const popupText = document.getElementById('statusPopupText');
+      const textEl = statusBadge.querySelector('.status-text');
       
-      statusBadge.className = `status-badge-circle ${type}`;
-      if (popupText) {
-        popupText.textContent = text;
-      }
+      statusBadge.className = `status-badge ${type}`;
+      textEl.textContent = text;
     }
 
     // --- Prediction Module ---
