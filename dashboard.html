@@ -1008,6 +1008,204 @@
       background: var(--accent-glow) !important;
     }
 
+    /* ── Account Dropdown Menu ── */
+    .user-menu-container {
+      position: relative;
+    }
+    
+    .btn-user-menu {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .btn-user-menu:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text);
+    }
+    
+    .btn-user-menu .arrow-icon {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+    
+    .user-menu-container.open .btn-user-menu .arrow-icon {
+      transform: rotate(180deg);
+    }
+    
+    .user-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: #11121d;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      padding: 14px;
+      z-index: 100;
+      min-width: 220px;
+      text-align: left;
+      animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .dropdown-header {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .dropdown-email {
+      font-size: 0.85rem;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 12px;
+      word-break: break-all;
+    }
+    
+    .dropdown-logout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    
+    .dropdown-logout-btn:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      box-shadow: 0 6px 14px rgba(239, 68, 68, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* ── Connection Status Badge & Circular Dot ── */
+    .connection-container {
+      position: relative;
+    }
+    
+    .status-badge-circle {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    
+    .status-badge-circle:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+    
+    .status-dot-circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+    }
+    
+    /* Green status styles */
+    .status-badge-circle.connected .status-dot-circle {
+      background: var(--color-green);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+    
+    /* Loading status styles with pulse animation */
+    .status-badge-circle.loading .status-dot-circle {
+      background: #fbbf24;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+      animation: pulse-dot 1.5s infinite;
+    }
+    
+    /* Error status styles with error shake pulse */
+    .status-badge-circle.error .status-dot-circle {
+      background: var(--color-red);
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+      animation: pulse-error 1.5s infinite;
+    }
+    
+    @keyframes pulse-dot {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.6; }
+    }
+    
+    @keyframes pulse-error {
+      0% { transform: scale(0.85); box-shadow: 0 0 6px rgba(244, 63, 94, 0.4); }
+      50% { transform: scale(1.15); box-shadow: 0 0 14px rgba(244, 63, 94, 0.8); }
+      100% { transform: scale(0.85); box-shadow: 0 0 6px rgba(244, 63, 94, 0.4); }
+    }
+    
+    .status-popup {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: #11121d;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      padding: 10px 14px;
+      z-index: 100;
+      min-width: 260px;
+      text-align: left;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: var(--text);
+      animation: fadeIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Back button & Desktop/Mobile text */
+    .back-link-btn {
+      margin-right: 16px;
+      padding: 8px 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .back-link-btn .mobile-text {
+      display: none;
+    }
+
     .detail-close-btn {
       position: absolute;
       top: 16px;
@@ -1031,48 +1229,69 @@
     /* ── Mobile & Smartphone Responsive Adjustments ── */
     @media (max-width: 600px) {
       header {
-        padding: 16px 16px;
-        flex-direction: column;
-        gap: 12px;
+        padding: 12px 16px;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
       }
       .brand-section {
-        flex-direction: column;
-        gap: 6px;
-        text-align: center;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        text-align: left;
+        order: 1;
+      }
+      .logo-container {
+        display: none;
       }
       .title-area {
-        text-align: center;
+        text-align: left;
       }
       .title-area h1 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
       }
-      .title-area p {
-        font-size: 0.8rem;
+      .title-area .sub-title {
+        display: none;
       }
       .header-controls {
         flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-end;
+        align-items: center;
         gap: 8px;
-        width: 100%;
+        width: auto;
+        order: 2;
       }
-      .back-link-btn, #logoutBtn {
-        padding: 6px 12px;
+      .back-link-btn {
+        padding: 6px 10px;
         font-size: 0.8rem;
         margin-right: 0 !important;
         margin-left: 0 !important;
       }
-      #userChip {
-        font-size: 0.8rem;
-        margin-right: 0 !important;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 2px;
+      .back-link-btn .desktop-text {
+        display: none;
       }
-      .status-badge {
-        font-size: 0.75rem;
-        padding: 4px 8px;
+      .back-link-btn .mobile-text {
+        display: inline;
+      }
+      .btn-user-menu {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
+      .status-badge-circle {
+        width: 32px;
+        height: 32px;
+      }
+      .status-dot-circle {
+        width: 10px;
+        height: 10px;
+      }
+      .user-dropdown {
+        min-width: 200px;
+      }
+      .status-popup {
+        min-width: 220px;
       }
       main {
         padding: 16px;
@@ -1249,15 +1468,33 @@
       </div>
       <div class="title-area">
         <h1>Moe's Vocab Progress</h1>
-        <p>Target 1900 学習効果・進捗分析</p>
+        <p class="sub-title">Target 1900 学習効果・進捗分析</p>
       </div>
     </div>
-    <div class="header-controls" style="display: flex; align-items: center;">
-      <a href="index.html" id="backToAppBtn" class="back-link-btn" style="display:none; margin-right: 16px; padding: 8px 16px; border: 1px solid var(--card-border); border-radius: 6px; text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; transition: all 0.2s;">← 学習画面へ戻る</a>
-      <span id="userChip" style="font-size: 0.85rem; color: var(--text-muted); margin-right: 16px; display: none; font-weight: 600;"></span>
-      <button id="logoutBtn" style="display:none; padding: 8px 16px; background: transparent; border: 1px solid var(--card-border); border-radius: 6px; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-weight: 600;">ログアウト</button>
-      <div id="connectionStatus" class="status-badge loading" style="margin-left: 8px;">
-        <span class="dot">●</span> <span class="status-text">データを取得中...</span>
+    <div class="header-controls">
+      <a href="index.html" id="backToAppBtn" class="back-link-btn" style="display:none;"><span class="desktop-text">← 学習画面へ戻る</span><span class="mobile-text">← 戻る</span></a>
+      
+      <!-- アカウントドロップダウンメニュー -->
+      <div id="userMenuContainer" class="user-menu-container" style="display: none;">
+        <button id="userMenuBtn" class="btn-user-menu">
+          <span id="userMenuLabel">保護者</span> <span class="arrow-icon">▼</span>
+        </button>
+        <div id="userDropdown" class="user-dropdown">
+          <div class="dropdown-header">ログインアカウント:</div>
+          <div id="userEmail" class="dropdown-email">-</div>
+          <button id="logoutBtn" class="dropdown-logout-btn">ログアウト</button>
+        </div>
+      </div>
+
+      <!-- 接続ステータス（緑の円） -->
+      <div class="connection-container">
+        <button id="connectionStatus" class="status-badge-circle loading" aria-label="接続状態">
+          <span class="status-dot-circle"></span>
+        </button>
+        <!-- タップしたときに表示される最終学習日時ポップアップ -->
+        <div id="statusPopup" class="status-popup">
+          <div id="statusPopupText">データを取得中...</div>
+        </div>
       </div>
     </div>
   </header>
@@ -1456,7 +1693,7 @@
             </label>
             <input type="range" id="paceSlider" min="5" max="30" step="1" class="slider" style="width:100%; margin-top:8px;">
             <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:6px;">
-              ※過去の実績平均: <strong>9.6語 / 日</strong> (MIN_NEW=10の設定)
+              ※過去の実績平均: <strong id="historicalPaceText">9.6語 / 日</strong> (MIN_NEW=10の設定)
             </span>
           </div>
 
@@ -1467,7 +1704,7 @@
             </label>
             <input type="range" id="delaySlider" min="7" max="28" step="1" class="slider" style="width:100%; margin-top:8px;">
             <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:6px;">
-              ※新出単語がInterval &gt;= 14日に育つまでの平均日数
+              ※新出単語がInterval &gt;= 14日に育つまでの平均日数: <strong id="historicalDelayText">14日</strong>
             </span>
           </div>
         </div>
@@ -1630,6 +1867,40 @@
       });
       document.getElementById('logoutBtn').onclick = () => sb.auth.signOut().then(() => location.reload());
 
+      // アカウントドロップダウンメニューのトグル
+      const userMenuBtn = document.getElementById('userMenuBtn');
+      const userDropdown = document.getElementById('userDropdown');
+      const userMenuContainer = document.getElementById('userMenuContainer');
+      
+      userMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShow = userDropdown.style.display === 'block';
+        userDropdown.style.display = isShow ? 'none' : 'block';
+        userMenuContainer.classList.toggle('open', !isShow);
+        // ステータスポップアップは閉じる
+        document.getElementById('statusPopup').style.display = 'none';
+      });
+
+      // 接続ステータス（緑の円）のタップで最終学習日時を表示
+      const connectionStatus = document.getElementById('connectionStatus');
+      const statusPopup = document.getElementById('statusPopup');
+      
+      connectionStatus.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShow = statusPopup.style.display === 'block';
+        statusPopup.style.display = isShow ? 'none' : 'block';
+        // アカウントドロップダウンは閉じる
+        userDropdown.style.display = 'none';
+        userMenuContainer.classList.remove('open');
+      });
+
+      // ドロップダウンやポップアップ以外をクリックしたときに閉じる
+      document.addEventListener('click', () => {
+        if (userDropdown) userDropdown.style.display = 'none';
+        if (userMenuContainer) userMenuContainer.classList.remove('open');
+        if (statusPopup) statusPopup.style.display = 'none';
+      });
+
       // Listen for auth state changes
       sb.auth.onAuthStateChange((event, session) => {
         if (session && session.user) {
@@ -1638,18 +1909,24 @@
           if (email === 'moeloveslemon1921@gmail.com') {
             currentMode = 'child';
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('backToAppBtn').style.display = 'inline-block';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
-            document.getElementById('userChip').style.display = 'inline-block';
-            document.getElementById('userChip').textContent = '学習者: Moe';
+            document.getElementById('backToAppBtn').style.display = 'inline-flex';
+            
+            // ドロップダウン対応
+            document.getElementById('userMenuContainer').style.display = 'block';
+            document.getElementById('userMenuLabel').textContent = 'Moe';
+            document.getElementById('userEmail').textContent = email;
+            
             tryFetchCSVAuto();
           } else if (email === 'shiwei76@gmail.com') {
             currentMode = 'parent';
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('backToAppBtn').style.display = 'inline-block';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
-            document.getElementById('userChip').style.display = 'inline-block';
-            document.getElementById('userChip').textContent = '保護者: shiwei76';
+            document.getElementById('backToAppBtn').style.display = 'inline-flex';
+            
+            // ドロップダウン対応
+            document.getElementById('userMenuContainer').style.display = 'block';
+            document.getElementById('userMenuLabel').textContent = '保護者';
+            document.getElementById('userEmail').textContent = email;
+            
             tryFetchCSVAuto();
           } else {
             // Unauthorized
@@ -1849,6 +2126,7 @@
         selectWord(defaultId, false);
         
         // Calculate prediction
+        updatePredictionSlidersWithHistorical();
         calculatePrediction();
         
         const lastStudied = reviewLogs.length > 0 ? reviewLogs[0].reviewed_at : null;
@@ -1895,6 +2173,7 @@
         selectWord(defaultId, false);
         
         // Calculate prediction
+        updatePredictionSlidersWithHistorical();
         calculatePrediction();
         
         const lastStudied = reviewLogs.length > 0 ? reviewLogs[0].reviewed_at : null;
@@ -2469,14 +2748,145 @@
     // --- Status Bar Utility ---
     function showStatus(type, text) {
       const statusBadge = document.getElementById('connectionStatus');
-      const textEl = statusBadge.querySelector('.status-text');
+      const popupText = document.getElementById('statusPopupText');
       
-      statusBadge.className = `status-badge ${type}`;
-      textEl.textContent = text;
+      statusBadge.className = `status-badge-circle ${type}`;
+      if (popupText) {
+        popupText.textContent = text;
+      }
     }
 
     // --- Prediction Module ---
     let predictionChart = null;
+
+    function calculateHistoricalMetrics() {
+      if (!reviewLogs || reviewLogs.length === 0) {
+        return { pace: 10, delay: 14, rawPace: 10.0, rawDelay: 14.0 };
+      }
+
+      // 1. 新規単語ペースの計算
+      const firstStudyTimes = {};
+      reviewLogs.forEach(log => {
+        const wk = String(log.word_key);
+        const time = new Date(log.reviewed_at).getTime();
+        if (!firstStudyTimes[wk] || time < firstStudyTimes[wk]) {
+          firstStudyTimes[wk] = time;
+        }
+      });
+      
+      const studyTimes = Object.values(firstStudyTimes);
+      let calculatedPace = 10;
+      if (studyTimes.length > 0) {
+        const minTime = Math.min(...studyTimes);
+        const maxTime = Math.max(...studyTimes);
+        const msPerDay = 24 * 60 * 60 * 1000;
+        const daysDiff = Math.max(1, Math.ceil((maxTime - minTime) / msPerDay));
+        const totalNewWords = studyTimes.length;
+        calculatedPace = totalNewWords / daysDiff;
+      }
+      
+      let initialPace = Math.round(calculatedPace);
+      initialPace = Math.max(5, Math.min(30, initialPace));
+
+      // 2. 定着までに要した平均日数の計算（SM-2 シミュレーション）
+      const wordLogs = {};
+      reviewLogs.forEach(log => {
+        const wk = String(log.word_key);
+        if (!wordLogs[wk]) wordLogs[wk] = [];
+        wordLogs[wk].push(log);
+      });
+
+      const graduationDelays = [];
+
+      for (const wk in wordLogs) {
+        const logs = wordLogs[wk].sort((a, b) => new Date(a.reviewed_at) - new Date(b.reviewed_at));
+        if (logs.length === 0) continue;
+
+        const firstTime = new Date(logs[0].reviewed_at).getTime();
+        
+        let ease = 2.5;
+        let interval = 1;
+        let reps = 0;
+        let graduatedTime = null;
+        let lastSessionDate = null;
+
+        for (const log of logs) {
+          const logTime = new Date(log.reviewed_at);
+          const sessionDate = logTime.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+
+          if (sessionDate !== lastSessionDate) {
+            lastSessionDate = sessionDate;
+            const quality = log.rating;
+
+            if (quality === 1) {
+              interval = 1;
+              reps = 0;
+            } else {
+              ease = Math.max(1.3, ease + 0.1);
+              reps += 1;
+              if (reps === 1) {
+                interval = 3;
+              } else if (reps === 2) {
+                interval = 6;
+              } else {
+                interval = Math.round(interval * ease);
+              }
+            }
+
+            if (interval >= 14) {
+              graduatedTime = logTime.getTime();
+              break;
+            }
+          }
+        }
+
+        if (graduatedTime) {
+          const delayDays = (graduatedTime - firstTime) / (24 * 60 * 60 * 1000);
+          graduationDelays.push(delayDays);
+        }
+      }
+
+      let initialDelay = 14;
+      let rawDelayAvg = 14;
+      if (graduationDelays.length > 0) {
+        const sum = graduationDelays.reduce((a, b) => a + b, 0);
+        rawDelayAvg = sum / graduationDelays.length;
+        initialDelay = Math.round(rawDelayAvg);
+        initialDelay = Math.max(7, Math.min(28, initialDelay));
+      }
+
+      return {
+        pace: initialPace,
+        rawPace: calculatedPace,
+        delay: initialDelay,
+        rawDelay: rawDelayAvg
+      };
+    }
+
+    function updatePredictionSlidersWithHistorical() {
+      const metrics = calculateHistoricalMetrics();
+      
+      const paceSlider = document.getElementById('paceSlider');
+      const paceValue = document.getElementById('paceValue');
+      const delaySlider = document.getElementById('delaySlider');
+      const delayValue = document.getElementById('delayValue');
+
+      paceSlider.value = metrics.pace;
+      paceValue.textContent = `${metrics.pace}語 / 日`;
+      
+      delaySlider.value = metrics.delay;
+      delayValue.textContent = `${metrics.delay}日`;
+
+      const historicalPaceText = document.getElementById('historicalPaceText');
+      if (historicalPaceText) {
+        historicalPaceText.textContent = `${metrics.rawPace.toFixed(2)}語 / 日`;
+      }
+      
+      const historicalDelayText = document.getElementById('historicalDelayText');
+      if (historicalDelayText) {
+        historicalDelayText.textContent = `${metrics.rawDelay.toFixed(1)}日`;
+      }
+    }
 
     function initPrediction() {
       const paceSlider = document.getElementById('paceSlider');
@@ -2484,7 +2894,7 @@
       const delaySlider = document.getElementById('delaySlider');
       const delayValue = document.getElementById('delayValue');
 
-      // Set historical default pace (9.62 -> 10)
+      // Default temporary values before data load
       paceSlider.value = 10;
       paceValue.textContent = '10語 / 日';
       
@@ -2539,26 +2949,159 @@
       updatePredictionChart(studiedCount, greenCount, learningCount, remainingNew, newWordsPerDay, graduationDelay);
     }
 
-    function updatePredictionChart(currentStudied, currentMastered, currentLearning, remainingNew, pace, delay) {
-      const labels = [];
+    function calculateHistoricalTimeline() {
+      if (!reviewLogs || reviewLogs.length === 0) {
+        return { dates: [], studied: [], mastered: [] };
+      }
+
+      // Group logs by word
+      const wordLogs = {};
+      reviewLogs.forEach(log => {
+        const wk = String(log.word_key);
+        if (!wordLogs[wk]) wordLogs[wk] = [];
+        wordLogs[wk].push(log);
+      });
+
+      // Calculate first study date and graduation date (Interval >= 14) for each word
+      const wordFirstStudyDateStr = {};
+      const wordGraduationDateStr = {};
+
+      for (const wk in wordLogs) {
+        const logs = wordLogs[wk].sort((a, b) => new Date(a.reviewed_at) - new Date(b.reviewed_at));
+        if (logs.length === 0) continue;
+
+        const firstLogTime = new Date(logs[0].reviewed_at);
+        const firstDateStr = firstLogTime.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+        wordFirstStudyDateStr[wk] = firstDateStr;
+
+        let ease = 2.5;
+        let interval = 1;
+        let reps = 0;
+        let lastSessionDate = null;
+
+        for (const log of logs) {
+          const logTime = new Date(log.reviewed_at);
+          const sessionDate = logTime.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+
+          if (sessionDate !== lastSessionDate) {
+            lastSessionDate = sessionDate;
+            const quality = log.rating;
+
+            if (quality === 1) {
+              interval = 1;
+              reps = 0;
+            } else {
+              ease = Math.max(1.3, ease + 0.1);
+              reps += 1;
+              if (reps === 1) {
+                interval = 3;
+              } else if (reps === 2) {
+                interval = 6;
+              } else {
+                interval = Math.round(interval * ease);
+              }
+            }
+
+            if (interval >= 14) {
+              wordGraduationDateStr[wk] = sessionDate;
+              break;
+            }
+          }
+        }
+      }
+
+      // Determine date range (from oldest log to today)
+      const studyTimes = reviewLogs.map(log => new Date(log.reviewed_at).getTime());
+      const minTime = Math.min(...studyTimes);
+      const startDate = new Date(minTime);
+      const endDate = new Date();
+
+      const datesList = [];
+      let cur = new Date(startDate);
+      while (cur <= endDate) {
+        datesList.push(cur.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' }));
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      // Aggregate cumulatively
       const studiedData = [];
       const masteredData = [];
+      let runningStudied = 0;
+      let runningMastered = 0;
 
+      const studiedCountByDate = {};
+      const masteredCountByDate = {};
+      datesList.forEach(d => {
+        studiedCountByDate[d] = 0;
+        masteredCountByDate[d] = 0;
+      });
+
+      Object.values(wordFirstStudyDateStr).forEach(d => {
+        if (studiedCountByDate[d] !== undefined) studiedCountByDate[d]++;
+      });
+      Object.values(wordGraduationDateStr).forEach(d => {
+        if (masteredCountByDate[d] !== undefined) masteredCountByDate[d]++;
+      });
+
+      datesList.forEach(d => {
+        runningStudied += studiedCountByDate[d];
+        runningMastered += masteredCountByDate[d];
+        studiedData.push(runningStudied);
+        masteredData.push(runningMastered);
+      });
+
+      return {
+        dates: datesList,
+        studied: studiedData,
+        mastered: masteredData
+      };
+    }
+
+    function updatePredictionChart(currentStudied, currentMastered, currentLearning, remainingNew, pace, delay) {
+      const hist = calculateHistoricalTimeline();
+      
+      const labels = [];
+      const histStudied = [];
+      const predStudied = [];
+      const histMastered = [];
+      const predMastered = [];
+
+      // Add past historical data
+      hist.dates.forEach((dStr, idx) => {
+        const dateObj = new Date(dStr);
+        labels.push(dateObj.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }));
+        histStudied.push(hist.studied[idx]);
+        histMastered.push(hist.mastered[idx]);
+        predStudied.push(null);
+        predMastered.push(null);
+      });
+
+      // Connect the last point of history (today) to the prediction
+      const todayIdx = labels.length - 1;
+      if (todayIdx >= 0) {
+        predStudied[todayIdx] = hist.studied[todayIdx];
+        predMastered[todayIdx] = hist.mastered[todayIdx];
+      }
+
+      // Generate future projected dates
       const today = new Date();
-      const totalDays = Math.ceil(remainingNew / pace) + delay + 14;
+      const totalPredDays = Math.ceil(remainingNew / pace) + delay + 14;
+      const totalDays = hist.dates.length + totalPredDays;
+      const step = totalDays > 120 ? 7 : 2;
 
-      const step = totalDays > 120 ? 7 : 1;
+      for (let d = 1; d <= totalPredDays; d++) {
+        if (d % step !== 0 && d !== totalPredDays) continue;
 
-      for (let d = 0; d <= totalDays; d += step) {
         const futureDate = new Date(today);
         futureDate.setDate(today.getDate() + d);
         labels.push(futureDate.toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }));
 
-        // Studied projection
-        const projectedStudied = Math.min(1900, currentStudied + pace * d);
-        studiedData.push(projectedStudied);
+        histStudied.push(null);
+        histMastered.push(null);
 
-        // Mastered projection
+        const projectedStudied = Math.min(1900, currentStudied + pace * d);
+        predStudied.push(projectedStudied);
+
         let projectedMastered = currentMastered;
         if (d < delay) {
           projectedMastered += Math.round(d * (currentLearning / delay));
@@ -2566,7 +3109,7 @@
           projectedMastered += currentLearning + Math.round((d - delay) * pace);
         }
         projectedMastered = Math.min(1900, projectedMastered);
-        masteredData.push(projectedMastered);
+        predMastered.push(projectedMastered);
       }
 
       if (predictionChart) predictionChart.destroy();
@@ -2578,22 +3121,44 @@
           labels: labels,
           datasets: [
             {
-              label: '学習開始済み (累計)',
-              data: studiedData,
-              borderColor: 'rgba(251, 191, 36, 0.8)',
-              backgroundColor: 'rgba(251, 191, 36, 0.05)',
+              label: '実績: 学習開始済み',
+              data: histStudied,
+              borderColor: 'rgba(251, 191, 36, 0.95)',
+              backgroundColor: 'rgba(251, 191, 36, 0.03)',
               fill: true,
-              borderWidth: 2,
+              borderWidth: 2.5,
               tension: 0.1,
               pointRadius: 0
             },
             {
-              label: '習得完了 (Interval >= 14日)',
-              data: masteredData,
-              borderColor: 'rgba(16, 185, 129, 0.8)',
-              backgroundColor: 'rgba(16, 185, 129, 0.05)',
+              label: '予測: 学習開始済み',
+              data: predStudied,
+              borderColor: 'rgba(251, 191, 36, 0.5)',
+              backgroundColor: 'rgba(251, 191, 36, 0.01)',
               fill: true,
               borderWidth: 2,
+              borderDash: [4, 4],
+              tension: 0.1,
+              pointRadius: 0
+            },
+            {
+              label: '実績: 習得完了',
+              data: histMastered,
+              borderColor: 'rgba(16, 185, 129, 0.95)',
+              backgroundColor: 'rgba(16, 185, 129, 0.03)',
+              fill: true,
+              borderWidth: 2.5,
+              tension: 0.1,
+              pointRadius: 0
+            },
+            {
+              label: '予測: 習得完了',
+              data: predMastered,
+              borderColor: 'rgba(16, 185, 129, 0.5)',
+              backgroundColor: 'rgba(16, 185, 129, 0.01)',
+              fill: true,
+              borderWidth: 2,
+              borderDash: [4, 4],
               tension: 0.1,
               pointRadius: 0
             }
