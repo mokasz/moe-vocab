@@ -1145,12 +1145,12 @@
     },
     {
       "word_key": "1064",
-      "status": "green",
+      "status": "red",
       "ease_factor": 3,
-      "interval_days": 18,
-      "repetitions": 3,
-      "last_studied": "2026-06-26",
-      "next_review": "2026-07-14"
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-07-16"
     },
     {
       "word_key": "1065",
@@ -1569,11 +1569,11 @@
     {
       "word_key": "1644",
       "status": "green",
-      "ease_factor": 3.7,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-07-10",
-      "next_review": "2026-07-13"
+      "ease_factor": 3.8,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-07-21"
     },
     {
       "word_key": "1645",
@@ -3540,11 +3540,11 @@
     {
       "word_key": "1871",
       "status": "green",
-      "ease_factor": 2.9,
-      "interval_days": 49,
-      "repetitions": 4,
-      "last_studied": "2026-05-26",
-      "next_review": "2026-07-13"
+      "ease_factor": 3,
+      "interval_days": 147,
+      "repetitions": 5,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-12-09"
     },
     {
       "word_key": "1872",
@@ -3729,20 +3729,20 @@
     {
       "word_key": "1869",
       "status": "green",
-      "ease_factor": 2.9,
-      "interval_days": 49,
-      "repetitions": 4,
-      "last_studied": "2026-05-26",
-      "next_review": "2026-07-13"
+      "ease_factor": 3,
+      "interval_days": 147,
+      "repetitions": 5,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-12-09"
     },
     {
       "word_key": "1870",
       "status": "green",
-      "ease_factor": 2.9,
-      "interval_days": 49,
-      "repetitions": 4,
-      "last_studied": "2026-05-26",
-      "next_review": "2026-07-13"
+      "ease_factor": 3,
+      "interval_days": 147,
+      "repetitions": 5,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-12-09"
     },
     {
       "word_key": "1106",
@@ -5735,12 +5735,12 @@
     },
     {
       "word_key": "981",
-      "status": "green",
+      "status": "red",
       "ease_factor": 3.5,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-07-08",
-      "next_review": "2026-07-14"
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-07-16"
     },
     {
       "word_key": "982",
@@ -6023,12 +6023,12 @@
     },
     {
       "word_key": "1010",
-      "status": "green",
+      "status": "red",
       "ease_factor": 3,
-      "interval_days": 18,
-      "repetitions": 3,
-      "last_studied": "2026-06-26",
-      "next_review": "2026-07-14"
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-07-16"
     },
     {
       "word_key": "1011",
@@ -6456,20 +6456,20 @@
     {
       "word_key": "1121",
       "status": "green",
-      "ease_factor": 2.8,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-06-27",
-      "next_review": "2026-07-14"
+      "ease_factor": 2.9,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-09-02"
     },
     {
       "word_key": "1123",
       "status": "green",
-      "ease_factor": 2.8,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-06-27",
-      "next_review": "2026-07-14"
+      "ease_factor": 2.9,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-09-02"
     },
     {
       "word_key": "1124",
@@ -6492,11 +6492,11 @@
     {
       "word_key": "1126",
       "status": "green",
-      "ease_factor": 2.8,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-06-27",
-      "next_review": "2026-07-14"
+      "ease_factor": 2.9,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-09-02"
     },
     {
       "word_key": "1127",
@@ -8661,11 +8661,11 @@
     {
       "word_key": "1363",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-07-10",
-      "next_review": "2026-07-13"
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-07-21"
     },
     {
       "word_key": "1364",
@@ -8679,11 +8679,11 @@
     {
       "word_key": "1365",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-07-10",
-      "next_review": "2026-07-13"
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-07-15",
+      "next_review": "2026-07-21"
     },
     {
       "word_key": "1366",
@@ -9002,6 +9002,371 @@
     }
   ],
   "logs": [
+    {
+      "word_key": "1398",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T14:01:32.690611+00:00"
+    },
+    {
+      "word_key": "1390",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:43.618858+00:00"
+    },
+    {
+      "word_key": "1388",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:43.037862+00:00"
+    },
+    {
+      "word_key": "1387",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:42.261169+00:00"
+    },
+    {
+      "word_key": "1338",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:41.667774+00:00"
+    },
+    {
+      "word_key": "1410",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:39.35048+00:00"
+    },
+    {
+      "word_key": "1409",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:38.287852+00:00"
+    },
+    {
+      "word_key": "1408",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:37.377557+00:00"
+    },
+    {
+      "word_key": "1406",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:35.877088+00:00"
+    },
+    {
+      "word_key": "1405",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:31.791334+00:00"
+    },
+    {
+      "word_key": "1348",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:30.723196+00:00"
+    },
+    {
+      "word_key": "1340",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:29.811338+00:00"
+    },
+    {
+      "word_key": "1339",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:29.12283+00:00"
+    },
+    {
+      "word_key": "1325",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:28.326642+00:00"
+    },
+    {
+      "word_key": "1319",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:27.216137+00:00"
+    },
+    {
+      "word_key": "1290",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:26.407615+00:00"
+    },
+    {
+      "word_key": "1400",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:24.816323+00:00"
+    },
+    {
+      "word_key": "1399",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:58:23.383708+00:00"
+    },
+    {
+      "word_key": "1398",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:58:01.307301+00:00"
+    },
+    {
+      "word_key": "1390",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:57:59.699695+00:00"
+    },
+    {
+      "word_key": "1388",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:57:58.588149+00:00"
+    },
+    {
+      "word_key": "1387",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:57:57.124741+00:00"
+    },
+    {
+      "word_key": "1338",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:57:55.682737+00:00"
+    },
+    {
+      "word_key": "1410",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:54:19.412288+00:00"
+    },
+    {
+      "word_key": "1409",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:54:18.040989+00:00"
+    },
+    {
+      "word_key": "1408",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:54:15.988318+00:00"
+    },
+    {
+      "word_key": "1406",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:54:14.943618+00:00"
+    },
+    {
+      "word_key": "1405",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:59.934513+00:00"
+    },
+    {
+      "word_key": "1064",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:57.888712+00:00"
+    },
+    {
+      "word_key": "1010",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:56.13152+00:00"
+    },
+    {
+      "word_key": "981",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:55.050086+00:00"
+    },
+    {
+      "word_key": "1348",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:54.105812+00:00"
+    },
+    {
+      "word_key": "1341",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:51.970095+00:00"
+    },
+    {
+      "word_key": "1340",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:50.554671+00:00"
+    },
+    {
+      "word_key": "1339",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:48.632213+00:00"
+    },
+    {
+      "word_key": "1325",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:47.351892+00:00"
+    },
+    {
+      "word_key": "1319",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:46.386776+00:00"
+    },
+    {
+      "word_key": "1290",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:45.121839+00:00"
+    },
+    {
+      "word_key": "1286",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:43.833268+00:00"
+    },
+    {
+      "word_key": "1273",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:41.82269+00:00"
+    },
+    {
+      "word_key": "1272",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:40.904818+00:00"
+    },
+    {
+      "word_key": "1270",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:39.97745+00:00"
+    },
+    {
+      "word_key": "1400",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:38.798446+00:00"
+    },
+    {
+      "word_key": "1399",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:37.284417+00:00"
+    },
+    {
+      "word_key": "1398",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:35.819226+00:00"
+    },
+    {
+      "word_key": "1390",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:34.285189+00:00"
+    },
+    {
+      "word_key": "1388",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:32.785173+00:00"
+    },
+    {
+      "word_key": "1387",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:31.387405+00:00"
+    },
+    {
+      "word_key": "1384",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:29.575016+00:00"
+    },
+    {
+      "word_key": "1338",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:53:28.618734+00:00"
+    },
+    {
+      "word_key": "1275",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:53:27.707415+00:00"
+    },
+    {
+      "word_key": "1410",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:51:04.054365+00:00"
+    },
+    {
+      "word_key": "1409",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:51:02.667493+00:00"
+    },
+    {
+      "word_key": "1408",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:51:00.85287+00:00"
+    },
+    {
+      "word_key": "1407",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:50:59.76448+00:00"
+    },
+    {
+      "word_key": "1406",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:49:42.012521+00:00"
+    },
+    {
+      "word_key": "1405",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:49:40.416752+00:00"
+    },
+    {
+      "word_key": "1404",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:38.511622+00:00"
+    },
+    {
+      "word_key": "1403",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:37.637899+00:00"
+    },
+    {
+      "word_key": "1402",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:36.653259+00:00"
+    },
+    {
+      "word_key": "1401",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:35.468727+00:00"
+    },
+    {
+      "word_key": "1126",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:34.029916+00:00"
+    },
+    {
+      "word_key": "1123",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:32.864257+00:00"
+    },
+    {
+      "word_key": "1121",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:31.797571+00:00"
+    },
+    {
+      "word_key": "1064",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:49:30.351851+00:00"
+    },
+    {
+      "word_key": "1010",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:49:28.440041+00:00"
+    },
+    {
+      "word_key": "981",
+      "rating": 1,
+      "reviewed_at": "2026-07-15T13:49:27.142454+00:00"
+    },
+    {
+      "word_key": "1871",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:49:26.086504+00:00"
+    },
+    {
+      "word_key": "1870",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:48:39.996542+00:00"
+    },
+    {
+      "word_key": "1869",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:48:38.510411+00:00"
+    },
+    {
+      "word_key": "1644",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:47:31.712735+00:00"
+    },
+    {
+      "word_key": "1365",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:47:31.25904+00:00"
+    },
+    {
+      "word_key": "1363",
+      "rating": 4,
+      "reviewed_at": "2026-07-15T13:47:30.139504+00:00"
+    },
     {
       "word_key": "1361",
       "rating": 4,
@@ -71138,57 +71503,72 @@
       "reviewed_at": "2026-04-02T12:57:15.347774+00:00"
     },
     {
+      "word_key": "1704",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1705",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1706",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1707",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1708",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1709",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1710",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
       "word_key": "1711",
       "rating": 1,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1659",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1660",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1662",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1663",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1666",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1674",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1682",
+      "word_key": "1712",
       "rating": 1,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1686",
-      "rating": 4,
+      "word_key": "1713",
+      "rating": 1,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1655",
-      "rating": 4,
+      "word_key": "1714",
+      "rating": 1,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1653",
+      "word_key": "1715",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1716",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1504",
       "rating": 4,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
@@ -71253,6 +71633,46 @@
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
+      "word_key": "1659",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1660",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1662",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1663",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1666",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1682",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1674",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1686",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
       "word_key": "1508",
       "rating": 4,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
@@ -71273,7 +71693,12 @@
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1504",
+      "word_key": "1655",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1653",
       "rating": 4,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
@@ -71329,66 +71754,71 @@
     },
     {
       "word_key": "1704",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1532",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1549",
       "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1705",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1706",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1707",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1708",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1709",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1710",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1712",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1713",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1714",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1715",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1716",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
+      "word_key": "1554",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
       "word_key": "1592",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1594",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1607",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1608",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1609",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1617",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1630",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1631",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1637",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1638",
       "rating": 4,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
@@ -71533,7 +71963,32 @@
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1704",
+      "word_key": "1698",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1699",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1700",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1701",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1702",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1703",
       "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
@@ -71545,96 +72000,6 @@
     {
       "word_key": "1706",
       "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1703",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1702",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1701",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1700",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1699",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1698",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1532",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1549",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1554",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1594",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1607",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1608",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1609",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1617",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1630",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1631",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1637",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1638",
-      "rating": 4,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
