@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <meta name="words-version" content="1784252957">
+  <meta name="words-version" content="1784296245">
   <title>Moe's Vocab — ターゲット1900</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -465,27 +465,39 @@
   }
 
   // ── Progress (Supabase のみ) ─────────────────────────────────────────────
-  function loadFromSupabase() {
+  async function loadFromSupabase() {
     if (!currentUser) return;
-    sb.from('progress_sync')
-      .select('word_key, status, ease_factor, interval_days, repetitions, last_studied, next_review, last_session_version')
-      .eq('user_id', currentUser.id)
-      .eq('book_key', BOOK_KEY)
-      .then(({ data, error }) => {
-        if (error) { console.warn('[loadFromSupabase] error:', error); }
-        const hasData = !error && data && data.length > 0;
-        const hasPending = localStorage.getItem(PENDING_KEY);
-        if (!hasData && !hasPending) return;
+    try {
+      let allData = [];
+      const limit = 1000;
+      let offset = 0;
+      while (true) {
+        const { data, error } = await sb.from('progress_sync')
+          .select('word_key, status, ease_factor, interval_days, repetitions, last_studied, next_review, last_session_version')
+          .eq('user_id', currentUser.id)
+          .eq('book_key', BOOK_KEY)
+          .range(offset, offset + limit - 1);
 
-        const map = {};
-        if (data) {
-          data.forEach(r => { map[r.word_key] = r; });
+        if (error) {
+          console.warn('[loadFromSupabase] error:', error);
+          throw error;
         }
-        const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
-        Object.keys(pending).forEach(k => {
-          map[k] = { ...map[k], ...pending[k] };
-        });
-        allProgress = map; // 全進捗キャッシュを更新
+        if (!data || data.length === 0) break;
+        allData = allData.concat(data);
+        if (data.length < limit) break;
+        offset += limit;
+      }
+
+      const hasPending = localStorage.getItem(PENDING_KEY);
+      if (allData.length === 0 && !hasPending) return;
+
+      const map = {};
+      allData.forEach(r => { map[r.word_key] = r; });
+      const pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '{}');
+      Object.keys(pending).forEach(k => {
+        map[k] = { ...map[k], ...pending[k] };
+      });
+      allProgress = map; // 全進捗キャッシュを更新
         
         const currentVersion = wordsData?.meta?.version;
         allWords.forEach(w => {
