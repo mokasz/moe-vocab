@@ -523,15 +523,17 @@
             w.last_session_version = r.last_session_version;
           }
         });
-        // セッション進行中（カード回答開始後 or 復習中）は renderCards() を実行しない。
-        // loadFromSupabase() の遅延応答が自動復習の state を上書きするのを防ぐ。
-        if (cardIndex === 0 && !isReviewSession) {
-          renderAll();
-        } else {
-          renderPassage();
-          renderProgress();
-        }
-      });
+      // セッション進行中（カード回答開始後 or 復習中）は renderCards() を実行しない。
+      // loadFromSupabase() の遅延応答が自動復習の state を上書きするのを防ぐ。
+      if (cardIndex === 0 && !isReviewSession) {
+        renderAll();
+      } else {
+        renderPassage();
+        renderProgress();
+      }
+    } catch (e) {
+      console.warn('[loadFromSupabase] catch error:', e);
+    }
   }
 
   async function flushPending() {
