@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Moe's Vocab Progress Dashboard</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2152,7 +2155,7 @@
     async function loadLocalProgressData() {
       showStatus('loading', '進捗データ（JSON）を読み込み中...');
       try {
-        const response = await fetch('raw_data/progress_data.json');
+        const response = await fetch('raw_data/progress_data.json', { cache: 'no-store' });
         if (!response.ok) {
           throw new Error('進捗データファイルが見つかりません。');
         }
