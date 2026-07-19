@@ -2199,6 +2199,7 @@
     }
 
     function aggregateReviewLogs() {
+      cachedHistoricalTimeline = null;
       logSummary = {};
       reviewLogs.forEach(log => {
         const wk = String(log.word_key);
@@ -2771,6 +2772,7 @@
 
     // --- Prediction Module ---
     let predictionChart = null;
+    let cachedHistoricalTimeline = null;
 
     function calculateHistoricalMetrics() {
       if (!reviewLogs || reviewLogs.length === 0) {
@@ -3079,7 +3081,10 @@
     }
 
     function updatePredictionChart(currentStudied, currentMastered, currentLearning, remainingNew, pace, delay) {
-      const hist = calculateHistoricalTimeline();
+      if (!cachedHistoricalTimeline) {
+        cachedHistoricalTimeline = calculateHistoricalTimeline();
+      }
+      const hist = cachedHistoricalTimeline;
       
       const labels = [];
       const histStudied = [];
