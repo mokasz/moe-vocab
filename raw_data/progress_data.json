@@ -1081,6 +1081,15 @@
       "next_review": "2026-09-20"
     },
     {
+      "word_key": "124",
+      "status": "red",
+      "ease_factor": 1.84,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-08-23",
+      "next_review": "2026-08-23"
+    },
+    {
       "word_key": "1876",
       "status": "green",
       "ease_factor": 2.6,
@@ -1106,6 +1115,15 @@
       "repetitions": 2,
       "last_studied": "2026-08-23",
       "next_review": "2026-08-28"
+    },
+    {
+      "word_key": "127",
+      "status": "red",
+      "ease_factor": 1.84,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-08-23",
+      "next_review": "2026-08-23"
     },
     {
       "word_key": "1411",
@@ -1153,15 +1171,6 @@
       "next_review": "2026-08-24"
     },
     {
-      "word_key": "124",
-      "status": "red",
-      "ease_factor": 1.84,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-08-23",
-      "next_review": "2026-08-23"
-    },
-    {
       "word_key": "125",
       "status": "green",
       "ease_factor": 2.16,
@@ -1178,15 +1187,6 @@
       "repetitions": 1,
       "last_studied": "2026-08-23",
       "next_review": "2026-08-25"
-    },
-    {
-      "word_key": "127",
-      "status": "red",
-      "ease_factor": 1.84,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-08-23",
-      "next_review": "2026-08-23"
     },
     {
       "word_key": "1417",
@@ -11199,6 +11199,11 @@
   ],
   "logs": [
     {
+      "word_key": "127",
+      "rating": 4,
+      "reviewed_at": "2026-08-23T12:39:38.611668+00:00"
+    },
+    {
       "word_key": "124",
       "rating": 4,
       "reviewed_at": "2026-08-23T12:39:37.712577+00:00"
@@ -16192,11 +16197,6 @@
       "word_key": "1046",
       "rating": 4,
       "reviewed_at": "2026-08-18T10:37:49.882608+00:00"
-    },
-    {
-      "word_key": "1043",
-      "rating": 1,
-      "reviewed_at": "2026-08-18T10:37:45.886853+00:00"
     },
     {
       "word_key": "1043",
