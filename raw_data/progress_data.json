@@ -48,11 +48,11 @@
     {
       "word_key": "1325",
       "status": "green",
-      "ease_factor": 2.4,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.5,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "1290",
@@ -91,15 +91,6 @@
       "next_review": "2026-09-20"
     },
     {
-      "word_key": "1651",
-      "status": "green",
-      "ease_factor": 2.88,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1661",
       "status": "green",
       "ease_factor": 2.6,
@@ -109,13 +100,13 @@
       "next_review": "2026-12-23"
     },
     {
-      "word_key": "1613",
+      "word_key": "1651",
       "status": "green",
-      "ease_factor": 2.42,
-      "interval_days": 15,
-      "repetitions": 3,
-      "last_studied": "2026-08-24",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.98,
+      "interval_days": 51,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-27"
     },
     {
       "word_key": "1577",
@@ -125,6 +116,15 @@
       "repetitions": 5,
       "last_studied": "2026-06-02",
       "next_review": "2026-10-26"
+    },
+    {
+      "word_key": "1613",
+      "status": "green",
+      "ease_factor": 2.52,
+      "interval_days": 38,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-14"
     },
     {
       "word_key": "182",
@@ -210,11 +210,11 @@
     {
       "word_key": "272",
       "status": "red",
-      "ease_factor": 2.38,
+      "ease_factor": 2.16,
       "interval_days": 1,
       "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "177",
@@ -316,6 +316,15 @@
       "next_review": "2026-10-09"
     },
     {
+      "word_key": "10",
+      "status": "green",
+      "ease_factor": 1.98,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "11",
       "status": "green",
       "ease_factor": 2.9,
@@ -323,15 +332,6 @@
       "repetitions": 4,
       "last_studied": "2026-08-22",
       "next_review": "2026-10-09"
-    },
-    {
-      "word_key": "7",
-      "status": "green",
-      "ease_factor": 2.76,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "9",
@@ -379,13 +379,13 @@
       "next_review": "2026-09-18"
     },
     {
-      "word_key": "61",
-      "status": "red",
-      "ease_factor": 2,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "7",
+      "status": "green",
+      "ease_factor": 2.86,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "1567",
@@ -397,13 +397,13 @@
       "next_review": "2026-10-26"
     },
     {
-      "word_key": "10",
-      "status": "red",
-      "ease_factor": 1.88,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "61",
+      "status": "green",
+      "ease_factor": 2.1,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
       "word_key": "2",
@@ -442,6 +442,15 @@
       "next_review": "2026-10-05"
     },
     {
+      "word_key": "1057",
+      "status": "green",
+      "ease_factor": 2.36,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "67",
       "status": "green",
       "ease_factor": 2.34,
@@ -451,22 +460,22 @@
       "next_review": "2026-10-03"
     },
     {
-      "word_key": "240",
+      "word_key": "241",
       "status": "green",
-      "ease_factor": 2.04,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
-      "word_key": "238",
+      "word_key": "239",
       "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "244",
@@ -478,13 +487,13 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "239",
+      "word_key": "240",
       "status": "green",
-      "ease_factor": 2.7,
+      "ease_factor": 2.14,
       "interval_days": 6,
       "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "68",
@@ -514,13 +523,13 @@
       "next_review": "2026-10-22"
     },
     {
-      "word_key": "241",
+      "word_key": "242",
       "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "115",
@@ -532,13 +541,13 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "242",
+      "word_key": "243",
       "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "117",
@@ -550,13 +559,13 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "243",
+      "word_key": "245",
       "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "64",
@@ -568,31 +577,22 @@
       "next_review": "2026-10-22"
     },
     {
-      "word_key": "245",
-      "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "246",
       "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "247",
       "status": "green",
-      "ease_factor": 2.7,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "65",
@@ -604,13 +604,13 @@
       "next_review": "2026-09-09"
     },
     {
-      "word_key": "1057",
-      "status": "red",
-      "ease_factor": 2.26,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "238",
+      "status": "green",
+      "ease_factor": 2.8,
+      "interval_days": 17,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "1627",
@@ -647,15 +647,6 @@
       "repetitions": 5,
       "last_studied": "2026-06-18",
       "next_review": "2026-11-23"
-    },
-    {
-      "word_key": "17",
-      "status": "green",
-      "ease_factor": 1.64,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "18",
@@ -701,6 +692,15 @@
       "repetitions": 3,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-15"
+    },
+    {
+      "word_key": "17",
+      "status": "red",
+      "ease_factor": 1.42,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "14",
@@ -767,11 +767,11 @@
     },
     {
       "word_key": "185",
-      "status": "green",
-      "ease_factor": 1.82,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
+      "status": "red",
+      "ease_factor": 1.6,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
       "next_review": "2026-09-07"
     },
     {
@@ -820,13 +820,13 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "190",
+      "word_key": "193",
       "status": "green",
       "ease_factor": 1.92,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "interval_days": 12,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-18"
     },
     {
       "word_key": "1526",
@@ -856,15 +856,6 @@
       "next_review": "2026-09-20"
     },
     {
-      "word_key": "273",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "188",
       "status": "green",
       "ease_factor": 2.36,
@@ -874,76 +865,22 @@
       "next_review": "2026-09-19"
     },
     {
-      "word_key": "274",
+      "word_key": "190",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "275",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "276",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "277",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "278",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "193",
-      "status": "green",
-      "ease_factor": 1.82,
+      "ease_factor": 2.02,
       "interval_days": 6,
       "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
-      "word_key": "280",
+      "word_key": "273",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "281",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "189",
@@ -964,30 +901,57 @@
       "next_review": "2026-09-08"
     },
     {
-      "word_key": "282",
+      "word_key": "274",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
-      "word_key": "283",
+      "word_key": "275",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
-      "word_key": "284",
+      "word_key": "276",
       "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
+      "word_key": "277",
+      "status": "green",
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
+      "word_key": "278",
+      "status": "green",
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
+      "word_key": "281",
+      "status": "red",
+      "ease_factor": 2.38,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
       "next_review": "2026-09-07"
     },
     {
@@ -998,6 +962,42 @@
       "repetitions": 5,
       "last_studied": "2026-06-18",
       "next_review": "2026-11-12"
+    },
+    {
+      "word_key": "284",
+      "status": "red",
+      "ease_factor": 2.38,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
+    },
+    {
+      "word_key": "282",
+      "status": "green",
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
+      "word_key": "283",
+      "status": "green",
+      "ease_factor": 2.7,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
+      "word_key": "280",
+      "status": "red",
+      "ease_factor": 2.38,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "195",
@@ -1117,22 +1117,22 @@
       "next_review": "2026-12-29"
     },
     {
-      "word_key": "286",
-      "status": "red",
-      "ease_factor": 2.28,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "290",
+      "status": "green",
+      "ease_factor": 2.38,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
-      "word_key": "290",
+      "word_key": "286",
       "status": "red",
-      "ease_factor": 2.28,
+      "ease_factor": 2.06,
       "interval_days": 1,
       "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "1277",
@@ -1225,6 +1225,15 @@
       "next_review": "2026-09-08"
     },
     {
+      "word_key": "78",
+      "status": "green",
+      "ease_factor": 2.78,
+      "interval_days": 44,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-20"
+    },
+    {
       "word_key": "76",
       "status": "green",
       "ease_factor": 2.9,
@@ -1306,24 +1315,6 @@
       "next_review": "2026-09-13"
     },
     {
-      "word_key": "75",
-      "status": "green",
-      "ease_factor": 2.68,
-      "interval_days": 16,
-      "repetitions": 3,
-      "last_studied": "2026-08-23",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "78",
-      "status": "green",
-      "ease_factor": 2.68,
-      "interval_days": 16,
-      "repetitions": 3,
-      "last_studied": "2026-08-23",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "119",
       "status": "green",
       "ease_factor": 2.02,
@@ -1331,6 +1322,15 @@
       "repetitions": 3,
       "last_studied": "2026-09-03",
       "next_review": "2026-09-15"
+    },
+    {
+      "word_key": "75",
+      "status": "green",
+      "ease_factor": 2.78,
+      "interval_days": 44,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-20"
     },
     {
       "word_key": "1797",
@@ -1522,13 +1522,13 @@
       "next_review": "2026-09-08"
     },
     {
-      "word_key": "1862",
+      "word_key": "1868",
       "status": "green",
-      "ease_factor": 2.5,
-      "interval_days": 68,
-      "repetitions": 4,
-      "last_studied": "2026-07-01",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.58,
+      "interval_days": 15,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-21"
     },
     {
       "word_key": "1865",
@@ -1538,6 +1538,15 @@
       "repetitions": 5,
       "last_studied": "2026-07-14",
       "next_review": "2026-12-08"
+    },
+    {
+      "word_key": "1862",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 177,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-03-02"
     },
     {
       "word_key": "1104",
@@ -1574,15 +1583,6 @@
       "repetitions": 5,
       "last_studied": "2026-07-15",
       "next_review": "2026-12-09"
-    },
-    {
-      "word_key": "1868",
-      "status": "green",
-      "ease_factor": 2.48,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "201",
@@ -1675,13 +1675,13 @@
       "next_review": "2026-09-20"
     },
     {
-      "word_key": "126",
+      "word_key": "204",
       "status": "green",
       "ease_factor": 2.24,
       "interval_days": 6,
       "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "1876",
@@ -1709,15 +1709,6 @@
       "repetitions": 3,
       "last_studied": "2026-09-01",
       "next_review": "2026-09-12"
-    },
-    {
-      "word_key": "204",
-      "status": "green",
-      "ease_factor": 2.14,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1411",
@@ -1754,6 +1745,15 @@
       "repetitions": 5,
       "last_studied": "2026-08-02",
       "next_review": "2026-12-12"
+    },
+    {
+      "word_key": "126",
+      "status": "green",
+      "ease_factor": 2.34,
+      "interval_days": 14,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-20"
     },
     {
       "word_key": "1419",
@@ -1801,6 +1801,60 @@
       "next_review": "2026-09-09"
     },
     {
+      "word_key": "291",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "292",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "293",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "294",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "295",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "296",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "1424",
       "status": "green",
       "ease_factor": 2.32,
@@ -1837,13 +1891,13 @@
       "next_review": "2026-09-21"
     },
     {
-      "word_key": "87",
+      "word_key": "88",
       "status": "green",
-      "ease_factor": 2.8,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.9,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-25"
     },
     {
       "word_key": "1652",
@@ -1873,22 +1927,31 @@
       "next_review": "2026-10-15"
     },
     {
-      "word_key": "88",
+      "word_key": "200",
       "status": "green",
-      "ease_factor": 2.8,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.24,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "86",
       "status": "green",
-      "ease_factor": 2.8,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.9,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-25"
+    },
+    {
+      "word_key": "87",
+      "status": "green",
+      "ease_factor": 2.9,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-25"
     },
     {
       "word_key": "1427",
@@ -1907,15 +1970,6 @@
       "repetitions": 4,
       "last_studied": "2026-09-01",
       "next_review": "2026-09-29"
-    },
-    {
-      "word_key": "200",
-      "status": "green",
-      "ease_factor": 2.14,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1423",
@@ -2008,15 +2062,6 @@
       "next_review": "2026-09-08"
     },
     {
-      "word_key": "1438",
-      "status": "green",
-      "ease_factor": 2.32,
-      "interval_days": 14,
-      "repetitions": 3,
-      "last_studied": "2026-08-25",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1434",
       "status": "green",
       "ease_factor": 1.6,
@@ -2044,6 +2089,15 @@
       "next_review": "2026-09-15"
     },
     {
+      "word_key": "1433",
+      "status": "green",
+      "ease_factor": 2.2,
+      "interval_days": 29,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-05"
+    },
+    {
       "word_key": "1437",
       "status": "green",
       "ease_factor": 2.32,
@@ -2053,13 +2107,13 @@
       "next_review": "2026-10-05"
     },
     {
-      "word_key": "1433",
+      "word_key": "1438",
       "status": "green",
-      "ease_factor": 2.1,
-      "interval_days": 13,
-      "repetitions": 3,
-      "last_studied": "2026-08-26",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.42,
+      "interval_days": 34,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-10"
     },
     {
       "word_key": "1432",
@@ -2323,6 +2377,15 @@
       "next_review": "2026-09-11"
     },
     {
+      "word_key": "35",
+      "status": "green",
+      "ease_factor": 2.32,
+      "interval_days": 14,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-20"
+    },
+    {
       "word_key": "847",
       "status": "green",
       "ease_factor": 2.6,
@@ -2332,13 +2395,49 @@
       "next_review": "2026-11-27"
     },
     {
-      "word_key": "35",
+      "word_key": "297",
       "status": "green",
-      "ease_factor": 2.22,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "298",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "299",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "300",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "301",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
       "word_key": "251",
@@ -2347,6 +2446,24 @@
       "interval_days": 6,
       "repetitions": 2,
       "last_studied": "2026-09-04",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "302",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "303",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
       "next_review": "2026-09-09"
     },
     {
@@ -2359,6 +2476,15 @@
       "next_review": "2026-09-09"
     },
     {
+      "word_key": "304",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "258",
       "status": "green",
       "ease_factor": 2.7,
@@ -2366,6 +2492,15 @@
       "repetitions": 2,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-11"
+    },
+    {
+      "word_key": "263",
+      "status": "green",
+      "ease_factor": 2.26,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "898",
@@ -2393,15 +2528,6 @@
       "repetitions": 2,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-11"
-    },
-    {
-      "word_key": "263",
-      "status": "green",
-      "ease_factor": 2.16,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1231",
@@ -2476,15 +2602,6 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "1447",
-      "status": "green",
-      "ease_factor": 2.22,
-      "interval_days": 13,
-      "repetitions": 3,
-      "last_studied": "2026-08-26",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1444",
       "status": "green",
       "ease_factor": 1.88,
@@ -2512,13 +2629,22 @@
       "next_review": "2026-12-06"
     },
     {
+      "word_key": "1447",
+      "status": "green",
+      "ease_factor": 2.32,
+      "interval_days": 30,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-06"
+    },
+    {
       "word_key": "1446",
       "status": "green",
-      "ease_factor": 2.1,
-      "interval_days": 13,
-      "repetitions": 3,
-      "last_studied": "2026-08-26",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.2,
+      "interval_days": 29,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-05"
     },
     {
       "word_key": "935",
@@ -2546,6 +2672,15 @@
       "repetitions": 1,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-08"
+    },
+    {
+      "word_key": "206",
+      "status": "green",
+      "ease_factor": 1.4,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
       "word_key": "1449",
@@ -2593,15 +2728,6 @@
       "next_review": "2026-09-09"
     },
     {
-      "word_key": "206",
-      "status": "red",
-      "ease_factor": 1.3,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
-    },
-    {
       "word_key": "140",
       "status": "green",
       "ease_factor": 2.36,
@@ -2621,20 +2747,11 @@
     },
     {
       "word_key": "950",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 49,
-      "repetitions": 4,
-      "last_studied": "2026-07-21",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "143",
-      "status": "green",
-      "ease_factor": 2.24,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
+      "status": "red",
+      "ease_factor": 2.38,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
       "next_review": "2026-09-07"
     },
     {
@@ -2726,6 +2843,15 @@
       "repetitions": 3,
       "last_studied": "2026-08-26",
       "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "143",
+      "status": "green",
+      "ease_factor": 2.34,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "135",
@@ -2836,15 +2962,6 @@
       "next_review": "2026-09-12"
     },
     {
-      "word_key": "1462",
-      "status": "green",
-      "ease_factor": 1.98,
-      "interval_days": 12,
-      "repetitions": 3,
-      "last_studied": "2026-08-27",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1463",
       "status": "green",
       "ease_factor": 2.66,
@@ -2890,6 +3007,15 @@
       "next_review": "2026-09-10"
     },
     {
+      "word_key": "208",
+      "status": "green",
+      "ease_factor": 2.58,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "1468",
       "status": "green",
       "ease_factor": 2.54,
@@ -2926,13 +3052,13 @@
       "next_review": "2026-09-08"
     },
     {
-      "word_key": "208",
-      "status": "red",
-      "ease_factor": 2.48,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "1462",
+      "status": "green",
+      "ease_factor": 2.08,
+      "interval_days": 25,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-01"
     },
     {
       "word_key": "972",
@@ -2989,13 +3115,13 @@
       "next_review": "2026-10-05"
     },
     {
-      "word_key": "1474",
+      "word_key": "1475",
       "status": "green",
       "ease_factor": 1.7,
       "interval_days": 17,
       "repetitions": 4,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "1473",
@@ -3034,13 +3160,13 @@
       "next_review": "2026-09-27"
     },
     {
-      "word_key": "1006",
+      "word_key": "1474",
       "status": "green",
-      "ease_factor": 1.68,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 1.8,
+      "interval_days": 31,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-07"
     },
     {
       "word_key": "1478",
@@ -3061,15 +3187,6 @@
       "next_review": "2026-09-08"
     },
     {
-      "word_key": "1475",
-      "status": "green",
-      "ease_factor": 1.6,
-      "interval_days": 10,
-      "repetitions": 3,
-      "last_studied": "2026-08-28",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1470",
       "status": "green",
       "ease_factor": 2.2,
@@ -3077,6 +3194,15 @@
       "repetitions": 2,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-11"
+    },
+    {
+      "word_key": "1006",
+      "status": "green",
+      "ease_factor": 1.78,
+      "interval_days": 11,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-17"
     },
     {
       "word_key": "44",
@@ -3151,6 +3277,15 @@
       "next_review": "2026-09-10"
     },
     {
+      "word_key": "46",
+      "status": "green",
+      "ease_factor": 2.32,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
       "word_key": "93",
       "status": "green",
       "ease_factor": 1.9,
@@ -3205,13 +3340,13 @@
       "next_review": "2026-10-04"
     },
     {
-      "word_key": "46",
+      "word_key": "1043",
       "status": "green",
       "ease_factor": 2.22,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "interval_days": 13,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-19"
     },
     {
       "word_key": "45",
@@ -3266,15 +3401,6 @@
       "repetitions": 3,
       "last_studied": "2026-08-26",
       "next_review": "2026-09-09"
-    },
-    {
-      "word_key": "1043",
-      "status": "green",
-      "ease_factor": 2.12,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "37",
@@ -3367,6 +3493,15 @@
       "next_review": "2026-09-08"
     },
     {
+      "word_key": "218",
+      "status": "green",
+      "ease_factor": 1.4,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "945",
       "status": "green",
       "ease_factor": 2.22,
@@ -3401,15 +3536,6 @@
       "repetitions": 2,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-11"
-    },
-    {
-      "word_key": "218",
-      "status": "red",
-      "ease_factor": 1.3,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
     },
     {
       "word_key": "213",
@@ -3511,15 +3637,6 @@
       "next_review": "2026-09-09"
     },
     {
-      "word_key": "1486",
-      "status": "green",
-      "ease_factor": 1.6,
-      "interval_days": 10,
-      "repetitions": 3,
-      "last_studied": "2026-08-28",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1483",
       "status": "green",
       "ease_factor": 1.7,
@@ -3563,6 +3680,15 @@
       "repetitions": 4,
       "last_studied": "2026-08-30",
       "next_review": "2026-09-16"
+    },
+    {
+      "word_key": "1486",
+      "status": "green",
+      "ease_factor": 1.7,
+      "interval_days": 17,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "95",
@@ -3646,13 +3772,13 @@
       "next_review": "2027-01-02"
     },
     {
-      "word_key": "1208",
+      "word_key": "1203",
       "status": "red",
-      "ease_factor": 1.94,
+      "ease_factor": 1.38,
       "interval_days": 1,
       "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "1210",
@@ -3664,6 +3790,15 @@
       "next_review": "2027-01-02"
     },
     {
+      "word_key": "1208",
+      "status": "red",
+      "ease_factor": 1.72,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
+    },
+    {
       "word_key": "1191",
       "status": "green",
       "ease_factor": 2.7,
@@ -3671,15 +3806,6 @@
       "repetitions": 5,
       "last_studied": "2026-09-03",
       "next_review": "2026-12-31"
-    },
-    {
-      "word_key": "1203",
-      "status": "green",
-      "ease_factor": 1.6,
-      "interval_days": 10,
-      "repetitions": 3,
-      "last_studied": "2026-08-28",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1206",
@@ -3734,6 +3860,15 @@
       "repetitions": 4,
       "last_studied": "2026-08-23",
       "next_review": "2026-09-16"
+    },
+    {
+      "word_key": "103",
+      "status": "green",
+      "ease_factor": 2,
+      "interval_days": 12,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-18"
     },
     {
       "word_key": "1492",
@@ -3862,15 +3997,6 @@
       "next_review": "2026-09-09"
     },
     {
-      "word_key": "103",
-      "status": "green",
-      "ease_factor": 1.9,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "155",
       "status": "green",
       "ease_factor": 2.58,
@@ -3887,15 +4013,6 @@
       "repetitions": 4,
       "last_studied": "2026-07-30",
       "next_review": "2026-09-11"
-    },
-    {
-      "word_key": "48",
-      "status": "green",
-      "ease_factor": 2.12,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "106",
@@ -4051,6 +4168,15 @@
       "next_review": "2026-09-16"
     },
     {
+      "word_key": "48",
+      "status": "green",
+      "ease_factor": 2.22,
+      "interval_days": 13,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-19"
+    },
+    {
       "word_key": "157",
       "status": "green",
       "ease_factor": 2.36,
@@ -4096,22 +4222,13 @@
       "next_review": "2026-10-09"
     },
     {
-      "word_key": "221",
-      "status": "red",
-      "ease_factor": 1.82,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
-    },
-    {
       "word_key": "54",
       "status": "green",
-      "ease_factor": 2.56,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.66,
+      "interval_days": 16,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-22"
     },
     {
       "word_key": "226",
@@ -4139,6 +4256,15 @@
       "repetitions": 3,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-22"
+    },
+    {
+      "word_key": "221",
+      "status": "green",
+      "ease_factor": 1.92,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
       "word_key": "1306",
@@ -4222,6 +4348,15 @@
       "next_review": "2026-09-13"
     },
     {
+      "word_key": "230",
+      "status": "green",
+      "ease_factor": 1.92,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
       "word_key": "1338",
       "status": "green",
       "ease_factor": 1.84,
@@ -4240,22 +4375,13 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "230",
+      "word_key": "233",
       "status": "green",
-      "ease_factor": 1.82,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
-      "word_key": "1326",
-      "status": "green",
-      "ease_factor": 1.6,
-      "interval_days": 10,
+      "ease_factor": 2.58,
+      "interval_days": 15,
       "repetitions": 3,
-      "last_studied": "2026-08-28",
-      "next_review": "2026-09-07"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-21"
     },
     {
       "word_key": "229",
@@ -4276,13 +4402,13 @@
       "next_review": "2026-09-22"
     },
     {
-      "word_key": "233",
+      "word_key": "1326",
       "status": "green",
-      "ease_factor": 2.48,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 1.7,
+      "interval_days": 17,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-23"
     },
     {
       "word_key": "235",
@@ -4321,15 +4447,6 @@
       "next_review": "2026-09-17"
     },
     {
-      "word_key": "236",
-      "status": "red",
-      "ease_factor": 1.3,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
-    },
-    {
       "word_key": "108",
       "status": "green",
       "ease_factor": 2.34,
@@ -4345,6 +4462,15 @@
       "interval_days": 14,
       "repetitions": 3,
       "last_studied": "2026-08-27",
+      "next_review": "2026-09-09"
+    },
+    {
+      "word_key": "236",
+      "status": "green",
+      "ease_factor": 1.4,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
       "next_review": "2026-09-09"
     },
     {
@@ -4384,13 +4510,13 @@
       "next_review": "2026-09-22"
     },
     {
-      "word_key": "1390",
+      "word_key": "1402",
       "status": "green",
-      "ease_factor": 2.76,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.98,
+      "interval_days": 51,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-27"
     },
     {
       "word_key": "1378",
@@ -4438,6 +4564,15 @@
       "next_review": "2026-09-19"
     },
     {
+      "word_key": "162",
+      "status": "green",
+      "ease_factor": 2.02,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
+    },
+    {
       "word_key": "166",
       "status": "green",
       "ease_factor": 2.36,
@@ -4474,13 +4609,13 @@
       "next_review": "2026-09-17"
     },
     {
-      "word_key": "163",
+      "word_key": "1390",
       "status": "green",
-      "ease_factor": 1.48,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.86,
+      "interval_days": 49,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-25"
     },
     {
       "word_key": "1393",
@@ -4546,13 +4681,13 @@
       "next_review": "2026-09-20"
     },
     {
-      "word_key": "1402",
+      "word_key": "1404",
       "status": "green",
-      "ease_factor": 2.88,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.98,
+      "interval_days": 51,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-27"
     },
     {
       "word_key": "1383",
@@ -4564,12 +4699,12 @@
       "next_review": "2026-09-20"
     },
     {
-      "word_key": "1404",
-      "status": "green",
-      "ease_factor": 2.88,
-      "interval_days": 17,
-      "repetitions": 3,
-      "last_studied": "2026-08-22",
+      "word_key": "163",
+      "status": "red",
+      "ease_factor": 1.3,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
       "next_review": "2026-09-07"
     },
     {
@@ -4580,15 +4715,6 @@
       "repetitions": 1,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-08"
-    },
-    {
-      "word_key": "162",
-      "status": "red",
-      "ease_factor": 1.92,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
     },
     {
       "word_key": "1389",
@@ -4958,15 +5084,6 @@
       "repetitions": 5,
       "last_studied": "2026-07-16",
       "next_review": "2027-02-02"
-    },
-    {
-      "word_key": "1598",
-      "status": "green",
-      "ease_factor": 2.5,
-      "interval_days": 63,
-      "repetitions": 4,
-      "last_studied": "2026-07-06",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1606",
@@ -5365,13 +5482,13 @@
       "next_review": "2027-01-25"
     },
     {
-      "word_key": "1515",
+      "word_key": "1598",
       "status": "green",
-      "ease_factor": 2.58,
-      "interval_days": 15,
-      "repetitions": 3,
-      "last_studied": "2026-08-24",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.6,
+      "interval_days": 164,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-02-17"
     },
     {
       "word_key": "1019",
@@ -5444,6 +5561,15 @@
       "repetitions": 4,
       "last_studied": "2026-08-24",
       "next_review": "2026-09-26"
+    },
+    {
+      "word_key": "1515",
+      "status": "green",
+      "ease_factor": 2.68,
+      "interval_days": 40,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-16"
     },
     {
       "word_key": "1525",
@@ -5851,15 +5977,6 @@
       "next_review": "2026-11-06"
     },
     {
-      "word_key": "1091",
-      "status": "green",
-      "ease_factor": 2.36,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1064",
       "status": "green",
       "ease_factor": 2.8,
@@ -6056,6 +6173,15 @@
       "repetitions": 4,
       "last_studied": "2026-09-01",
       "next_review": "2026-09-30"
+    },
+    {
+      "word_key": "1091",
+      "status": "green",
+      "ease_factor": 2.46,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "916",
@@ -6355,6 +6481,15 @@
       "next_review": "2027-01-04"
     },
     {
+      "word_key": "1112",
+      "status": "red",
+      "ease_factor": 1.3,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
+    },
+    {
       "word_key": "1082",
       "status": "green",
       "ease_factor": 1.5,
@@ -6580,13 +6715,13 @@
       "next_review": "2026-12-28"
     },
     {
-      "word_key": "1112",
-      "status": "red",
-      "ease_factor": 1.3,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "1096",
+      "status": "green",
+      "ease_factor": 2.68,
+      "interval_days": 16,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-22"
     },
     {
       "word_key": "1638",
@@ -6605,15 +6740,6 @@
       "repetitions": 2,
       "last_studied": "2026-09-04",
       "next_review": "2026-09-09"
-    },
-    {
-      "word_key": "1096",
-      "status": "green",
-      "ease_factor": 2.58,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1056",
@@ -6994,15 +7120,6 @@
       "next_review": "2027-01-06"
     },
     {
-      "word_key": "1719",
-      "status": "green",
-      "ease_factor": 2.54,
-      "interval_days": 15,
-      "repetitions": 3,
-      "last_studied": "2026-08-24",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1705",
       "status": "green",
       "ease_factor": 2.6,
@@ -7165,13 +7282,13 @@
       "next_review": "2026-09-27"
     },
     {
-      "word_key": "1731",
-      "status": "red",
-      "ease_factor": 2.26,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "1740",
+      "status": "green",
+      "ease_factor": 2.14,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
       "word_key": "1726",
@@ -7181,6 +7298,15 @@
       "repetitions": 5,
       "last_studied": "2026-08-28",
       "next_review": "2027-02-26"
+    },
+    {
+      "word_key": "1731",
+      "status": "green",
+      "ease_factor": 2.36,
+      "interval_days": 3,
+      "repetitions": 1,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
       "word_key": "1717",
@@ -7201,13 +7327,13 @@
       "next_review": "2026-09-08"
     },
     {
-      "word_key": "1740",
-      "status": "red",
-      "ease_factor": 2.04,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "word_key": "1719",
+      "status": "green",
+      "ease_factor": 2.64,
+      "interval_days": 40,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-16"
     },
     {
       "word_key": "1745",
@@ -8011,6 +8137,15 @@
       "next_review": "2027-01-20"
     },
     {
+      "word_key": "1886",
+      "status": "green",
+      "ease_factor": 2.48,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
+    },
+    {
       "word_key": "1882",
       "status": "green",
       "ease_factor": 2.42,
@@ -8326,15 +8461,6 @@
       "next_review": "2026-10-14"
     },
     {
-      "word_key": "1886",
-      "status": "green",
-      "ease_factor": 2.38,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1893",
       "status": "green",
       "ease_factor": 1.82,
@@ -8342,15 +8468,6 @@
       "repetitions": 1,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-08"
-    },
-    {
-      "word_key": "1899",
-      "status": "green",
-      "ease_factor": 2.5,
-      "interval_days": 63,
-      "repetitions": 4,
-      "last_studied": "2026-07-06",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1732",
@@ -8380,15 +8497,6 @@
       "next_review": "2026-09-25"
     },
     {
-      "word_key": "825",
-      "status": "green",
-      "ease_factor": 2.5,
-      "interval_days": 68,
-      "repetitions": 4,
-      "last_studied": "2026-07-01",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "826",
       "status": "green",
       "ease_factor": 2.5,
@@ -8414,15 +8522,6 @@
       "repetitions": 4,
       "last_studied": "2026-07-09",
       "next_review": "2026-09-08"
-    },
-    {
-      "word_key": "885",
-      "status": "green",
-      "ease_factor": 2.5,
-      "interval_days": 61,
-      "repetitions": 4,
-      "last_studied": "2026-07-08",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "801",
@@ -8459,15 +8558,6 @@
       "repetitions": 5,
       "last_studied": "2026-07-17",
       "next_review": "2026-11-21"
-    },
-    {
-      "word_key": "820",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 52,
-      "repetitions": 4,
-      "last_studied": "2026-07-17",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "866",
@@ -8722,13 +8812,13 @@
       "next_review": "2026-09-13"
     },
     {
-      "word_key": "1109",
+      "word_key": "1899",
       "status": "green",
-      "ease_factor": 2.48,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.6,
+      "interval_days": 164,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-02-17"
     },
     {
       "word_key": "802",
@@ -8848,13 +8938,13 @@
       "next_review": "2027-01-29"
     },
     {
-      "word_key": "808",
+      "word_key": "820",
       "status": "green",
-      "ease_factor": 2.36,
-      "interval_days": 14,
-      "repetitions": 3,
-      "last_studied": "2026-08-25",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.7,
+      "interval_days": 140,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-01-24"
     },
     {
       "word_key": "809",
@@ -8873,6 +8963,15 @@
       "repetitions": 2,
       "last_studied": "2026-09-06",
       "next_review": "2026-09-11"
+    },
+    {
+      "word_key": "808",
+      "status": "green",
+      "ease_factor": 2.46,
+      "interval_days": 34,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-10"
     },
     {
       "word_key": "843",
@@ -8909,6 +9008,33 @@
       "repetitions": 4,
       "last_studied": "2026-09-04",
       "next_review": "2026-10-13"
+    },
+    {
+      "word_key": "885",
+      "status": "green",
+      "ease_factor": 2.6,
+      "interval_days": 159,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-02-12"
+    },
+    {
+      "word_key": "1109",
+      "status": "green",
+      "ease_factor": 2.58,
+      "interval_days": 15,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-21"
+    },
+    {
+      "word_key": "825",
+      "status": "red",
+      "ease_factor": 2.28,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "869",
@@ -9478,15 +9604,6 @@
       "next_review": "2026-09-12"
     },
     {
-      "word_key": "990",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 49,
-      "repetitions": 4,
-      "last_studied": "2026-07-21",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "997",
       "status": "green",
       "ease_factor": 2.6,
@@ -9593,6 +9710,15 @@
       "repetitions": 4,
       "last_studied": "2026-08-03",
       "next_review": "2026-09-14"
+    },
+    {
+      "word_key": "984",
+      "status": "green",
+      "ease_factor": 2.56,
+      "interval_days": 38,
+      "repetitions": 4,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-10-14"
     },
     {
       "word_key": "954",
@@ -9946,13 +10072,13 @@
       "next_review": "2026-10-13"
     },
     {
-      "word_key": "984",
+      "word_key": "990",
       "status": "green",
-      "ease_factor": 2.46,
-      "interval_days": 15,
-      "repetitions": 3,
-      "last_studied": "2026-08-24",
-      "next_review": "2026-09-07"
+      "ease_factor": 2.7,
+      "interval_days": 132,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-01-16"
     },
     {
       "word_key": "977",
@@ -10142,15 +10268,6 @@
       "repetitions": 3,
       "last_studied": "2026-08-27",
       "next_review": "2026-09-09"
-    },
-    {
-      "word_key": "1080",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 49,
-      "repetitions": 4,
-      "last_studied": "2026-07-21",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1132",
@@ -10414,6 +10531,15 @@
       "next_review": "2026-09-10"
     },
     {
+      "word_key": "1080",
+      "status": "green",
+      "ease_factor": 2.7,
+      "interval_days": 132,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-01-16"
+    },
+    {
       "word_key": "1017",
       "status": "green",
       "ease_factor": 2.58,
@@ -10583,15 +10709,6 @@
       "repetitions": 3,
       "last_studied": "2026-09-05",
       "next_review": "2026-09-18"
-    },
-    {
-      "word_key": "1185",
-      "status": "green",
-      "ease_factor": 2.6,
-      "interval_days": 44,
-      "repetitions": 4,
-      "last_studied": "2026-07-26",
-      "next_review": "2026-09-07"
     },
     {
       "word_key": "1146",
@@ -10972,22 +11089,31 @@
       "next_review": "2026-12-31"
     },
     {
-      "word_key": "1143",
+      "word_key": "1176",
       "status": "green",
-      "ease_factor": 2.14,
+      "ease_factor": 2.36,
       "interval_days": 3,
       "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-09"
     },
     {
-      "word_key": "1176",
+      "word_key": "1185",
+      "status": "green",
+      "ease_factor": 2.7,
+      "interval_days": 119,
+      "repetitions": 5,
+      "last_studied": "2026-09-07",
+      "next_review": "2027-01-03"
+    },
+    {
+      "word_key": "1143",
       "status": "red",
-      "ease_factor": 2.26,
+      "ease_factor": 1.92,
       "interval_days": 1,
       "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "1217",
@@ -12268,15 +12394,6 @@
       "next_review": "2026-09-09"
     },
     {
-      "word_key": "169",
-      "status": "green",
-      "ease_factor": 1.48,
-      "interval_days": 3,
-      "repetitions": 1,
-      "last_studied": "2026-09-05",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1366",
       "status": "green",
       "ease_factor": 2.74,
@@ -12313,15 +12430,6 @@
       "next_review": "2026-09-11"
     },
     {
-      "word_key": "269",
-      "status": "red",
-      "ease_factor": 2.38,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-09-06",
-      "next_review": "2026-09-06"
-    },
-    {
       "word_key": "1368",
       "status": "green",
       "ease_factor": 2.56,
@@ -12329,6 +12437,15 @@
       "repetitions": 4,
       "last_studied": "2026-08-12",
       "next_review": "2026-09-18"
+    },
+    {
+      "word_key": "169",
+      "status": "green",
+      "ease_factor": 1.58,
+      "interval_days": 6,
+      "repetitions": 2,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-12"
     },
     {
       "word_key": "55",
@@ -12374,6 +12491,24 @@
       "repetitions": 4,
       "last_studied": "2026-09-01",
       "next_review": "2026-10-19"
+    },
+    {
+      "word_key": "228",
+      "status": "green",
+      "ease_factor": 2.58,
+      "interval_days": 15,
+      "repetitions": 3,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-21"
+    },
+    {
+      "word_key": "269",
+      "status": "red",
+      "ease_factor": 2.16,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-09-07",
+      "next_review": "2026-09-07"
     },
     {
       "word_key": "171",
@@ -12466,15 +12601,6 @@
       "next_review": "2026-09-20"
     },
     {
-      "word_key": "228",
-      "status": "green",
-      "ease_factor": 2.48,
-      "interval_days": 6,
-      "repetitions": 2,
-      "last_studied": "2026-09-02",
-      "next_review": "2026-09-07"
-    },
-    {
       "word_key": "1365",
       "status": "green",
       "ease_factor": 2.66,
@@ -12512,6 +12638,586 @@
     }
   ],
   "logs": [
+    {
+      "word_key": "269",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:33:05.639907+00:00"
+    },
+    {
+      "word_key": "304",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:34.296455+00:00"
+    },
+    {
+      "word_key": "303",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:31.417859+00:00"
+    },
+    {
+      "word_key": "302",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:30.711827+00:00"
+    },
+    {
+      "word_key": "301",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:29.887816+00:00"
+    },
+    {
+      "word_key": "300",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:27.431955+00:00"
+    },
+    {
+      "word_key": "299",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:26.136005+00:00"
+    },
+    {
+      "word_key": "298",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:23.860371+00:00"
+    },
+    {
+      "word_key": "297",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:21.3964+00:00"
+    },
+    {
+      "word_key": "296",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:19.566932+00:00"
+    },
+    {
+      "word_key": "295",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:18.445615+00:00"
+    },
+    {
+      "word_key": "294",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:15.442155+00:00"
+    },
+    {
+      "word_key": "293",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:12.995492+00:00"
+    },
+    {
+      "word_key": "292",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:11.255006+00:00"
+    },
+    {
+      "word_key": "291",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:10.009172+00:00"
+    },
+    {
+      "word_key": "1899",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:30:06.54747+00:00"
+    },
+    {
+      "word_key": "1886",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:58.768621+00:00"
+    },
+    {
+      "word_key": "1868",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:56.848172+00:00"
+    },
+    {
+      "word_key": "1862",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:54.05371+00:00"
+    },
+    {
+      "word_key": "1719",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:50.158595+00:00"
+    },
+    {
+      "word_key": "1651",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:42.061267+00:00"
+    },
+    {
+      "word_key": "1613",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:38.898821+00:00"
+    },
+    {
+      "word_key": "1598",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:36.654248+00:00"
+    },
+    {
+      "word_key": "1515",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:33.678521+00:00"
+    },
+    {
+      "word_key": "1486",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:31.72208+00:00"
+    },
+    {
+      "word_key": "1475",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:26.71778+00:00"
+    },
+    {
+      "word_key": "1474",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:25.223737+00:00"
+    },
+    {
+      "word_key": "1462",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:21.228428+00:00"
+    },
+    {
+      "word_key": "1447",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:29:16.788523+00:00"
+    },
+    {
+      "word_key": "1446",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:28:33.978753+00:00"
+    },
+    {
+      "word_key": "1438",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:28:31.527029+00:00"
+    },
+    {
+      "word_key": "1433",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:28:28.964051+00:00"
+    },
+    {
+      "word_key": "1404",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:28:23.838785+00:00"
+    },
+    {
+      "word_key": "1402",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:28:21.181486+00:00"
+    },
+    {
+      "word_key": "1390",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:28:18.414171+00:00"
+    },
+    {
+      "word_key": "1326",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:27:57.324884+00:00"
+    },
+    {
+      "word_key": "1325",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:27:54.256596+00:00"
+    },
+    {
+      "word_key": "1203",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:27:52.714737+00:00"
+    },
+    {
+      "word_key": "1185",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:27:14.612882+00:00"
+    },
+    {
+      "word_key": "1143",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:27:07.870968+00:00"
+    },
+    {
+      "word_key": "1109",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:27:01.30901+00:00"
+    },
+    {
+      "word_key": "1096",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:26:12.637048+00:00"
+    },
+    {
+      "word_key": "1091",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:26:10.883226+00:00"
+    },
+    {
+      "word_key": "1080",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:26:09.319004+00:00"
+    },
+    {
+      "word_key": "1043",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:25:29.451721+00:00"
+    },
+    {
+      "word_key": "1006",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:24:36.932047+00:00"
+    },
+    {
+      "word_key": "990",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:24:33.244956+00:00"
+    },
+    {
+      "word_key": "984",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:24:31.082992+00:00"
+    },
+    {
+      "word_key": "950",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:24:28.010715+00:00"
+    },
+    {
+      "word_key": "885",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:24:15.837749+00:00"
+    },
+    {
+      "word_key": "825",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:24:12.248372+00:00"
+    },
+    {
+      "word_key": "820",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:22:48.086874+00:00"
+    },
+    {
+      "word_key": "808",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:22:14.464821+00:00"
+    },
+    {
+      "word_key": "284",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:21:53.790948+00:00"
+    },
+    {
+      "word_key": "283",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:21:50.954886+00:00"
+    },
+    {
+      "word_key": "282",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:19:58.210381+00:00"
+    },
+    {
+      "word_key": "281",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:18:53.053781+00:00"
+    },
+    {
+      "word_key": "280",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:18:31.952074+00:00"
+    },
+    {
+      "word_key": "278",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:18:13.214189+00:00"
+    },
+    {
+      "word_key": "277",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:18:09.121055+00:00"
+    },
+    {
+      "word_key": "276",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:18:05.754552+00:00"
+    },
+    {
+      "word_key": "275",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:17:50.696458+00:00"
+    },
+    {
+      "word_key": "274",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:17:01.421148+00:00"
+    },
+    {
+      "word_key": "273",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:16:50.897571+00:00"
+    },
+    {
+      "word_key": "263",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:16:42.071623+00:00"
+    },
+    {
+      "word_key": "247",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:14:11.757447+00:00"
+    },
+    {
+      "word_key": "246",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:14:08.572402+00:00"
+    },
+    {
+      "word_key": "245",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:14:06.833032+00:00"
+    },
+    {
+      "word_key": "243",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:13:53.931018+00:00"
+    },
+    {
+      "word_key": "242",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:13:40.833987+00:00"
+    },
+    {
+      "word_key": "241",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:12:05.87678+00:00"
+    },
+    {
+      "word_key": "240",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:11:47.776504+00:00"
+    },
+    {
+      "word_key": "239",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:11:05.373967+00:00"
+    },
+    {
+      "word_key": "238",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:11:03.333371+00:00"
+    },
+    {
+      "word_key": "233",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:10:55.140608+00:00"
+    },
+    {
+      "word_key": "230",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:10:45.759037+00:00"
+    },
+    {
+      "word_key": "228",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:06:48.066383+00:00"
+    },
+    {
+      "word_key": "204",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:05:38.515535+00:00"
+    },
+    {
+      "word_key": "200",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:05:33.625405+00:00"
+    },
+    {
+      "word_key": "193",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:05:30.953806+00:00"
+    },
+    {
+      "word_key": "190",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:05:29.106252+00:00"
+    },
+    {
+      "word_key": "185",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:04:14.815586+00:00"
+    },
+    {
+      "word_key": "169",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:04:01.424502+00:00"
+    },
+    {
+      "word_key": "163",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T10:00:56.191503+00:00"
+    },
+    {
+      "word_key": "143",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:00:45.040827+00:00"
+    },
+    {
+      "word_key": "126",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:00:38.659615+00:00"
+    },
+    {
+      "word_key": "103",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:00:19.939003+00:00"
+    },
+    {
+      "word_key": "88",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:00:16.901767+00:00"
+    },
+    {
+      "word_key": "87",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T10:00:15.051294+00:00"
+    },
+    {
+      "word_key": "86",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:59:32.544911+00:00"
+    },
+    {
+      "word_key": "78",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:59:21.188299+00:00"
+    },
+    {
+      "word_key": "75",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:59:18.517504+00:00"
+    },
+    {
+      "word_key": "54",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:58:59.882929+00:00"
+    },
+    {
+      "word_key": "48",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:58:26.694473+00:00"
+    },
+    {
+      "word_key": "46",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:58:06.488877+00:00"
+    },
+    {
+      "word_key": "35",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:56:46.335309+00:00"
+    },
+    {
+      "word_key": "17",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T09:56:38.378064+00:00"
+    },
+    {
+      "word_key": "7",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:55:57.905844+00:00"
+    },
+    {
+      "word_key": "1740",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:55:24.636555+00:00"
+    },
+    {
+      "word_key": "1731",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:55:08.85832+00:00"
+    },
+    {
+      "word_key": "1208",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T09:55:03.441886+00:00"
+    },
+    {
+      "word_key": "1176",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:54:11.017106+00:00"
+    },
+    {
+      "word_key": "1112",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T09:54:08.683698+00:00"
+    },
+    {
+      "word_key": "1057",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:53:08.243979+00:00"
+    },
+    {
+      "word_key": "290",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:52:16.421248+00:00"
+    },
+    {
+      "word_key": "286",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T09:52:13.525016+00:00"
+    },
+    {
+      "word_key": "272",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T09:51:21.634489+00:00"
+    },
+    {
+      "word_key": "269",
+      "rating": 1,
+      "reviewed_at": "2026-09-07T09:51:06.078057+00:00"
+    },
+    {
+      "word_key": "236",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:50:39.758935+00:00"
+    },
+    {
+      "word_key": "221",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:50:31.813484+00:00"
+    },
+    {
+      "word_key": "218",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:50:29.209839+00:00"
+    },
+    {
+      "word_key": "208",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:50:10.751394+00:00"
+    },
+    {
+      "word_key": "206",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:49:46.30936+00:00"
+    },
+    {
+      "word_key": "162",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:49:21.743411+00:00"
+    },
+    {
+      "word_key": "61",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:49:01.414734+00:00"
+    },
+    {
+      "word_key": "10",
+      "rating": 4,
+      "reviewed_at": "2026-09-07T09:48:01.185786+00:00"
+    },
     {
       "word_key": "1112",
       "rating": 4,
@@ -119673,242 +120379,12 @@
       "reviewed_at": "2026-04-02T12:57:15.347774+00:00"
     },
     {
-      "word_key": "1716",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1659",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
       "word_key": "1660",
       "rating": 4,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1662",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1663",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1666",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1674",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1682",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1686",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1655",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1653",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1650",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1649",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1648",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1647",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1644",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1641",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1637",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1617",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1608",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1532",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1514",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1512",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1508",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1507",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1506",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1505",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1504",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1693",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1694",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1695",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1696",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1697",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1699",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1700",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1701",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1702",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1703",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1704",
-      "rating": 4,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1705",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1706",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1707",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1708",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1709",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1710",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1711",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1712",
-      "rating": 1,
-      "reviewed_at": "2026-04-02T03:00:00+00:00"
-    },
-    {
-      "word_key": "1713",
+      "word_key": "1715",
       "rating": 1,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
@@ -119918,47 +120394,252 @@
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1715",
+      "word_key": "1713",
       "rating": 1,
       "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1698",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1630",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1617",
+      "word_key": "1712",
       "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
-      "word_key": "1609",
+      "word_key": "1711",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1710",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1709",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1708",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1707",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1706",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1705",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1704",
       "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1703",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1702",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1701",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1700",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1699",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1697",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1696",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1695",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1694",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1693",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1716",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1504",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1505",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1506",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1507",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1508",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1512",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1514",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1532",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
     },
     {
       "word_key": "1608",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1617",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1637",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1641",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1644",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1647",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1648",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1649",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1650",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1653",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1655",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1686",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1682",
+      "rating": 1,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1674",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1666",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1663",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1662",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1659",
+      "rating": 4,
+      "reviewed_at": "2026-04-02T03:00:00+00:00"
+    },
+    {
+      "word_key": "1702",
       "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1607",
-      "rating": 4,
+      "word_key": "1532",
+      "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1594",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1592",
+      "word_key": "1549",
       "rating": 4,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
@@ -119968,7 +120649,42 @@
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1549",
+      "word_key": "1592",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1594",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1607",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1608",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1609",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1617",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1630",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1631",
       "rating": 4,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
@@ -120058,26 +120774,6 @@
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1631",
-      "rating": 4,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1701",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1700",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1699",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
       "word_key": "1682",
       "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
@@ -120094,26 +120790,6 @@
     },
     {
       "word_key": "1686",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1706",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1705",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1704",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
-      "word_key": "1703",
       "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
@@ -120153,11 +120829,6 @@
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1532",
-      "rating": 1,
-      "reviewed_at": "2026-04-01T13:00:00+00:00"
-    },
-    {
       "word_key": "1696",
       "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
@@ -120168,7 +120839,42 @@
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
     {
-      "word_key": "1702",
+      "word_key": "1698",
+      "rating": 4,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1699",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1700",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1701",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1703",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1704",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1705",
+      "rating": 1,
+      "reviewed_at": "2026-04-01T13:00:00+00:00"
+    },
+    {
+      "word_key": "1706",
       "rating": 1,
       "reviewed_at": "2026-04-01T13:00:00+00:00"
     },
