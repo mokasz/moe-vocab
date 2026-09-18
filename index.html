@@ -68,6 +68,17 @@
       margin: 8px 0;
     }
 
+    .login-error {
+      background: #3a1a1a;
+      border: 1px solid #e05252;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #ff9999;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      text-align: left;
+    }
+
     #loginBtn {
       display: flex;
       align-items: center;
@@ -337,6 +348,7 @@
   <div class="login-card">
     <div class="login-title">Moe's Vocab</div>
     <div class="login-subtitle">ターゲット1900</div>
+    <div id="loginError" class="login-error" style="display:none;"></div>
     <div class="login-divider"></div>
     <button id="loginBtn">
       <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -386,6 +398,7 @@
     ? 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH'
     : 'sb_publishable_YCsV4Wpn8tb8gwLrgsPf2g_xAX0Q4gt';
   const BOOK_KEY    = 'moe-target1900';
+  const ALLOWED_EMAIL = 'moeloveslemon1921@gmail.com';
   const PENDING_KEY = BOOK_KEY + '_sync_pending';
   const REVIEW_LOG_KEY = BOOK_KEY + '_review_log_pending';
   const VERSION_KEY = 'moe_words_version'; // 単語セット切り替え検出用
@@ -407,14 +420,32 @@
 
   // ── Auth ─────────────────────────────────────────────────────────────────
   async function bootAuth() {
-    document.getElementById('loginBtn').onclick = () => sb.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: location.href }
-    });
-    document.getElementById('logoutBtn').onclick = () => sb.auth.signOut();
+    document.getElementById('loginBtn').onclick = () => {
+      clearLoginError();
+      sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: location.href }
+      });
+    };
+    document.getElementById('logoutBtn').onclick = () => {
+      sessionStorage.removeItem(SS_KEY);
+      sessionStorage.removeItem(SS_START);
+      sb.auth.signOut();
+    };
 
     sb.auth.onAuthStateChange(async (event, session) => {
       if (session) {
+        const email = session.user?.email || '';
+        if (email !== ALLOWED_EMAIL) {
+          console.warn('[auth] Unauthorized account:', email);
+          sessionStorage.removeItem(SS_KEY);
+          sessionStorage.removeItem(SS_START);
+          await sb.auth.signOut();
+          showLoginError(email);
+          return;
+        }
+
+        clearLoginError();
         if (!currentUser) {
           currentUser = session.user;
           const chip = document.getElementById('userChip');
@@ -426,6 +457,8 @@
         if (currentUser) {
           currentUser = null;
           document.getElementById('userChip').textContent = '';
+          sessionStorage.removeItem(SS_KEY);
+          sessionStorage.removeItem(SS_START);
           showLogin();
         } else if (event === 'INITIAL_SESSION') {
           showLogin();
@@ -434,8 +467,41 @@
     });
   }
 
-  function showLogin() { document.getElementById('loginScreen').style.display = 'flex'; }
-  function showApp()   { document.getElementById('loginScreen').style.display = 'none'; }
+  function showLoginError(email) {
+    const errEl = document.getElementById('loginError');
+    if (errEl) {
+      while (errEl.firstChild) errEl.removeChild(errEl.firstChild);
+      const p1 = document.createElement('p');
+      p1.textContent = '⚠️ アクセス権がありません: ' + (email || '不明なアカウント');
+      p1.style.fontWeight = '600';
+      const p2 = document.createElement('p');
+      p2.textContent = ALLOWED_EMAIL + ' でログインしてください。';
+      p2.style.fontSize = '0.8rem';
+      p2.style.marginTop = '4px';
+      p2.style.color = '#ffcccc';
+      errEl.appendChild(p1);
+      errEl.appendChild(p2);
+      errEl.style.display = 'block';
+    }
+    showLogin();
+  }
+
+  function clearLoginError() {
+    const errEl = document.getElementById('loginError');
+    if (errEl) {
+      while (errEl.firstChild) errEl.removeChild(errEl.firstChild);
+      errEl.style.display = 'none';
+    }
+  }
+
+  function showLogin() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+  function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+  }
 
   // ── App Init ─────────────────────────────────────────────────────────────
   let audioVer = '0'; // audio cache-busting version
