@@ -15886,15 +15886,6 @@
       "next_review": "2026-12-11"
     },
     {
-      "word_key": "679",
-      "status": "red",
-      "ease_factor": 1.38,
-      "interval_days": 1,
-      "repetitions": 0,
-      "last_studied": "2026-10-30",
-      "next_review": "2026-10-30"
-    },
-    {
       "word_key": "677",
       "status": "green",
       "ease_factor": 2.34,
@@ -15902,6 +15893,15 @@
       "repetitions": 4,
       "last_studied": "2026-10-26",
       "next_review": "2026-11-24"
+    },
+    {
+      "word_key": "679",
+      "status": "red",
+      "ease_factor": 1.38,
+      "interval_days": 1,
+      "repetitions": 0,
+      "last_studied": "2026-10-31",
+      "next_review": "2026-10-30"
     },
     {
       "word_key": "661",
@@ -17102,6 +17102,11 @@
     }
   ],
   "logs": [
+    {
+      "word_key": "679",
+      "rating": 4,
+      "reviewed_at": "2026-10-31T12:06:23.261678+00:00"
+    },
     {
       "word_key": "679",
       "rating": 4,
