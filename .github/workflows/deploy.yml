@@ -29,6 +29,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+      # Wait for GitHub Artifacts API eventual consistency before deploy-pages queries it
+      - name: Wait for artifact propagation
+        run: sleep 10
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
